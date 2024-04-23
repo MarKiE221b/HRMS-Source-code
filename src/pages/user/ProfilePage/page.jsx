@@ -7,7 +7,7 @@ import gifSick from "/sick.gif";
 import gifOT from "/down-time.gif";
 import { FaWpforms } from "react-icons/fa";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-
+import { Label, Select, Textarea, TextInput } from "flowbite-react";
 import { useParams } from "react-router-dom";
 import { Avatar } from "flowbite-react";
 
@@ -276,7 +276,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
     <div>
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal}>
-        <TEModalDialog centered size="lg">
+        <TEModalDialog centered size="sm">
           <TEModalContent>
             <TEModalHeader>
               {/* <!--Modal title--> */}
@@ -307,7 +307,73 @@ const LeaveModal = ({ showModal, setShowModal }) => {
               </button>
             </TEModalHeader>
             {/* <!--Modal body--> */}
-            <TEModalBody>Modal body text goes here.</TEModalBody>
+            <TEModalBody>
+              <div className="flex flex-col">
+                <div className="mb-3">
+                  <div className="mb-3">
+                    <h1>6.A TYPE OF LEAVE TO BE AVAILED OF</h1>
+                  </div>
+                  <div className="max-w-md">
+                    <Select id="leave" required>
+                      <option>Vacation Leave</option>
+                      <option>Mandatory/Forced Leave</option>
+                      <option>Sick Leave</option>
+                      <option>Maternity Leave</option>
+                    </Select>
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="mb-3">
+                    <h1>6.B DETAILS OF LEAVE</h1>
+                  </div>
+                  <div className="max-w-md">
+                    <Textarea
+                      id="details"
+                      placeholder="Details of leave..."
+                      required
+                      rows={4}
+                    />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div className="mb-2">
+                    <h1>6.C NUMBER OF WORKING DAYS APPLIED FOR</h1>
+                  </div>
+                  <div>
+                    <div className="">
+                      <TextInput
+                        id="days"
+                        type="text"
+                        sizing="sm"
+                        className="w-64"
+                      />
+                    </div>
+                  </div>
+                  <div className="w-64">
+                    <div className="mb-1 block">
+                      <Label htmlFor="inclusiveD" value="INCLUSIVE DATES" />
+                    </div>
+                    <TextInput id="inclusiveD" type="text" sizing="sm" />
+                  </div>
+                </div>
+                <div className="mb-3">
+                  <div>
+                    <h1>6.D COMMUTATION</h1>
+                  </div>
+                  <div>
+                    <input
+                      className="form-check-input mr-2"
+                      type="checkbox"
+                      value=""
+                      id="requested"
+                    />
+                    <label className="form-check-label" htmlFor="requested">
+                      Requested
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </TEModalBody>
             <TEModalFooter>
               <TERipple rippleColor="light">
                 <button
