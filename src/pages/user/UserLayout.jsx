@@ -1,18 +1,31 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
 import NavBar from "../../components/user/NavBar.jsx";
 
+import { Outlet, Navigate } from "react-router-dom";
+import { verifyApi } from "../../api/index.js";
+import Loading from "../../Loading.jsx";
+
 const UserLayout = () => {
-  return (
-    <div>
-      <div className="sticky top-0 z-50">
-        <NavBar />
+  const { data: verifyUser, isLoading, isError, isFetching } = verifyApi();
+
+  if (isLoading || isFetching) {
+    return <Loading />;
+  }
+
+  if (isError || verifyUser !== "user") {
+    return <Navigate to="/" />;
+  } else {
+    return (
+      <div>
+        <div className="sticky top-0 z-50">
+          <NavBar />
+        </div>
+        <div className="bg-slate-100 py-10 px-5">
+          <Outlet />
+        </div>
       </div>
-      <div className="bg-slate-100 py-10 px-5">
-        <Outlet />
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default UserLayout;

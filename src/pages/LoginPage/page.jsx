@@ -1,8 +1,20 @@
-import React from "react";
-import logo from "/ched-logo.png";
+import React, { useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
+import logo from "/ched-logo.png";
+import bg from "/memer.png";
+
+import { Navigate } from "react-router-dom";
+import { loginApi } from "../../api";
 
 const LoginPage = () => {
+  const [formData, setFormData] = useState({
+    user_id: "",
+    pwd: "",
+  });
+
+  const { mutate: submitData, isSuccess, isError, error, data } = loginApi();
+  if (isSuccess) return <Navigate to={`user/${data.data.user.emp_id}`} />;
+
   return (
     <div
       className="relative h-screen bg-cover bg-center"
@@ -42,42 +54,56 @@ const LoginPage = () => {
             <h1 className="text-3xl font-semibold">User Login</h1>
           </div>
           {/* <form onSubmit={handleSubmit}> */}
-          <div className="mb-4">
-            <label className="block text- font-medium leading-6 text-balance">
-              Username
-            </label>
-            <input
-              onChange={(e) =>
-                setValues({ ...values, Username: e.target.value })
-              }
-              required
-              type="Username"
-              id="Username"
-              name="Username"
-              className="mt-1 px-3 py-2 w-full border rounded-md focus:ring focus:ring-blue-200"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-medium font-medium leading-6 text-balance">
-              Password
-            </label>
-            <input
-              onChange={(e) =>
-                setValues({ ...values, Password: e.target.value })
-              }
-              required
-              type="Password"
-              id="Password"
-              name="Password"
-              className="mt-1 px-3 py-2 w-full border rounded-md focus:ring focus:ring-blue-200"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 text-lg"
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              submitData(formData);
+            }}
           >
-            Login
-          </button>
+            <div className="mb-4">
+              <label className="block text- font-medium leading-6 text-balance">
+                Username
+              </label>
+              <input
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, user_id: e.target.value }))
+                }
+                required
+                type="Username"
+                id="Username"
+                name="Username"
+                className="mt-1 px-3 py-2 w-full border rounded-md focus:ring focus:ring-blue-200"
+              />
+            </div>
+            <div className="mb-4">
+              <label className="block text-medium font-medium leading-6 text-balance">
+                Password
+              </label>
+              <input
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, pwd: e.target.value }))
+                }
+                required
+                type="Password"
+                id="Password"
+                name="Password"
+                className="mt-1 px-3 py-2 w-full border rounded-md focus:ring focus:ring-blue-200"
+              />
+            </div>
+
+            {isError && (
+              <p className="text-center text-red-600 font-bold uppercase mb-2 ">
+                {error?.response?.data?.message}
+              </p>
+            )}
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 text-lg"
+            >
+              Login
+            </button>
+          </form>
           {/* </form> */}
         </div>
       </div>

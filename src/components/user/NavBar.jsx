@@ -5,10 +5,14 @@ import { FcOvertime } from "react-icons/fc";
 import logo from "/ched-logo.png";
 
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
-import { useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
+import { logoutApi, userInfoApi } from "../../api";
 
 const NavBar = () => {
-  const { id } = useParams();
+  const { data: userData } = userInfoApi();
+  const { mutate: submitData, isSuccess } = logoutApi();
+
+  if (isSuccess) return <Navigate to="/" />;
 
   return (
     <Navbar fluid className="bg-sky-950">
@@ -28,23 +32,27 @@ const NavBar = () => {
           }
         >
           <Dropdown.Header>
-            <span className="block text-base">Joe Rogan</span>
+            <span className="block text-base">{`${userData?.lastname}, ${
+              userData?.firstname
+            } ${userData?.middlename ? userData?.middlename + " " : ""}${
+              userData?.ext_name || ""
+            }`}</span>
           </Dropdown.Header>
-          {!id && <Dropdown.Item>Profile</Dropdown.Item>}
+          {!userData && <Dropdown.Item>Profile</Dropdown.Item>}
           <Dropdown.Divider />
           <Dropdown.Header>
             <span className="block font-semibold">Credits: </span>
             <span className="flex items-center ml-2 font-semibold">
-              <FaSwimmer size="25px" /> : 140.2
+              <FaSwimmer size="25px" /> : {userData?.vacation_balance}
             </span>
             <span className="flex items-center ml-2 font-semibold">
-              <MdOutlineSick size="25px" /> : 140.2
+              <MdOutlineSick size="25px" /> : {userData?.sick_balance}
             </span>
             <span className="flex items-center ml-2 font-semibold">
-              <FcOvertime size="25px" />: 140.2
+              <FcOvertime size="25px" />: 0
             </span>
           </Dropdown.Header>
-          <Dropdown.Item>
+          <Dropdown.Item type="button" onClick={() => submitData()}>
             {" "}
             <span className="text-base">Sign out</span>
           </Dropdown.Item>
