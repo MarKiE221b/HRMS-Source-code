@@ -77,13 +77,13 @@ const ProfilePage = () => {
   });
 
   return (
-    <div>
+    <div className="h-screen">
       {/* Modal */}
       <LeaveModal showModal={showModal} setShowModal={setShowModal} />
 
       {/* Main */}
-      <div className="flex flex-col md:flex-row gap-8 py-6">
-        <div className="flex flex-col gap-8 md:w-[450px] max-h-screen">
+      <div className="flex flex-col md:flex-row h-full gap-8 py-6">
+        <div className="flex flex-col gap-8 md:w-[450px]">
           {/* Profile Panel */}
           <div className="bg-white shadow-sm p-8">
             <div className="flex items-center gap-4">
@@ -129,7 +129,7 @@ const ProfilePage = () => {
             </div>
           </div>
 
-          <div className="bg-white shadow-sm p-8 overflow-auto">
+          <div className="bg-white shadow-sm p-8 h-full overflow-auto">
             <h1 className="text-xl font-semibold">Earned Credits</h1>
             <div className="mt-5">
               {creditInfo?.map((credits, key) => (

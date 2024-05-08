@@ -12,6 +12,7 @@ const ProfilePage = lazy(() => import("./pages/user/ProfilePage/page.jsx"));
 const ApplicationLeavePage = lazy(() =>
   import("./pages/user/ApplicationLeavePage.jsx/page.jsx")
 );
+const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
 
 import Loading from "./Loading.jsx";
 
@@ -46,6 +47,16 @@ function App() {
               </Suspense>
             }
           />
+
+          <Route
+            path=":id/settings"
+            element={
+              <Suspense fallback={<Loading />}>
+                <SettingsPage />
+              </Suspense>
+            }
+          />
+
           <Route
             path="application"
             element={
