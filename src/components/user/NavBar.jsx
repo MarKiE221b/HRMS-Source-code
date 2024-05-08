@@ -5,12 +5,14 @@ import { FcOvertime } from "react-icons/fc";
 import logo from "/ched-logo.png";
 
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { logoutApi, userInfoApi } from "../../api";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+  const { id } = useParams();
   const { data: userData } = userInfoApi();
-  const { mutate: submitData, isSuccess } = logoutApi();
+  const { mutate: logoutFunct, isSuccess } = logoutApi();
 
   if (isSuccess) return <Navigate to="/" />;
 
@@ -39,7 +41,6 @@ const NavBar = () => {
             }`}</span>
           </Dropdown.Header>
           {!userData && <Dropdown.Item>Profile</Dropdown.Item>}
-          <Dropdown.Divider />
           <Dropdown.Header>
             <span className="block font-semibold">Credits: </span>
             <span className="flex items-center ml-2 font-semibold">
@@ -52,7 +53,14 @@ const NavBar = () => {
               <FcOvertime size="25px" />: 0
             </span>
           </Dropdown.Header>
-          <Dropdown.Item type="button" onClick={() => submitData()}>
+          <Dropdown.Item
+            type="button"
+            onClick={() => navigate(`${id}/settings`)}
+          >
+            {" "}
+            <span className="text-base">Profile</span>
+          </Dropdown.Item>
+          <Dropdown.Item type="button" onClick={() => logoutFunct()}>
             {" "}
             <span className="text-base">Sign out</span>
           </Dropdown.Item>

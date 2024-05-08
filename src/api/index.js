@@ -112,3 +112,47 @@ export const leaveApplicationsApi = () => {
     },
   });
 };
+
+export const getUsername = () => {
+  return useQuery({
+    queryKey: ["getusernamekey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getusername");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const updateUsername = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/updateusername", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const updatePwd = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/updatepwd", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};

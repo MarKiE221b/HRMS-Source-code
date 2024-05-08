@@ -17,7 +17,7 @@ const LoginPage = () => {
 
   return (
     <div
-      className="relative h-screen bg-cover bg-center"
+      className="h-screen bg-cover bg-center overflow-y-auto"
       style={{
         backgroundImage: `url(${logo})`,
         backgroundRepeat: "no-repeat",
