@@ -5,6 +5,7 @@ import bg from "/memer.png";
 
 import { Navigate } from "react-router-dom";
 import { loginApi } from "../../api";
+import { Button, Spinner } from "flowbite-react";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +13,14 @@ const LoginPage = () => {
     pwd: "",
   });
 
-  const { mutate: submitData, isSuccess, isError, error, data } = loginApi();
+  const {
+    mutate: submitData,
+    isSuccess,
+    isError,
+    error,
+    data,
+    isPending,
+  } = loginApi();
   if (isSuccess) return <Navigate to={`user/${data.data.user.emp_id}`} />;
 
   return (
@@ -97,12 +105,20 @@ const LoginPage = () => {
                 {error?.response?.data?.message}
               </p>
             )}
-            <button
+
+            <Button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 text-lg"
+              color="blue"
+              isProcessing={isPending}
+              processingSpinner={
+                <Spinner size="md" aria-label="Login spinner" />
+              }
+              label="2"
+              fullSized
+              disabled={isPending}
             >
-              Login
-            </button>
+              LOGIN
+            </Button>
           </form>
           {/* </form> */}
         </div>
