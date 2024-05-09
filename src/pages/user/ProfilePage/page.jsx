@@ -77,24 +77,24 @@ const ProfilePage = () => {
   });
 
   return (
-    <div className="h-screen">
+    <div className="h-full">
       {/* Modal */}
       <LeaveModal showModal={showModal} setShowModal={setShowModal} />
 
       {/* Main */}
-      <div className="flex flex-col md:flex-row h-full gap-8 py-6">
+      <div className="flex flex-col md:flex-row h-full gap-8">
         <div className="flex flex-col gap-8 md:w-[450px]">
           {/* Profile Panel */}
           <div className="bg-white shadow-sm p-8">
             <div className="flex items-center gap-4">
               <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
               <div>
-                <span className="block font-bold text-lg">
+                <span className="block font-bold">
                   {`${userData?.lastname}, ${userData?.firstname} ${
                     userData?.middlename ? userData?.middlename + " " : ""
                   }${userData?.ext_name || ""}`}
                 </span>
-                <span className="block text-gray-400">{userData?.unit}</span>
+                <span className="block text-sm text-gray-400">{userData?.unit}</span>
               </div>
             </div>
             {/* Credits Earned Panel */}
@@ -155,7 +155,7 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        <div className="p-5 bg-white w-full shadow-sm">
+        <div className="p-5 bg-white w-full shadow-sm ">
           <div className="my-5  w-full">
             <button
               className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"

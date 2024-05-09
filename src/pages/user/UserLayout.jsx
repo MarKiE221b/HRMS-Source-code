@@ -20,7 +20,7 @@ const UserLayout = () => {
         <div className="sticky top-0 z-50">
           <NavBar />
         </div>
-        <div className="bg-slate-100 py-10 px-5">
+        <div className="bg-slate-100 py-10 px-5 h-screen overflow-y-auto">
           <Outlet />
         </div>
       </div>
