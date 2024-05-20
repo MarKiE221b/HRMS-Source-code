@@ -13,6 +13,8 @@ const ApplicationLeavePage = lazy(() =>
   import("./pages/user/ApplicationLeavePage.jsx/page.jsx")
 );
 const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
+const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.jsx"));
+const Dashboard = lazy(() => import("./pages/admin/Dashboard/page.jsx"));
 
 import Loading from "./Loading.jsx";
 
@@ -62,6 +64,25 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <ApplicationLeavePage />
+              </Suspense>
+            }
+          />
+        </Route>
+
+        {/* Admin */}
+        <Route
+          path="admin"
+          element={
+            <Suspense fallback={<Loading />}>
+              <AdminLayout />
+            </Suspense>
+          }
+        >
+          <Route
+            path="dashboard"
+            element={
+              <Suspense fallback={<Loading />}>
+                <Dashboard />
               </Suspense>
             }
           />

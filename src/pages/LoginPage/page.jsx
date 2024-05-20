@@ -21,7 +21,20 @@ const LoginPage = () => {
     data,
     isPending,
   } = loginApi();
-  if (isSuccess) return <Navigate to={`user/${data.data.user.emp_id}`} />;
+
+  if (isSuccess) {
+    const { role, emp_id } = data.data.user;
+
+    switch (role) {
+      case "user":
+        return <Navigate to={`user/${emp_id}`} />;
+      case "admin":
+        return <Navigate to="admin/dashboard" />;
+      default:
+        console.error(`Unexpected role: ${role}`);
+        return <Navigate to="/" />;
+    }
+  }
 
   return (
     <div
