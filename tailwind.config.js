@@ -9,7 +9,11 @@ export default {
     flowbite.content(),
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        body: ["Radio Canada Big"],
+      },
+    },
   },
   plugins: [flowbite.plugin(), require("tw-elements-react/dist/plugin.cjs")],
 };

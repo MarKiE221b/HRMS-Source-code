@@ -1,8 +1,37 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { MdOutlineSpaceDashboard } from "react-icons/md";
+import { PiUserList } from "react-icons/pi";
 import logo from "/ched-logo.png";
 
+import { useLocation, useNavigate } from "react-router-dom";
+
 const SideBar = (props) => {
+  const path = useLocation();
+  const navigate = useNavigate();
+
+  const [indexMenu, setIndexMenu] = useState(0);
+  const sideList = [
+    {
+      icon: <MdOutlineSpaceDashboard />,
+      label: "Dashboard",
+      path: "dashboard",
+    },
+    {
+      icon: <PiUserList />,
+      label: "Employees",
+      path: "employees",
+    },
+  ];
+
+  useEffect(() => {
+    sideList.map((list, index) => {
+      if (list.path === path.pathname.split("/")[2]) {
+        setIndexMenu(index);
+      }
+    });
+  }, [path]);
+
   return (
     <aside
       className={`absolute left-0 top-0 z-10 flex h-screen flex-col w-64 bg-[#1c2434] text-white transform transition-transform ${
@@ -22,22 +51,32 @@ const SideBar = (props) => {
         </div>
       </div>
 
-      <nav>
-        <ul>
-          <li className="p-2">
-            <a href="#">Home</a>
-          </li>
-          <li className="p-2">
-            <a href="#">About</a>
-          </li>
-          <li className="p-2">
-            <a href="#">Services</a>
-          </li>
-          <li className="p-2">
-            <a href="#">Contact</a>
-          </li>
-        </ul>
-      </nav>
+      <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
+        <nav className="px-4 py-4">
+          <div>
+            <ul>
+              <h3 className="mb-4 ml-4 text-sm font-medium text-white text-opacity-70">
+                MENU
+              </h3>
+              <li>
+                {sideList.map((list, index) => (
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/admin/${list.path}`)}
+                    key={index}
+                    className={`flex items-center gap-2.5 px-4 py-2 mt-2 w-full ${
+                      indexMenu === index && "bg-[#333a48]"
+                    } hover:bg-[#333a48] duration-300 ease-in-out rounded-sm`}
+                  >
+                    {" "}
+                    {list.icon} {list.label}
+                  </button>
+                ))}
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     </aside>
   );
 };

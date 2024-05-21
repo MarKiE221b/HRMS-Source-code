@@ -19,11 +19,13 @@ const AdminLayout = () => {
     return <Navigate to="/" />;
   } else {
     return (
-      <div className="flex h-screen">
+      <div className="flex h-screen font-body">
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <NavBar isOpen={isOpen} setIsOpen={setIsOpen} />
-          <Outlet />
+          <div className="h-full p-10">
+            <Outlet />
+          </div>
         </div>
       </div>
     );

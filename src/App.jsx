@@ -15,6 +15,7 @@ const ApplicationLeavePage = lazy(() =>
 const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.jsx"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard/page.jsx"));
+const Employees = lazy(() => import("./pages/admin/Employees/page.jsx"));
 
 import Loading from "./Loading.jsx";
 
@@ -83,6 +84,14 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <Dashboard />
+              </Suspense>
+            }
+          />
+          <Route
+            path="employees"
+            element={
+              <Suspense fallback={<Loading />}>
+                <Employees />
               </Suspense>
             }
           />
