@@ -3,15 +3,16 @@ import { IoIosPeople } from "react-icons/io";
 import { TERipple } from "tw-elements-react";
 import { getAllApplications, getEmployeesCount } from "../../../api";
 import Loading from "../../../components/loading/Loading";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate()
+
   const { data: empCount, isFetching: loadCount } = getEmployeesCount();
   const { data: allApplications, isFetching: loadApp } = getAllApplications();
 
-  console.log(allApplications);
-
   return (
-    <div className="flex flex-col md:flex-row gap-14 px-14 mt-9">
+    <div className="flex flex-col md:flex-row md:px-14 md:mt-9  gap-14 ">
       {/* sample card */}
       <div className="flex-grow rounded-lg bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full">
         <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
@@ -103,6 +104,7 @@ const Dashboard = () => {
                 <button
                   type="button"
                   className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
+                  onClick={()=> navigate("/admin/employees")}
                 >
                   VIEW MORE
                 </button>
