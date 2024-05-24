@@ -27,6 +27,7 @@ import {
   TEModalBody,
   TEModalFooter,
 } from "tw-elements-react";
+import StatusTimeline from "../../../components/user/StatusTimeline";
 
 // api middlewares
 import {
@@ -56,7 +57,7 @@ const ProfilePage = () => {
       {
         accessorKey: "status",
         header: "Status",
-        cell: (props) => <div>{props.getValue()}</div>,
+        cell: <StatusTimeline />,
       },
     ],
     []
@@ -77,139 +78,133 @@ const ProfilePage = () => {
   });
 
   return (
-    <div className="h-full">
-      {/* Modal */}
-      <LeaveModal showModal={showModal} setShowModal={setShowModal} />
-
-      {/* Main */}
-      <div className="flex flex-col md:flex-row h-full gap-8">
-        <div className="flex flex-col gap-8 md:w-[450px]">
-          {/* Profile Panel */}
-          <div className="bg-white shadow-sm p-8">
-            <div className="flex items-center gap-4">
-              <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
-              <div>
-                <span className="block font-bold">
-                  {`${userData?.lastname}, ${userData?.firstname} ${
-                    userData?.middlename ? userData?.middlename + " " : ""
-                  }${userData?.ext_name || ""}`}
-                </span>
-                <span className="block text-sm text-gray-400">{userData?.unit}</span>
-              </div>
-            </div>
-            {/* Credits Earned Panel */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-              <div className="flex flex-col items-center border p-4">
-                <div className="h-[30px] w-[30px]">
-                  <img src={gifSwimming} alt="swimming_gif" />
-                </div>
-                <span className="block text-base font-bold">
-                  {userData?.vacation_balance}
-                </span>
-                <span className="block text-gray-400">Credits</span>
-              </div>
-
-              <div className="flex flex-col items-center border p-4">
-                <img
-                  src={gifSick}
-                  alt="sick_gif"
-                  className="h-[30px] w-[30px]"
-                />
-                <span className="block text-base font-bold">
-                  {userData?.sick_balance}
-                </span>
-                <span className="block text-gray-400">Credits</span>
-              </div>
-
-              <div className="flex flex-col items-center border p-4">
-                <img src={gifOT} alt="ot_gif" className="h-[30px] w-[30px]" />
-                <span className="block text-base font-bold">0</span>
-                <span className="block text-gray-400">Credits</span>
-              </div>
+    <div className="flex flex-col h-full gap-5 md:flex-row">
+      <div className="flex flex-col gap-5 md:w-[450px]">
+        {/* Profile Panel */}
+        <div className="flex-grow bg-white shadow-sm p-8">
+          <div className="flex items-center gap-4">
+            <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
+            <div>
+              <span className="block font-bold">
+                {`${userData?.lastname}, ${userData?.firstname} ${
+                  userData?.middlename ? userData?.middlename + " " : ""
+                }${userData?.ext_name || ""}`}
+              </span>
+              <span className="block text-sm text-gray-400">
+                {userData?.unit}
+              </span>
             </div>
           </div>
+          {/* Credits Earned Panel */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
+            <div className="flex flex-col items-center border p-4">
+              <div className="h-[30px] w-[30px]">
+                <img src={gifSwimming} alt="swimming_gif" />
+              </div>
+              <span className="block text-base font-bold">
+                {userData?.vacation_balance}
+              </span>
+              <span className="block text-gray-400">Credits</span>
+            </div>
 
-          <div className="bg-white shadow-sm p-8 h-full overflow-auto">
-            <h1 className="text-xl font-semibold">Earned Credits</h1>
-            <div className="mt-5">
-              {creditInfo?.map((credits, key) => (
-                <div
-                  key={key}
-                  className="p-4 border shadow-sm bg-slate-50 mb-2"
-                >
-                  <span className="block text-base font-semibold">
-                    {`${credits.particulars} ${
-                      credits.vacation_earned ? "Vacation" : "Sick"
-                    } `}
-                  </span>
-                  <span className="block text-gray-400">
-                    Credits Earned:{" "}
-                    {credits.vacation_earned || credits.sick_earned}
-                  </span>
-                  <span className="block text-gray-400">
-                    Month Credited : {credits.period}
-                  </span>
-                </div>
-              ))}
+            <div className="flex flex-col items-center border p-4">
+              <img src={gifSick} alt="sick_gif" className="h-[30px] w-[30px]" />
+              <span className="block text-base font-bold">
+                {userData?.sick_balance}
+              </span>
+              <span className="block text-gray-400">Credits</span>
+            </div>
+
+            <div className="flex flex-col items-center border p-4">
+              <img src={gifOT} alt="ot_gif" className="h-[30px] w-[30px]" />
+              <span className="block text-base font-bold">0</span>
+              <span className="block text-gray-400">Credits</span>
             </div>
           </div>
         </div>
 
-        <div className="p-5 bg-white w-full shadow-sm ">
-          <div className="my-5  w-full">
-            <button
-              className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
-              type="button"
-              onClick={() => setShowModal(true)}
-            >
-              <FaWpforms size="20px" />
-              <span className="text-sm md:text-base">Apply Leave</span>
-            </button>
-          </div>
-
-          <div className="text-sm overflow-auto">
-            <table className="max-h-[500px] w-full">
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="bg-gray-100 border ">
-                    {headerGroup.headers.map((header) => (
-                      <td
-                        className="cursor-pointer px-7 py-3"
-                        key={header.id}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        <div className="flex gap-1 items-center">
-                          {header.column.columnDef.header}
-                          {
-                            {
-                              asc: <IoIosArrowUp />,
-                              desc: <IoIosArrowDown />,
-                            }[header.column.getIsSorted() ?? null]
-                          }
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows?.map((row) => (
-                  <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <td className="px-7 border" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        {/* Credit Panel */}
+        <div className="flex-grow-0 bg-white shadow-sm p-8 overflow-y-auto">
+          <h1 className="text-xl font-semibold">Earned Credits</h1>
+          <div className="mt-5">
+            {creditInfo?.map((credits, key) => (
+              <div key={key} className="p-4 border shadow-sm bg-slate-50 mb-2">
+                <span className="block text-base font-semibold">
+                  {`${credits.particulars} ${
+                    credits.vacation_earned ? "Vacation" : "Sick"
+                  } `}
+                </span>
+                <span className="block text-gray-400">
+                  Credits Earned:{" "}
+                  {credits.vacation_earned || credits.sick_earned}
+                </span>
+                <span className="block text-gray-400">
+                  Month Credited : {credits.period}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {/* Table Application */}
+      <div className="p-5 bg-white w-full shadow-sm">
+        <div className="my-5  w-full">
+          <button
+            className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
+            type="button"
+            onClick={() => setShowModal(true)}
+          >
+            <FaWpforms size="20px" />
+            <span className="text-sm md:text-base">Apply Leave</span>
+          </button>
+        </div>
+
+        <div className="text-sm overflow-auto">
+          <table className="max-h-[500px] w-full">
+            <thead>
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id} className="bg-gray-100 border ">
+                  {headerGroup.headers.map((header) => (
+                    <td
+                      className="cursor-pointer px-7 py-3"
+                      key={header.id}
+                      onClick={header.column.getToggleSortingHandler()}
+                    >
+                      <div className="flex gap-1 items-center">
+                        {header.column.columnDef.header}
+                        {
+                          {
+                            asc: <IoIosArrowUp />,
+                            desc: <IoIosArrowDown />,
+                          }[header.column.getIsSorted() ?? null]
+                        }
+                      </div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table.getRowModel().rows?.map((row) => (
+                <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                  {row.getVisibleCells().map((cell) => (
+                    <td className="px-7 border" key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Modal */}
+      <LeaveModal showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 };

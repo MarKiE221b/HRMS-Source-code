@@ -16,12 +16,12 @@ const UserLayout = () => {
     return <Navigate to="/" />;
   } else {
     return (
-      <div>
-        <div className="sticky top-0 z-50">
+      <div className="flex h-screen font-body">
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-slate-100">
           <NavBar />
-        </div>
-        <div className="bg-slate-100 py-10 px-5 h-screen overflow-y-auto">
-          <Outlet />
+          <div className="max-h-full p-5 md:p-8 lg:p-14 overflow-y-auto">
+            <Outlet />
+          </div>
         </div>
       </div>
     );
