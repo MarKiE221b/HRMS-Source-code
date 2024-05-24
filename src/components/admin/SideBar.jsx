@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { PiUserList } from "react-icons/pi";
-import logo from "/ched-logo.png";
+import { IoDocumentTextOutline } from "react-icons/io5";
+import logo from "../../assets/ched-logo.png";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -21,6 +22,11 @@ const SideBar = (props) => {
       icon: <PiUserList />,
       label: "Employees",
       path: "employees",
+    },
+    {
+      icon: <IoDocumentTextOutline />,
+      label: "Leave",
+      path: "requests",
     },
   ];
 

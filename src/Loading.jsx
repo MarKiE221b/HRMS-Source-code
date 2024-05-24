@@ -1,5 +1,5 @@
 import React from "react";
-import catSpinning from "/catspinning.gif";
+import catSpinning from "./assets/catspinning.gif";
 
 const Loading = () => {
   return (

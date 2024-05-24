@@ -16,6 +16,8 @@ const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.jsx"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard/page.jsx"));
 const Employees = lazy(() => import("./pages/admin/Employees/page.jsx"));
+const RequestPage = lazy(() => import("./pages/admin/RequestPage/page.jsx"));
+
 
 import Loading from "./Loading.jsx";
 
@@ -95,6 +97,15 @@ function App() {
               </Suspense>
             }
           />
+         <Route
+            path="requests"
+            element={
+              <Suspense fallback={<Loading />}>
+                <RequestPage />
+              </Suspense>
+            }
+          /> 
+          
         </Route>
       </Route>
     )

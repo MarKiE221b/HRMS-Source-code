@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 
 // icons & picutures
-import logo from "/ched-logo.png";
+import logo from "../../../assets/ched-logo.png";
 import gifSwimming from "/swimming-pool.gif";
 import gifSick from "/sick.gif";
 import gifOT from "/down-time.gif";

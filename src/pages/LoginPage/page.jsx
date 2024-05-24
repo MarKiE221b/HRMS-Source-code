@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
-import logo from "/ched-logo.png";
-import bg from "/memer.png";
+import logo from "../../assets/ched-logo.png";
 
 import { Navigate } from "react-router-dom";
 import { loginApi } from "../../api";

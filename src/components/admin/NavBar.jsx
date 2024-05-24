@@ -3,7 +3,6 @@ import { FaSwimmer } from "react-icons/fa";
 import { MdOutlineSick } from "react-icons/md";
 import { FcOvertime } from "react-icons/fc";
 import { IoMdMenu } from "react-icons/io";
-import logo from "/ched-logo.png";
 
 import { Avatar, Dropdown, Navbar } from "flowbite-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";

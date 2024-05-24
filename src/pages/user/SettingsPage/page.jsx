@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import logo from "/ched-logo.png";
+import logo from "../../../assets/ched-logo.png";
 import { IoReturnUpBack } from "react-icons/io5";
 import { Avatar, Button, Label, TextInput } from "flowbite-react";
 import { Link, useParams } from "react-router-dom";
@@ -30,7 +30,7 @@ const SettingsPage = () => {
   }, [isSuccess]);
 
   return (
-    <div className="h-screen flex items-start justify-center">
+    <div className="flex items-start justify-center">
       <div className="bg-white w-full max-w-[500px] p-5 shadow-sm">
         <div className="flex items-center gap-1 mb-2">
           <IoReturnUpBack size="20px" />

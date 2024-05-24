@@ -156,3 +156,45 @@ export const updatePwd = () => {
     },
   });
 };
+
+export const getEmployeesCount = () => {
+  return useQuery({
+    queryKey: ["getemployeescountkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getEmployeesCount");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getAllApplications = () => {
+  return useQuery({
+    queryKey: ["getallapplicationskey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getAllApplications");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getEmployeesList = () => {
+  return useQuery({
+    queryKey: ["getemployeeslistkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getEmployeesList");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
