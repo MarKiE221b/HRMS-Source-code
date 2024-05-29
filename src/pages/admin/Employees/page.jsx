@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { getEmployeesList } from "../../../api";
 import Table from "../../../components/admin/Table";
+import EModifyModal from "../../../components/admin/EModifyModal";
 
 const Employees = () => {
   const { data: employees, isFetching: loadApp } = getEmployeesList();
@@ -36,6 +37,7 @@ const Employees = () => {
   );
   return (
     <div>
+      <EModifyModal />
       <Table columns={columns} data={employees} load={loadApp} />
     </div>
   );
