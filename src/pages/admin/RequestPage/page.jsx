@@ -6,12 +6,15 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
+import { useQueryClient } from "@tanstack/react-query";
+
 import { getAllApplications, updateEmployeeLeaveRD } from "../../../api";
 import StatusTimeline from "../../../components/admin/StatusTimeline";
 import TableButton from "../../../components/admin/TableButton";
 import ComplyModal from "../../../components/admin/ComplyModal";
 
 const RequestPage = () => {
+  const queryClient = useQueryClient();
   const { data: allApplications, isFetching: loadApp } = getAllApplications();
 
   const [sorting, setSorting] = useState([]);
