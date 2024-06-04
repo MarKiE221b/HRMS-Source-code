@@ -1,11 +1,5 @@
-import React, { useState } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  flexRender,
-} from "@tanstack/react-table";
+import React from "react";
+import { flexRender } from "@tanstack/react-table";
 import Loading from "../loading/Loading";
 import { Label, TextInput } from "flowbite-react";
 
@@ -35,22 +29,7 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   );
 };
 
-const Table = ({ columns, data, load }) => {
-  const [sorting, setSorting] = useState([]);
-  const [globalFilter, setGlobalFilter] = useState("");
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting, globalFilter },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: "includesString",
-  });
-
+const Table = ({ load, globalFilter, setGlobalFilter, table }) => {
   return (
     <div className="flex-grow rounded-lg bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full">
       <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
@@ -79,31 +58,36 @@ const Table = ({ columns, data, load }) => {
                               <th
                                 key={header.id}
                                 scope="col"
-                                className="px-6 py-4"
+                                className="px-3 py-4"
                               >
-                                {header.isPlaceholder ? null : (
-                                  <div>
-                                    {flexRender(
-                                      header.column.columnDef.header,
-                                      header.getContext()
-                                    )}
-                                    <button
-                                      onClick={header.column.getToggleSortingHandler()}
-                                      className="ml-2"
-                                    >
-                                      {header.column.getIsSorted() ? (
-                                        header.column.getIsSorted() ===
-                                        "desc" ? (
-                                          <FaLongArrowAltDown />
+                                <button
+                                  onClick={header.column.getToggleSortingHandler()}
+                                  className="ml-2"
+                                >
+                                  {header.isPlaceholder ? null : (
+                                    <div className="flex flex-row gap-3">
+                                      {flexRender(
+                                        header.column.columnDef.header,
+                                        header.getContext()
+                                      )}
+
+                                      {header.column.columnDef.header ? (
+                                        header.column.getIsSorted() ? (
+                                          header.column.getIsSorted() ===
+                                          "desc" ? (
+                                            <FaLongArrowAltDown />
+                                          ) : (
+                                            <FaLongArrowAltUp />
+                                          )
                                         ) : (
-                                          <FaLongArrowAltUp />
+                                          <FaArrowsAltV />
                                         )
                                       ) : (
-                                        <FaArrowsAltV />
+                                        <div></div>
                                       )}
-                                    </button>
-                                  </div>
-                                )}
+                                    </div>
+                                  )}
+                                </button>
                               </th>
                             ))}
                           </tr>

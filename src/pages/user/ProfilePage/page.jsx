@@ -28,6 +28,8 @@ import {
   TEModalFooter,
 } from "tw-elements-react";
 import StatusTimeline from "../../../components/user/StatusTimeline";
+import TableButton from "../../../components/user/TableButton";
+import ComplyModal from "../../../components/user/ComplyModal";
 
 // api middlewares
 import {
@@ -36,16 +38,35 @@ import {
   leaveApplicationsApi,
   leaveTypeApi,
   userInfoApi,
+  getEmployeesApplication,
+  updateEmployeeLeaveOIC,
 } from "../../../api";
+
+// Libraries
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfilePage = () => {
   const { data: userData } = userInfoApi();
   const { data: creditInfo } = creditInfoApi();
   const { data: leaveApplications } = leaveApplicationsApi();
+  const { data: employeesApplication } = getEmployeesApplication(
+    userData?.unit
+  );
+  const {
+    mutate: submitStatus,
+    isSuccess,
+    data,
+    isPending,
+  } = updateEmployeeLeaveOIC();
 
+  const queryClient = useQueryClient();
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+  const [showModal, setShowModal] = useState({
+    modal1: false,
+    modal2: false,
+  });
+  const [id, setId] = useState("");
 
   const columns = useMemo(
     () => [
@@ -55,9 +76,66 @@ const ProfilePage = () => {
         cell: (props) => <div>{props.getValue()}</div>,
       },
       {
+        accessorKey: "no_days",
+        header: "No. Days",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "inclusive_dates",
+        header: "Dates",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
         accessorKey: "status",
         header: "Status",
-        cell: <StatusTimeline />,
+        cell: (props) => (
+          <StatusTimeline status={props.table} row={props.row} />
+        ),
+      },
+    ],
+    []
+  );
+
+  const columns2 = useMemo(
+    () => [
+      {
+        accessorKey: "full_name",
+        header: "Name",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "type",
+        header: "Type",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "no_days",
+        header: "No. Days",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "inclusive_dates",
+        header: "Dates",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "status",
+        header: "Status",
+        cell: (props) => (
+          <StatusTimeline status={props.table} row={props.row} />
+        ),
+      },
+      {
+        accessorKey: "btnAction",
+        header: "",
+        cell: (props) => (
+          <TableButton
+            table={props.table}
+            row={props.row}
+            setShowModal={setShowModal}
+            setId={setId}
+          />
+        ),
       },
     ],
     []
@@ -77,11 +155,31 @@ const ProfilePage = () => {
     onSortingChange: setSorting,
   });
 
+  const table2 = useReactTable({
+    data: employeesApplication || [],
+    columns: columns2,
+    state: {
+      sorting: sorting,
+      globalFilter: columnFilters,
+    },
+    getCoreRowModel: getCoreRowModel(), // Pass the hook reference directly, not a call to it
+    getFilteredRowModel: getFilteredRowModel(), // Same here
+    getSortedRowModel: getSortedRowModel(), // And here
+    onGlobalFilterChange: setColumnFilters,
+    onSortingChange: setSorting,
+  });
+
+  if (isSuccess) {
+    queryClient.invalidateQueries({
+      queryKey: ["getemployeesapplicationkey"],
+    });
+  }
+
   return (
-    <div className="flex flex-col h-full gap-5 md:flex-row">
-      <div className="flex flex-col gap-5 md:w-[450px]">
+    <div className="flex flex-col gap-5 md:flex-row">
+      <div className="flex flex-col gap-5 md:w-[450px] ">
         {/* Profile Panel */}
-        <div className="flex-grow bg-white shadow-sm p-8">
+        <div className="bg-white shadow-sm p-8">
           <div className="flex items-center gap-4">
             <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
             <div>
@@ -124,7 +222,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Credit Panel */}
-        <div className="flex-grow-0 bg-white shadow-sm p-8 overflow-y-auto">
+        <div className="bg-white shadow-sm p-8 max-h-screen overflow-y-auto">
           <h1 className="text-xl font-semibold">Earned Credits</h1>
           <div className="mt-5">
             {creditInfo?.map((credits, key) => (
@@ -148,63 +246,134 @@ const ProfilePage = () => {
       </div>
 
       {/* Table Application */}
-      <div className="p-5 bg-white w-full shadow-sm">
-        <div className="my-5  w-full">
-          <button
-            className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
-            type="button"
-            onClick={() => setShowModal(true)}
-          >
-            <FaWpforms size="20px" />
-            <span className="text-sm md:text-base">Apply Leave</span>
-          </button>
-        </div>
+      <div className="flex flex-col flex-grow  gap-5">
+        {/* Emp Request Card */}
+        {userData?.unit === "Chief Administrative Officer" && (
+          <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
+            <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+              Employees Requests
+            </div>
 
-        <div className="text-sm overflow-auto">
-          <table className="max-h-[500px] w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="bg-gray-100 border ">
-                  {headerGroup.headers.map((header) => (
-                    <td
-                      className="cursor-pointer px-7 py-3"
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      <div className="flex gap-1 items-center">
-                        {header.column.columnDef.header}
-                        {
-                          {
-                            asc: <IoIosArrowUp />,
-                            desc: <IoIosArrowDown />,
-                          }[header.column.getIsSorted() ?? null]
-                        }
-                      </div>
-                    </td>
+            <div className="pt-5 bg-white">
+              <div className="text-sm max-h-[500px] overflow-y-auto">
+                <table className="w-full">
+                  <thead>
+                    {table2.getHeaderGroups().map((headerGroup) => (
+                      <tr key={headerGroup.id} className="bg-gray-100 border ">
+                        {headerGroup.headers.map((header) => (
+                          <td
+                            className="cursor-pointer px-7 py-3"
+                            key={header.id}
+                            onClick={header.column.getToggleSortingHandler()}
+                          >
+                            <div className="flex gap-1 items-center">
+                              {header.column.columnDef.header}
+                              {
+                                {
+                                  asc: <IoIosArrowUp />,
+                                  desc: <IoIosArrowDown />,
+                                }[header.column.getIsSorted() ?? null]
+                              }
+                            </div>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </thead>
+                  <tbody>
+                    {table2.getRowModel().rows?.map((row) => (
+                      <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                        {row.getVisibleCells().map((cell) => (
+                          <td className="px-7 border" key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Own Request Card */}
+        <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
+          <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
+            Your Requests
+          </div>
+
+          <div className="py-5">
+            <div className="my-5">
+              <button
+                className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
+                type="button"
+                onClick={() =>
+                  setShowModal((prev) => ({ ...prev, modal1: true }))
+                }
+              >
+                <FaWpforms size="20px" />
+                <span className="text-sm md:text-base">Apply Leave</span>
+              </button>
+            </div>
+
+            {/* Your Table */}
+            <div className="text-sm max-h-[300px] overflow-y-auto">
+              <table className=" w-full">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id} className="bg-gray-100 border ">
+                      {headerGroup.headers.map((header) => (
+                        <td
+                          className="cursor-pointer px-7 py-3"
+                          key={header.id}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          <div className="flex gap-1 items-center">
+                            {header.column.columnDef.header}
+                            {
+                              {
+                                asc: <IoIosArrowUp />,
+                                desc: <IoIosArrowDown />,
+                              }[header.column.getIsSorted() ?? null]
+                            }
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows?.map((row) => (
-                <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="px-7 border" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows?.map((row) => (
+                    <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td className="px-7 border" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Modal */}
-      <LeaveModal showModal={showModal} setShowModal={setShowModal} />
+      <LeaveModal showModal={showModal.modal1} setShowModal={setShowModal} />
+      <ComplyModal
+        showModal={showModal.modal2}
+        setShowModal={setShowModal}
+        id={id}
+        submitStatus={submitStatus}
+      />
     </div>
   );
 };
@@ -235,7 +404,9 @@ const LeaveModal = ({ showModal, setShowModal }) => {
               <button
                 type="button"
                 className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                onClick={() => setShowModal(false)}
+                onClick={() =>
+                  setShowModal((prev) => ({ ...prev, modal1: false }))
+                }
                 aria-label="Close"
               >
                 <svg
@@ -261,7 +432,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                 applyLeave(formData);
 
                 if (isSuccess) {
-                  setShowModal(false);
+                  setShowModal((prev) => ({ ...prev, modal1: false }));
                 }
               }}
             >
@@ -354,7 +525,9 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                   <button
                     type="button"
                     className="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
-                    onClick={() => setShowModal(false)}
+                    onClick={() =>
+                      setShowModal((prev) => ({ ...prev, modal1: false }))
+                    }
                   >
                     Close
                   </button>
