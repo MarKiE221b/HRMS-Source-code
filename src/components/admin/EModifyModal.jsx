@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Checkbox, Label, TextInput } from "flowbite-react";
+import React from "react";
+import { Label, Select, TextInput } from "flowbite-react";
 import {
   TERipple,
   TEModal,
@@ -9,30 +9,21 @@ import {
   TEModalBody,
   TEModalFooter,
 } from "tw-elements-react";
-function EModifyModal() {
-  const [showModal, setShowModal] = useState(true);
+function EModifyModal({ tableRowData, showModal, setShowModal }) {
+  const empDataObject = tableRowData?.reduce((acc, data) => {
+    acc[data.emp_id] = data;
+    return acc;
+  }, {});
+
   return (
     <div>
-      {/* <!-- Button trigger modal --> */}
-      <TERipple rippleColor="white">
-        <button
-          type="button"
-          className="inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
-          onClick={() => setShowModal(true)}
-        >
-          Launch demo modal
-        </button>
-      </TERipple>
-
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal}>
         <TEModalDialog>
           <TEModalContent>
             <TEModalHeader>
               {/* <!--Modal title--> */}
-              <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200">
-                Modal title
-              </h5>
+              <h5 className="text-xl font-medium leading-normal text-neutral-800 dark:text-neutral-200"></h5>
               {/* <!--Close button--> */}
               <button
                 type="button"
@@ -62,67 +53,47 @@ function EModifyModal() {
                 <div className="mb-2 block">
                   <Label htmlFor="lastname" value="Last Name" />
                 </div>
-                <TextInput
-                  id="lastname"
-                  type="text"
-                  placeholder="Last Name"
-                  required
-                />
+                <TextInput id="lastname" type="text" required />
               </div>
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="firstname" value="First Name" />
                 </div>
-                <TextInput
-                  id="firstname"
-                  type="text"
-                  placeholder="First Name"
-                  required
-                />
+                <TextInput id="firstname" type="text" required />
               </div>
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="middlename" value="Middle Name" />
                 </div>
-                <TextInput
-                  id="middlename"
-                  type="text"
-                  placeholder="Middle Name"
-                  required
-                />
+                <TextInput id="middlename" type="text" required />
               </div>
               <div>
                 <div className="mb-2 block">
                   <Label htmlFor="extname" value="Extension Name" />
                 </div>
-                <TextInput
-                  id="extname"
-                  type="text"
-                  placeholder="Extension Name"
-                  required
-                />
+                <TextInput id="extname" type="text" required />
               </div>
-              <div>
+              <div className="max-w-md">
                 <div className="mb-2 block">
                   <Label htmlFor="unit" value="Unit" />
                 </div>
-                <TextInput
-                  id="unit"
-                  type="text"
-                  placeholder="Unit"
-                  required
-                />
+                <Select id="unit" required>
+                  <option>United States</option>
+                  <option>Canada</option>
+                  <option>France</option>
+                  <option>Germany</option>
+                </Select>
               </div>
-              <div>
+              <div className="max-w-md">
                 <div className="mb-2 block">
                   <Label htmlFor="division" value="Division" />
                 </div>
-                <TextInput
-                  id="division"
-                  type="text"
-                  placeholder="Division"
-                  required
-                />
+                <Select id="division" required>
+                  <option>United States</option>
+                  <option>Canada</option>
+                  <option>France</option>
+                  <option>Germany</option>
+                </Select>
               </div>
             </TEModalBody>
             <TEModalFooter>

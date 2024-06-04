@@ -198,3 +198,63 @@ export const getEmployeesList = () => {
     },
   });
 };
+
+export const getEmployeesApplication = (unit) => {
+  return useQuery({
+    queryKey: ["getemployeesapplicationkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getEmployeeApplications");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    enabled: unit === "Chief Administrative Officer",
+  });
+};
+
+export const getEmployeeDetails = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/getEmployeeDetails", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const updateEmployeeLeaveOIC = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/updateLeaveOIC", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const updateEmployeeLeaveRD = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/updateLeaveRD", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
