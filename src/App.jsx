@@ -12,12 +12,12 @@ const ProfilePage = lazy(() => import("./pages/user/ProfilePage/page.jsx"));
 const ApplicationLeavePage = lazy(() =>
   import("./pages/user/ApplicationLeavePage.jsx/page.jsx")
 );
+const LedgerPage = lazy(() => import("./pages/user/LedgerPage/page.jsx"));
 const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.jsx"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard/page.jsx"));
 const Employees = lazy(() => import("./pages/admin/Employees/page.jsx"));
 const RequestPage = lazy(() => import("./pages/admin/RequestPage/page.jsx"));
-
 
 import Loading from "./Loading.jsx";
 
@@ -63,6 +63,15 @@ function App() {
           />
 
           <Route
+            path=":id/ledger"
+            element={
+              <Suspense fallback={<Loading />}>
+                <LedgerPage />
+              </Suspense>
+            }
+          />
+
+          <Route
             path="application"
             element={
               <Suspense fallback={<Loading />}>
@@ -97,15 +106,14 @@ function App() {
               </Suspense>
             }
           />
-         <Route
+          <Route
             path="requests"
             element={
               <Suspense fallback={<Loading />}>
                 <RequestPage />
               </Suspense>
             }
-          /> 
-          
+          />
         </Route>
       </Route>
     )
