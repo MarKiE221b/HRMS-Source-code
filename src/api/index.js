@@ -258,3 +258,17 @@ export const updateEmployeeLeaveRD = () => {
     },
   });
 };
+
+export const getLedger = () => {
+  return useQuery({
+    queryKey: ["getledgerkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getLedger");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};

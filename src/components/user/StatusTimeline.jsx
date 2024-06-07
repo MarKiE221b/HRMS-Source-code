@@ -2,6 +2,7 @@ import React from "react";
 import { Timeline } from "flowbite-react";
 import { RxCross2 } from "react-icons/rx";
 import { MdOutlinePending } from "react-icons/md";
+import { FaCheck } from "react-icons/fa6";
 const StatusTimeline = ({ status, row }) => {
   const filterStatusData =
     status
@@ -17,9 +18,11 @@ const StatusTimeline = ({ status, row }) => {
         <Timeline.Item>
           <Timeline.Point
             icon={
-              filterStatusData?.notedStatus === "Pending"
-                ? MdOutlinePending
-                : RxCross2
+              filterStatusData?.notedStatus !== "Pending"
+                ? filterStatusData?.notedStatus === "Approved"
+                  ? FaCheck
+                  : RxCross2
+                : MdOutlinePending
             }
           />
           <Timeline.Content>
@@ -33,9 +36,11 @@ const StatusTimeline = ({ status, row }) => {
         <Timeline.Item>
           <Timeline.Point
             icon={
-              filterStatusData?.approvedStatus === "Pending"
-                ? MdOutlinePending
-                : RxCross2
+              filterStatusData?.approvedStatus !== "Pending"
+                ? filterStatusData?.approvedStatus === "Approved"
+                  ? FaCheck
+                  : RxCross2
+                : MdOutlinePending
             }
           />
           <Timeline.Content>

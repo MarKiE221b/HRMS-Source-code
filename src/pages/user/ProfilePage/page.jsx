@@ -44,8 +44,10 @@ import {
 
 // Libraries
 import { useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
+  const navigate = useNavigate();
   const { data: userData } = userInfoApi();
   const { data: creditInfo } = creditInfoApi();
   const { data: leaveApplications } = leaveApplicationsApi();
@@ -215,32 +217,21 @@ const ProfilePage = () => {
 
             <div className="flex flex-col items-center border p-4">
               <img src={gifOT} alt="ot_gif" className="h-[30px] w-[30px]" />
-              <span className="block text-base font-bold">0</span>
+              <span className="block text-base font-bold">
+                {userData?.CTO_balance !== null ? userData?.CTO_balance : 0}
+              </span>
               <span className="block text-gray-400">Credits</span>
             </div>
           </div>
-        </div>
 
-        {/* Credit Panel */}
-        <div className="bg-white shadow-sm p-8 max-h-screen overflow-y-auto">
-          <h1 className="text-xl font-semibold">Earned Credits</h1>
-          <div className="mt-5">
-            {creditInfo?.map((credits, key) => (
-              <div key={key} className="p-4 border shadow-sm bg-slate-50 mb-2">
-                <span className="block text-base font-semibold">
-                  {`${credits.particulars} ${
-                    credits.vacation_earned ? "Vacation" : "Sick"
-                  } `}
-                </span>
-                <span className="block text-gray-400">
-                  Credits Earned:{" "}
-                  {credits.vacation_earned || credits.sick_earned}
-                </span>
-                <span className="block text-gray-400">
-                  Month Credited : {credits.period}
-                </span>
-              </div>
-            ))}
+          <div className="w-full flex justify-end mt-3">
+            <button
+              type="button"
+              className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
+              onClick={() => navigate("ledger")}
+            >
+              VIEW LEDGER
+            </button>
           </div>
         </div>
       </div>
