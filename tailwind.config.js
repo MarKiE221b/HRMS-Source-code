@@ -13,6 +13,20 @@ export default {
       fontFamily: {
         body: ["Radio Canada Big"],
       },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        logoPulse: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
+      },
+      animation: {
+        fadeIn: "fadeIn 1.5s ease-in-out",
+        logoPulse: "logoPulse 3s ease-in-out infinite",
+      },
     },
   },
   plugins: [flowbite.plugin(), require("tw-elements-react/dist/plugin.cjs")],

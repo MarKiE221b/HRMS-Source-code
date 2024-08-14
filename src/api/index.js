@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../axios";
 
 export const logoutApi = () => {
@@ -34,20 +34,6 @@ export const userInfoApi = () => {
     queryFn: async () => {
       try {
         const response = await makeRequest.get("/getuserinfo");
-        return response.data;
-      } catch (error) {
-        throw error;
-      }
-    },
-  });
-};
-
-export const creditInfoApi = () => {
-  return useQuery({
-    queryKey: ["getCreditInfoKey"],
-    queryFn: async () => {
-      try {
-        const response = await makeRequest.get("/getCreditInfo");
         return response.data;
       } catch (error) {
         throw error;
@@ -210,7 +196,9 @@ export const getEmployeesApplication = (unit) => {
         throw error;
       }
     },
-    enabled: unit === "Chief Administrative Officer",
+    enabled:
+      unit === "Chief Administrative Officer" ||
+      unit === "Chief Education Program Specialist",
   });
 };
 
@@ -272,3 +260,95 @@ export const getLedger = () => {
     },
   });
 };
+
+export const getCTOLedger = () => {
+  return useQuery({
+    queryKey: ["getCTOledgerkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getctoledger");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const uploadCTO = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/uploadCTO", input, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getPdf = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        const response = await makeRequest.post("/pdffile", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+          responseType: "blob",
+        });
+        return URL.createObjectURL(response.data); // Convert the blob to an object URL
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getNotedCount = (unit) => {
+  return useQuery({
+    queryKey: ["getnotedcountkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getCountNoted");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+    enabled:
+      unit === "Chief Administrative Officer" ||
+      unit === "Chief Education Program Specialist",
+  });
+};
+
+export const getApprovedCount = () => {
+  return useQuery({
+    queryKey: ["getapprovedcountkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getCountApproved");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+// export const getPdf = () => {
+//   return useQuery({
+//     queryKey: ["getPdfkey"],
+//     queryFn: async () => {
+//       try {
+//         const response = await makeRequest.post("/pdffile", {
+//           responseType: "blob",
+//         });
+//         return URL.createObjectURL(response.data);
+//       } catch (error) {
+//         throw error;
+//       }
+//     },
+//   });
+// };

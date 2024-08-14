@@ -44,18 +44,6 @@ const NavBar = (props) => {
           }`}</span>
         </Dropdown.Header>
         {!userData && <Dropdown.Item>Profile</Dropdown.Item>}
-        <Dropdown.Header>
-          <span className="block font-semibold">Credits: </span>
-          <span className="flex items-center ml-2 font-semibold">
-            <FaSwimmer size="25px" /> : {userData?.vacation_balance}
-          </span>
-          <span className="flex items-center ml-2 font-semibold">
-            <MdOutlineSick size="25px" /> : {userData?.sick_balance}
-          </span>
-          <span className="flex items-center ml-2 font-semibold">
-            <FcOvertime size="25px" />: 0
-          </span>
-        </Dropdown.Header>
         <Dropdown.Item type="button" onClick={() => navigate(`${id}/settings`)}>
           {" "}
           <span className="text-base">Profile</span>

@@ -3,9 +3,12 @@ import { FaArrowLeftLong } from "react-icons/fa6";
 import { MdOutlineSpaceDashboard } from "react-icons/md";
 import { PiUserList } from "react-icons/pi";
 import { IoDocumentTextOutline } from "react-icons/io5";
+import { GrCertificate } from "react-icons/gr";
+
 import logo from "../../assets/ched-logo.png";
 
 import { useLocation, useNavigate } from "react-router-dom";
+import { getApprovedCount } from "../../api";
 
 const SideBar = (props) => {
   const path = useLocation();
@@ -27,6 +30,11 @@ const SideBar = (props) => {
       icon: <IoDocumentTextOutline />,
       label: "Leave",
       path: "requests",
+    },
+    {
+      icon: <GrCertificate />,
+      label: "CTO",
+      path: "cto",
     },
   ];
 
@@ -70,12 +78,12 @@ const SideBar = (props) => {
                     type="button"
                     onClick={() => navigate(`/admin/${list.path}`)}
                     key={index}
-                    className={`flex items-center gap-2.5 px-4 py-2 mt-2 w-full ${
+                    className={`relative flex items-center text-sm gap-2.5 px-4 py-2 mt-2 w-full ${
                       indexMenu === index && "bg-[#333a48]"
                     } hover:bg-[#333a48] duration-300 ease-in-out rounded-sm`}
                   >
                     {" "}
-                    {list.icon} {list.label}
+                    {list.icon} {list.label}{" "}
                   </button>
                 ))}
               </li>

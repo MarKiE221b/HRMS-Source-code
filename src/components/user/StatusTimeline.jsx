@@ -29,7 +29,11 @@ const StatusTimeline = ({ status, row }) => {
             <Timeline.Time>
               {filterStatusData?.notedDateModified?.split("T")[0]}
             </Timeline.Time>
-            <Timeline.Title>Chief Administrative Officer</Timeline.Title>
+            <Timeline.Title>
+              {filterStatusData?.division === "Admin"
+                ? "Chief Administrative Officer"
+                : "Chief Education Program Specialist"}
+            </Timeline.Title>
             <Timeline.Body>{filterStatusData?.notedStatus}</Timeline.Body>
           </Timeline.Content>
         </Timeline.Item>

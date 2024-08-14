@@ -10,14 +10,19 @@ const LoginPage = lazy(() => import("./pages/LoginPage/page.jsx"));
 const UserLayout = lazy(() => import("./pages/user/UserLayout.jsx"));
 const ProfilePage = lazy(() => import("./pages/user/ProfilePage/page.jsx"));
 const ApplicationLeavePage = lazy(() =>
-  import("./pages/user/ApplicationLeavePage.jsx/page.jsx")
+  import("./pages/user/ApplicationLeavePage/page.jsx")
 );
 const LedgerPage = lazy(() => import("./pages/user/LedgerPage/page.jsx"));
+const CTOpage = lazy(() => import("./pages/user/CTOpage/page.jsx"));
 const SettingsPage = lazy(() => import("./pages/user/SettingsPage/page.jsx"));
+const EmployeeRequestPage = lazy(() =>
+  import("./pages/user/EmployeeRequestPage/page.jsx")
+);
 const AdminLayout = lazy(() => import("./pages/admin/AdminLayout.jsx"));
 const Dashboard = lazy(() => import("./pages/admin/Dashboard/page.jsx"));
 const Employees = lazy(() => import("./pages/admin/Employees/page.jsx"));
 const RequestPage = lazy(() => import("./pages/admin/RequestPage/page.jsx"));
+const CTO = lazy(() => import("./pages/admin/CTO/page.jsx"));
 
 import Loading from "./Loading.jsx";
 
@@ -72,6 +77,24 @@ function App() {
           />
 
           <Route
+            path=":id/emprequestpage"
+            element={
+              <Suspense fallback={<Loading />}>
+                <EmployeeRequestPage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path=":id/ctopage"
+            element={
+              <Suspense fallback={<Loading />}>
+                <CTOpage />
+              </Suspense>
+            }
+          />
+
+          <Route
             path="application"
             element={
               <Suspense fallback={<Loading />}>
@@ -111,6 +134,15 @@ function App() {
             element={
               <Suspense fallback={<Loading />}>
                 <RequestPage />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="cto"
+            element={
+              <Suspense fallback={<Loading />}>
+                <CTO />
               </Suspense>
             }
           />

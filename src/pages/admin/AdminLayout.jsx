@@ -23,7 +23,7 @@ const AdminLayout = () => {
         <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
           <NavBar isOpen={isOpen} setIsOpen={setIsOpen} />
-          <div className="h-full p-10">
+          <div className="h-full p-10 bg-slate-100">
             <Outlet />
           </div>
         </div>
