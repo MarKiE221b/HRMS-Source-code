@@ -1,12 +1,16 @@
 import React from "react";
-import catLoad from "../../assets/catLoad2.gif";
+import logo from "../../assets/ched-logo.png";
 
 const Loading = () => {
   return (
     <div>
       <div className="p-10 flex items-center justify-center">
         <div className="h-[120px] w-[120px]">
-          <img src={catLoad} alt="gif_img" />
+          <img
+            src={logo}
+            alt="Logo"
+            className="rounded-full animate-logoPulse"
+          />
         </div>
       </div>
     </div>

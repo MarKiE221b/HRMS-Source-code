@@ -2,11 +2,11 @@ import React from "react";
 import { IoIosPeople } from "react-icons/io";
 import { TERipple } from "tw-elements-react";
 import { getAllApplications, getEmployeesCount } from "../../../api";
-import Loading from "../../../components/loading/Loading";
+import Loading from "../../../components/loading/Loading.jsx";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { data: empCount, isFetching: loadCount } = getEmployeesCount();
   const { data: allApplications, isFetching: loadApp } = getAllApplications();
@@ -104,7 +104,7 @@ const Dashboard = () => {
                 <button
                   type="button"
                   className="inline-block rounded px-3 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary transition duration-150 ease-in-out hover:bg-neutral-500 hover:bg-opacity-10 hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
-                  onClick={()=> navigate("/admin/employees")}
+                  onClick={() => navigate("/admin/employees")}
                 >
                   VIEW MORE
                 </button>

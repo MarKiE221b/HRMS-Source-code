@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Table from "../../../components/admin/Table";
 import {
   useReactTable,
@@ -15,18 +15,17 @@ import ComplyModal from "../../../components/admin/ComplyModal";
 
 const RequestPage = () => {
   const queryClient = useQueryClient();
-  const { data: allApplications, isFetching: loadApp } = getAllApplications();
-
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [id, setId] = useState("");
+
   const {
-    mutate: submitStatus,
-    isSuccess,
-    data,
-    isPending,
-  } = updateEmployeeLeaveRD();
+    data: allApplications,
+    isFetching: loadApp,
+    refetch,
+  } = getAllApplications();
+  const { mutate: submitStatus, status, data } = updateEmployeeLeaveRD();
 
   const columns = useMemo(
     () => [
@@ -48,6 +47,11 @@ const RequestPage = () => {
       {
         accessorKey: "inclusive_dates",
         header: "Dates",
+        cell: (props) => <div>{props.getValue()}</div>,
+      },
+      {
+        accessorKey: "details",
+        header: "Details",
         cell: (props) => <div>{props.getValue()}</div>,
       },
       {
@@ -85,11 +89,13 @@ const RequestPage = () => {
     globalFilterFn: "includesString",
   });
 
-  if (isSuccess) {
-    queryClient.invalidateQueries({
-      queryKey: ["getallapplicationskey"],
-    });
-  }
+  useEffect(() => {
+    if (data?.status === 200) {
+      if (data?.data.message === "Leave and credit updated successfully") {
+        refetch();
+      }
+    }
+  }, [status === "success"]);
 
   return (
     <div>

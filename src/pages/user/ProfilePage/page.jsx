@@ -1,13 +1,12 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 // icons & picutures
 import logo from "../../../assets/ched-logo.png";
 import gifSwimming from "/swimming-pool.gif";
 import gifSick from "/sick.gif";
 import gifOT from "/down-time.gif";
-import { FaWpforms } from "react-icons/fa";
+import { FaWpforms, FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
-import { Avatar } from "flowbite-react";
 
 // components
 import {
@@ -28,47 +27,28 @@ import {
   TEModalFooter,
 } from "tw-elements-react";
 import StatusTimeline from "../../../components/user/StatusTimeline";
-import TableButton from "../../../components/user/TableButton";
-import ComplyModal from "../../../components/user/ComplyModal";
+import { Alert, Avatar } from "flowbite-react";
 
 // api middlewares
 import {
   applyLeaveApi,
-  creditInfoApi,
   leaveApplicationsApi,
   leaveTypeApi,
   userInfoApi,
-  getEmployeesApplication,
-  updateEmployeeLeaveOIC,
 } from "../../../api";
 
 // Libraries
-import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { data: userData } = userInfoApi();
-  const { data: creditInfo } = creditInfoApi();
   const { data: leaveApplications } = leaveApplicationsApi();
-  const { data: employeesApplication } = getEmployeesApplication(
-    userData?.unit
-  );
-  const {
-    mutate: submitStatus,
-    isSuccess,
-    data,
-    isPending,
-  } = updateEmployeeLeaveOIC();
 
-  const queryClient = useQueryClient();
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
-  const [showModal, setShowModal] = useState({
-    modal1: false,
-    modal2: false,
-  });
-  const [id, setId] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -88,36 +68,8 @@ const ProfilePage = () => {
         cell: (props) => <div>{props.getValue()}</div>,
       },
       {
-        accessorKey: "status",
-        header: "Status",
-        cell: (props) => (
-          <StatusTimeline status={props.table} row={props.row} />
-        ),
-      },
-    ],
-    []
-  );
-
-  const columns2 = useMemo(
-    () => [
-      {
-        accessorKey: "full_name",
-        header: "Name",
-        cell: (props) => <div>{props.getValue()}</div>,
-      },
-      {
-        accessorKey: "type",
-        header: "Type",
-        cell: (props) => <div>{props.getValue()}</div>,
-      },
-      {
-        accessorKey: "no_days",
-        header: "No. Days",
-        cell: (props) => <div>{props.getValue()}</div>,
-      },
-      {
-        accessorKey: "inclusive_dates",
-        header: "Dates",
+        accessorKey: "details",
+        header: "Details",
         cell: (props) => <div>{props.getValue()}</div>,
       },
       {
@@ -125,18 +77,6 @@ const ProfilePage = () => {
         header: "Status",
         cell: (props) => (
           <StatusTimeline status={props.table} row={props.row} />
-        ),
-      },
-      {
-        accessorKey: "btnAction",
-        header: "",
-        cell: (props) => (
-          <TableButton
-            table={props.table}
-            row={props.row}
-            setShowModal={setShowModal}
-            setId={setId}
-          />
         ),
       },
     ],
@@ -156,26 +96,6 @@ const ProfilePage = () => {
     onGlobalFilterChange: setColumnFilters,
     onSortingChange: setSorting,
   });
-
-  const table2 = useReactTable({
-    data: employeesApplication || [],
-    columns: columns2,
-    state: {
-      sorting: sorting,
-      globalFilter: columnFilters,
-    },
-    getCoreRowModel: getCoreRowModel(), // Pass the hook reference directly, not a call to it
-    getFilteredRowModel: getFilteredRowModel(), // Same here
-    getSortedRowModel: getSortedRowModel(), // And here
-    onGlobalFilterChange: setColumnFilters,
-    onSortingChange: setSorting,
-  });
-
-  if (isSuccess) {
-    queryClient.invalidateQueries({
-      queryKey: ["getemployeesapplicationkey"],
-    });
-  }
 
   return (
     <div className="flex flex-col gap-5 md:flex-row">
@@ -202,7 +122,9 @@ const ProfilePage = () => {
                 <img src={gifSwimming} alt="swimming_gif" />
               </div>
               <span className="block text-base font-bold">
-                {userData?.vacation_balance}
+                {userData?.vacation_balance !== null
+                  ? userData?.vacation_balance
+                  : 0}
               </span>
               <span className="block text-gray-400">Credits</span>
             </div>
@@ -210,7 +132,7 @@ const ProfilePage = () => {
             <div className="flex flex-col items-center border p-4">
               <img src={gifSick} alt="sick_gif" className="h-[30px] w-[30px]" />
               <span className="block text-base font-bold">
-                {userData?.sick_balance}
+                {userData?.sick_balance !== null ? userData?.sick_balance : 0}
               </span>
               <span className="block text-gray-400">Credits</span>
             </div>
@@ -237,154 +159,117 @@ const ProfilePage = () => {
       </div>
 
       {/* Table Application */}
-      <div className="flex flex-col flex-grow  gap-5">
-        {/* Emp Request Card */}
-        {userData?.unit === "Chief Administrative Officer" && (
-          <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
-            <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
-              Employees Requests
-            </div>
-
-            <div className="pt-5 bg-white">
-              <div className="text-sm max-h-[500px] overflow-y-auto">
-                <table className="w-full">
-                  <thead>
-                    {table2.getHeaderGroups().map((headerGroup) => (
-                      <tr key={headerGroup.id} className="bg-gray-100 border ">
-                        {headerGroup.headers.map((header) => (
-                          <td
-                            className="cursor-pointer px-7 py-3"
-                            key={header.id}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            <div className="flex gap-1 items-center">
-                              {header.column.columnDef.header}
-                              {
-                                {
-                                  asc: <IoIosArrowUp />,
-                                  desc: <IoIosArrowDown />,
-                                }[header.column.getIsSorted() ?? null]
-                              }
-                            </div>
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </thead>
-                  <tbody>
-                    {table2.getRowModel().rows?.map((row) => (
-                      <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                        {row.getVisibleCells().map((cell) => (
-                          <td className="px-7 border" key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Own Request Card */}
-        <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
-          <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
-            Your Requests
+      <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
+        <div className="">
+          <div className="mb-3">
+            <button
+              className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
+              type="button"
+              onClick={() =>
+                setShowModal((prev) => ({ ...prev, modal1: true }))
+              }
+            >
+              <FaWpforms size="20px" />
+              <span className="text-sm md:text-base">Request Leave</span>
+            </button>
           </div>
 
-          <div className="py-5">
-            <div className="my-5">
-              <button
-                className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
-                type="button"
-                onClick={() =>
-                  setShowModal((prev) => ({ ...prev, modal1: true }))
-                }
-              >
-                <FaWpforms size="20px" />
-                <span className="text-sm md:text-base">Apply Leave</span>
-              </button>
-            </div>
-
-            {/* Your Table */}
-            <div className="text-sm max-h-[300px] overflow-y-auto">
-              <table className=" w-full">
-                <thead>
-                  {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id} className="bg-gray-100 border ">
-                      {headerGroup.headers.map((header) => (
-                        <td
-                          className="cursor-pointer px-7 py-3"
-                          key={header.id}
-                          onClick={header.column.getToggleSortingHandler()}
-                        >
-                          <div className="flex gap-1 items-center">
-                            {header.column.columnDef.header}
+          {/* Your Table */}
+          <div className="text-sm max-h-screen overflow-y-auto">
+            <table className=" w-full">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id} className="bg-gray-100 border ">
+                    {headerGroup.headers.map((header) => (
+                      <td
+                        className="cursor-pointer px-7 py-3"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <div className="flex gap-1 items-center">
+                          {header.column.columnDef.header}
+                          {
                             {
-                              {
-                                asc: <IoIosArrowUp />,
-                                desc: <IoIosArrowDown />,
-                              }[header.column.getIsSorted() ?? null]
-                            }
-                          </div>
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody>
-                  {table.getRowModel().rows?.map((row) => (
-                    <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                      {row.getVisibleCells().map((cell) => (
-                        <td className="px-7 border" key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                              asc: <IoIosArrowUp />,
+                              desc: <IoIosArrowDown />,
+                            }[header.column.getIsSorted() ?? null]
+                          }
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows?.map((row) => (
+                  <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td className="px-7 border" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
       {/* Modal */}
-      <LeaveModal showModal={showModal.modal1} setShowModal={setShowModal} />
-      <ComplyModal
-        showModal={showModal.modal2}
+      <LeaveModal
+        showModal={showModal}
         setShowModal={setShowModal}
-        id={id}
-        submitStatus={submitStatus}
+        userInfo={userData}
+        application={leaveApplications}
       />
     </div>
   );
 };
 
-const LeaveModal = ({ showModal, setShowModal }) => {
+const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
+  const queryClient = useQueryClient();
   const { data: leaveTypeData } = leaveTypeApi();
-  const { mutate: applyLeave, isSuccess } = applyLeaveApi();
+  const { mutate: applyLeave, status, data } = applyLeaveApi();
+
+  const applicationStatus = application?.some(
+    (item) => item.approvedStatus === "Pending"
+  );
+
+  console.log(applicationStatus);
 
   const [formData, setFormData] = useState({
     type_id: "",
     details: "",
-    no_days: null,
+    no_days: 0,
     inclusive_dates: "",
   });
+
+  useEffect(() => {
+    if (data?.status === 200) {
+      if (data?.data.message === "successfully submitted!") {
+        queryClient.invalidateQueries({
+          queryKey: ["leaveApplicationsKey"]["getnotedcountkey"],
+        });
+        setFormData({
+          type_id: "",
+          details: "",
+          no_days: 0,
+          inclusive_dates: "",
+        });
+        setShowModal(false);
+      }
+    }
+  }, [status === "success"]);
 
   return (
     <div>
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal} scrollable>
-        <TEModalDialog centered size="sm">
+        <TEModalDialog centered size="md">
           <TEModalContent>
             <TEModalHeader>
               {/* <!--Modal title--> */}
@@ -395,9 +280,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
               <button
                 type="button"
                 className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
-                onClick={() =>
-                  setShowModal((prev) => ({ ...prev, modal1: false }))
-                }
+                onClick={() => setShowModal(false)}
                 aria-label="Close"
               >
                 <svg
@@ -421,14 +304,18 @@ const LeaveModal = ({ showModal, setShowModal }) => {
               onSubmit={(e) => {
                 e.preventDefault();
                 applyLeave(formData);
-
-                if (isSuccess) {
-                  setShowModal((prev) => ({ ...prev, modal1: false }));
-                }
               }}
             >
               <TEModalBody>
                 <div className="flex flex-col">
+                  {/* note */}
+                  <div className="mb-2">
+                    <p className="text-sm text-red-600">
+                      For inclusive dates, please follow the format: E.g., "Aug
+                      20", "Aug 20-21"
+                    </p>
+                  </div>
+                  {/* Dropdown for leave type */}
                   <div className="mb-3">
                     <div className="mb-3">
                       <h1>6.A TYPE OF LEAVE TO BE AVAILED OF</h1>
@@ -444,6 +331,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                           }));
                         }}
                         required
+                        disabled={applicationStatus}
                       >
                         {leaveTypeData?.map((types, key) => (
                           <option key={key} value={types.type_id}>
@@ -453,6 +341,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                       </Select>
                     </div>
                   </div>
+                  {/* Details of leave */}
                   <div className="mb-3">
                     <div className="mb-3">
                       <h1>6.B DETAILS OF LEAVE</h1>
@@ -461,6 +350,7 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                       <Textarea
                         id="details"
                         placeholder="Details of leave..."
+                        value={formData.details}
                         onChange={(e) => {
                           setFormData((prev) => ({
                             ...prev,
@@ -468,21 +358,27 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                           }));
                         }}
                         required
+                        disabled={applicationStatus}
                         rows={4}
                       />
                     </div>
                   </div>
+                  {/* Day Inputs */}
                   <div className="mb-3">
-                    <div className="mb-2">
-                      <h1>6.C NUMBER OF WORKING DAYS APPLIED FOR</h1>
-                    </div>
+                    {/* No of days */}
                     <div>
+                      <div className="mb-2">
+                        <h1>6.C NUMBER OF WORKING DAYS APPLIED FOR</h1>
+                      </div>
                       <div className="">
                         <TextInput
                           id="days"
-                          type="text"
+                          type="number"
+                          step="1"
                           sizing="sm"
                           className="w-64"
+                          value={formData.no_days}
+                          disabled={applicationStatus}
                           onChange={(e) => {
                             setFormData((prev) => ({
                               ...prev,
@@ -491,7 +387,35 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                           }}
                         />
                       </div>
+
+                      {formData.type_id === "SL003" &&
+                        userInfo.sick_balance < formData.no_days && (
+                          <div className="mt-3">
+                            <Alert color="warning" icon={FaExclamationCircle}>
+                              Insuficient balance for Sick Leave.
+                            </Alert>
+                          </div>
+                        )}
+
+                      {formData.type_id === "VC001" &&
+                        userInfo.vacation_balance < formData.no_days && (
+                          <div className="mt-3">
+                            <Alert color="warning" icon={FaExclamationCircle}>
+                              Insuficient balance for Vacation Leave.
+                            </Alert>
+                          </div>
+                        )}
+
+                      {formData.type_id === "CTO001" &&
+                        userInfo.CTO_balance < formData.no_days && (
+                          <div className="mt-3">
+                            <Alert color="warning" icon={FaExclamationCircle}>
+                              Insuficient balance for CTO Leave.
+                            </Alert>
+                          </div>
+                        )}
                     </div>
+                    {/* Inclusive dates */}
                     <div className="w-64">
                       <div className="mb-1 block">
                         <Label htmlFor="inclusiveD" value="INCLUSIVE DATES" />
@@ -500,6 +424,8 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                         id="inclusiveD"
                         type="text"
                         sizing="sm"
+                        value={formData.inclusive_dates}
+                        disabled={applicationStatus}
                         onChange={(e) => {
                           setFormData((prev) => ({
                             ...prev,
@@ -508,17 +434,25 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                         }}
                       />
                     </div>
+
+                    {applicationStatus && (
+                      <div className="mt-3">
+                        <Alert color="warning" icon={FaExclamationCircle}>
+                          You have pending request. Please wait until your
+                          previous request is approved
+                        </Alert>
+                      </div>
+                    )}
                   </div>
                 </div>
               </TEModalBody>
+
               <TEModalFooter>
                 <TERipple rippleColor="light">
                   <button
                     type="button"
                     className="inline-block rounded bg-primary-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 transition duration-150 ease-in-out hover:bg-primary-accent-100 focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
-                    onClick={() =>
-                      setShowModal((prev) => ({ ...prev, modal1: false }))
-                    }
+                    onClick={() => setShowModal(false)}
                   >
                     Close
                   </button>
@@ -527,6 +461,15 @@ const LeaveModal = ({ showModal, setShowModal }) => {
                   <button
                     type="submit"
                     className="ml-1 inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
+                    disabled={
+                      (formData.type_id === "SL003" &&
+                        userInfo.sick_balance < formData.no_days) ||
+                      (formData.type_id === "VC001" &&
+                        userInfo.vacation_balance < formData.no_days) ||
+                      (formData.type_id === "CTO001" &&
+                        userInfo.CTO_balance < formData.no_days) ||
+                      applicationStatus === true
+                    }
                   >
                     Apply
                   </button>
