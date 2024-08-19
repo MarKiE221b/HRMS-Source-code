@@ -91,7 +91,10 @@ const RequestPage = () => {
 
   useEffect(() => {
     if (data?.status === 200) {
-      if (data?.data.message === "Leave and credit updated successfully") {
+      if (
+        data?.data.message === "Leave and credit updated successfully" ||
+        data?.data.message === "Declined Status"
+      ) {
         refetch();
       }
     }

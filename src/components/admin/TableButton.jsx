@@ -22,6 +22,8 @@ const TableButton = ({ table, row, setShowModal, setId }) => {
       >
         For Approval
       </button>
+    ) : filterStatusData.approvedStatus === "Declined" ? (
+      <p className="text-center font-semibold">Declined</p>
     ) : (
       <p className="text-center font-semibold">Approved</p>
     )
