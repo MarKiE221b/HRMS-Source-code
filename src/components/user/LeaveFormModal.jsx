@@ -1,8 +1,15 @@
 import React, { forwardRef, useRef } from "react";
 import { useReactToPrint } from "react-to-print";
-import logo from "../../../assets/ched-logo.png";
-import checkmark from "../../../assets/checkmark.png";
-import sign from "../../../assets/signature.png";
+import {
+  TEModal,
+  TEModalBody,
+  TEModalContent,
+  TEModalDialog,
+} from "tw-elements-react";
+
+import logo from "../../assets/ched-logo.png";
+import checkmark from "../../assets/checkmark.png";
+import sign from "../../assets/signature.png";
 
 const Checkbox = ({ label, checked }) => (
   <div className="flex flex-row items-center">
@@ -13,7 +20,7 @@ const Checkbox = ({ label, checked }) => (
   </div>
 );
 
-const DocumentComponent = forwardRef((props, ref) => {
+const DocumentComponent = forwardRef((data, ref) => {
   return (
     <div ref={ref} className="flex justify-center items-center">
       <div className="w-a4-width h-a4-height border">
@@ -58,12 +65,12 @@ const DocumentComponent = forwardRef((props, ref) => {
               {/* form 1 data */}
               <div className="text-[2.82mm] flex justify-center my-[1mm]">
                 <div className="text-center w-[40%]">
-                  <p>RECORDS</p>
+                  <p>{data?.data?.unit ? data?.data?.unit : ""}</p>
                 </div>
                 <div className="text-center flex justify-evenly w-[60%]">
-                  <p>Espiritu</p>
-                  <p>Marc Anthony</p>
-                  <p>Castillo</p>
+                  <p>{data?.data?.lastname ? data?.data?.lastname : ""}</p>
+                  <p>{data?.data?.firstname ? data?.data?.firstname : ""}</p>
+                  <p>{data?.data?.middlename ? data?.data?.middlename : ""}</p>
                 </div>
               </div>
             </div>
@@ -72,11 +79,17 @@ const DocumentComponent = forwardRef((props, ref) => {
             <div className="py-[3mm] px-[1mm] text-[2.82mm] flex justify-start gap-[18mm] border-b border-solid border-black">
               <p>
                 3. DATE OF FILING{" "}
-                <span className="underline">Aug 23, 2024</span>
+                <span className="underline">
+                  {data?.data?.dateFiling
+                    ? data?.data?.dateFiling.split("T")[0]
+                    : ""}
+                </span>
               </p>
               <p>
                 4. POSITION{" "}
-                <span className="underline">Chief Administrative Officer</span>
+                <span className="underline">
+                  {data?.data?.unit ? data?.data?.unit : ""}
+                </span>
               </p>
               <p>
                 5. SALARY <span className="underline">?</span>
@@ -103,7 +116,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                   <div className="pl-[2.5mm] flex flex-col gap-5">
                     <div>
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "VC001" ? true : false}
                         label={
                           <p>
                             Vacation Leave{" "}
@@ -115,7 +128,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "ML002" ? true : false}
                         label={
                           <p>
                             Mandatory/Forced Leave{" "}
@@ -127,7 +140,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "SL003" ? true : false}
                         label={
                           <p>
                             Sick Leave{" "}
@@ -139,7 +152,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "ML004" ? true : false}
                         label={
                           <p>
                             Maternity Leave{" "}
@@ -150,7 +163,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "PL005" ? true : false}
                         label={
                           <p>
                             Paternity Leave{" "}
@@ -162,7 +175,9 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={
+                          data?.data?.type_id === "SPL006" ? true : false
+                        }
                         label={
                           <p>
                             Special Privilege Leave{" "}
@@ -174,7 +189,9 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={
+                          data?.data?.type_id === "SPL007" ? true : false
+                        }
                         label={
                           <p>
                             Solo Parent Leave{" "}
@@ -185,7 +202,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "SL008" ? true : false}
                         label={
                           <p>
                             Study Leave{" "}
@@ -197,7 +214,9 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={
+                          data?.data?.type_id === "VAWCL009" ? true : false
+                        }
                         label={
                           <p>
                             10-Day VAWC Leave{" "}
@@ -208,7 +227,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "RP010" ? true : false}
                         label={
                           <p>
                             Rehabilitation Privilege{" "}
@@ -220,7 +239,9 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={
+                          data?.data?.type_id === "SLBW011" ? true : false
+                        }
                         label={
                           <p>
                             Special Leave Benefits for Women{" "}
@@ -231,7 +252,9 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={
+                          data?.data?.type_id === "SEL012" ? true : false
+                        }
                         label={
                           <p>
                             Special Emergency (Calamity) Leave{" "}
@@ -242,7 +265,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                         }
                       />
                       <Checkbox
-                        checked={true}
+                        checked={data?.data?.type_id === "AL013" ? true : false}
                         label={
                           <p>
                             Adoption Leave{" "}
@@ -257,7 +280,7 @@ const DocumentComponent = forwardRef((props, ref) => {
                     <div className="text-[2.82mm] py-[5px] italic">
                       <p>Others :</p>
                       <div className="not-italic border-b border-solid border-black w-[65mm]">
-                        HEllo
+                        {data?.data?.type_id === "CTO001" ? "CTO" : ""}
                       </div>
                     </div>
                   </div>
@@ -283,23 +306,41 @@ const DocumentComponent = forwardRef((props, ref) => {
                       {/* wthn ph */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption ===
+                            "Within the Philippines"
+                              ? true
+                              : false
+                          }
                           label={<p>Within the Philippines</p>}
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>??</p>
+                          <p>
+                            {data?.data?.detailsOption ===
+                            "Within the Philippines"
+                              ? data?.data?.details
+                              : ""}
+                          </p>
                         </div>
                       </div>
                       {/* abroad */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption === "Abroad"
+                              ? true
+                              : false
+                          }
                           label={<p>Abroad (Specify)</p>}
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>??</p>
+                          <p>
+                            {data?.data?.detailsOption === "Abroad"
+                              ? data?.data?.details
+                              : ""}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -310,23 +351,39 @@ const DocumentComponent = forwardRef((props, ref) => {
                       {/* wthn ph */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption === "In Hospital"
+                              ? true
+                              : false
+                          }
                           label={<p>In Hospital (Specify Illness)</p>}
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>??</p>
+                          <p>
+                            {data?.data?.detailsOption === "In Hospital"
+                              ? data?.data?.details
+                              : ""}
+                          </p>
                         </div>
                       </div>
                       {/* abroad */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption === "Out Patient"
+                              ? true
+                              : false
+                          }
                           label={<p>Out Patient (Specify Illness)</p>}
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>??</p>
+                          <p>
+                            {data?.data?.detailsOption === "Out Patient"
+                              ? data?.data?.details
+                              : ""}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -339,7 +396,11 @@ const DocumentComponent = forwardRef((props, ref) => {
                       <div className="flex mt-[1mm]">
                         <p>(Specify Illness)</p>
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>??</p>
+                          <p>
+                            {data?.data?.type_id === "SLBW011"
+                              ? data?.data?.details
+                              : ""}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -350,14 +411,24 @@ const DocumentComponent = forwardRef((props, ref) => {
                       {/* wthn ph */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption ===
+                            "Completion of Master's Degree"
+                              ? true
+                              : false
+                          }
                           label={<p>Completion of Master's Degree</p>}
                         />
                       </div>
                       {/* abroad */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.detailsOption ===
+                            "BAR/Board Examination Review"
+                              ? true
+                              : false
+                          }
                           label={<p>BAR/Board Examination Review</p>}
                         />
                       </div>
@@ -369,14 +440,16 @@ const DocumentComponent = forwardRef((props, ref) => {
                       {/* wthn ph */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={false}
                           label={<p>Monetization of Leave Credits</p>}
                         />
                       </div>
                       {/* abroad */}
                       <div className="flex mt-[1mm]">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.type_id === "TL015" ? true : false
+                          }
                           label={<p>Terminal Leave </p>}
                         />
                       </div>
@@ -394,14 +467,18 @@ const DocumentComponent = forwardRef((props, ref) => {
                 <div className="pr-[35mm]">
                   <p>6.C NUMBER OF WORKING DAYS APPLIED FOR</p>
                   <div className="ml-[5mm] border-b border-solid border-black flex-grow">
-                    <p>?? Number Working</p>
+                    <p>{data?.data?.no_days ? data?.data?.no_days : ""}</p>
                   </div>
                 </div>
                 {/* Inclusive Dates */}
                 <div className="ml-[5mm] pr-[35mm]">
                   <p>INCLUSIVE DATES</p>
                   <div className="border-b border-solid border-black flex-grow">
-                    <p>?? Inclusive Dates</p>
+                    <p>
+                      {data?.data?.inclusive_dates
+                        ? data?.data?.inclusive_dates
+                        : ""}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -414,10 +491,10 @@ const DocumentComponent = forwardRef((props, ref) => {
 
                   <div className="px-[3mm]">
                     <div className="flex mt-[1mm] ">
-                      <Checkbox checked={true} label={<p>Not Requested</p>} />
+                      <Checkbox checked={false} label={<p>Not Requested</p>} />
                     </div>
                     <div className="flex mt-[1mm] ">
-                      <Checkbox checked={true} label={<p>Requested</p>} />
+                      <Checkbox checked={false} label={<p>Requested</p>} />
                     </div>
                   </div>
 
@@ -458,7 +535,13 @@ const DocumentComponent = forwardRef((props, ref) => {
                     <div>
                       <p>As of</p>
                     </div>
-                    <div className="flex-grow border-b border-solid border-black"></div>
+                    <div className="flex-grow border-b border-solid border-black">
+                      <p>
+                        {data?.data?.dateFiling
+                          ? data?.data?.dateFiling.split("T")[0]
+                          : ""}
+                      </p>
+                    </div>
                   </div>
 
                   {/* Table */}
@@ -479,25 +562,45 @@ const DocumentComponent = forwardRef((props, ref) => {
                             Total Earned
                           </td>
                           <td className="border-r border-black">
-                            ? earned vacation
+                            {data?.data?.vacation_balance
+                              ? data?.data?.vacation_balance
+                              : ""}
                           </td>
-                          <td>? earned sick</td>
+                          <td>
+                            {data?.data?.sick_balance
+                              ? data?.data?.sick_balance
+                              : ""}
+                          </td>
                         </tr>
                         <tr className="border-y border-black">
                           <td className="border-r border-black">
                             Less this application
                           </td>
                           <td className="border-r border-black">
-                            ? minus vacation
+                            {data?.data?.minus_vacation
+                              ? data?.data?.minus_vacation
+                              : "0"}
                           </td>
-                          <td>? minus sick</td>
+                          <td>
+                            {data?.data?.minus_sick
+                              ? data?.data?.minus_sick
+                              : "0"}
+                          </td>
                         </tr>
                         <tr className="border-y border-black">
                           <td className="border-r border-black">Balance</td>
                           <td className="border-r border-black">
-                            ? balance vacation
+                            {data?.data?.vacation_balance
+                              ? data?.data?.vacation_balance -
+                                data?.data?.minus_vacation
+                              : ""}
                           </td>
-                          <td>? balance sick</td>
+                          <td>
+                            {data?.data?.sick_balance
+                              ? data?.data?.sick_balance -
+                                data?.data?.minus_sick
+                              : ""}
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -506,8 +609,16 @@ const DocumentComponent = forwardRef((props, ref) => {
                   {/* Authorized OIC */}
                   <div className="mt-3 px-7 text-center">
                     <div className="text-[2.47mm]">
-                      <p className="font-bold">Marc Anthony Espiritu</p>
-                      <p>OIC - Office of the Chief Administrative Officer</p>
+                      <p className="font-bold">
+                        {data?.data?.division === "Admin"
+                          ? "DESIDERIO R. APAG, III, D.Eng'g"
+                          : "MIRIAM B. FUENTES, Ph.D."}
+                      </p>
+                      <p>
+                        {data?.data?.division === "Admin"
+                          ? "OIC - Office of the Chief Administrative Officer"
+                          : "Chief Education Program Specialist"}
+                      </p>
                     </div>
                     <div className="border-t border-black">
                       <p>(Authorized Officer)</p>
@@ -523,18 +634,29 @@ const DocumentComponent = forwardRef((props, ref) => {
 
                   <div className="px-[3mm]">
                     <div className="flex mt-[1mm] ">
-                      <Checkbox checked={true} label={<p>For approval</p>} />
+                      <Checkbox
+                        checked={
+                          data?.data?.notedStatus === "Approved" ? true : false
+                        }
+                        label={<p>For approval</p>}
+                      />
                     </div>
                     <div>
                       <div className="flex mt-[1mm] ">
                         <Checkbox
-                          checked={true}
+                          checked={
+                            data?.data?.notedStatus === "Declined"
+                              ? true
+                              : false
+                          }
                           label={<p>For disapproval due to</p>}
                         />
                       </div>
                       <div className="text-[2.47mm] h-[16mm] overflow-hidden">
                         <p className="underline text-justify overflow-ellipsis">
-                          disapprove details
+                          {data?.data?.notedStatus === "Declined"
+                            ? data?.data?.notedDetails
+                            : ""}
                         </p>
                       </div>
                     </div>
@@ -542,8 +664,16 @@ const DocumentComponent = forwardRef((props, ref) => {
 
                   <div className="mt-3 px-7 text-center">
                     <div className="text-[2.47mm]">
-                      <p className="font-bold">Marc Anthony Espiritu</p>
-                      <p>OIC - Office of the Chief Administrative Officer</p>
+                      <p className="font-bold">
+                        {data?.data?.division === "Admin"
+                          ? "DESIDERIO R. APAG, III, D.Eng'g"
+                          : "MIRIAM B. FUENTES, Ph.D."}
+                      </p>
+                      <p>
+                        {data?.data?.division === "Admin"
+                          ? "OIC - Office of the Chief Administrative Officer"
+                          : "Chief Education Program Specialist"}
+                      </p>
                     </div>
                     <div className="border-t border-black">
                       <p>(Authorized Officer)</p>
@@ -562,8 +692,30 @@ const DocumentComponent = forwardRef((props, ref) => {
                   <p>7.C APPROVED FOR:</p>
 
                   <div className="pl-[5mm]">
-                    <p>_______ days with pay</p>
-                    <p>_______ days without pay</p>
+                    <p>
+                      <span>
+                        {data?.data?.leavePayType === 0
+                          ? `___${
+                              data?.data?.minus_vacation ||
+                              data?.data?.minus_sick ||
+                              data?.data?.minus_CTO
+                            }___`
+                          : "_______"}
+                      </span>{" "}
+                      days with pay
+                    </p>
+                    <p>
+                      <span>
+                        {data?.data?.leavePayType === 1
+                          ? `___${
+                              data?.data?.minus_vacation ||
+                              data?.data?.minus_sick ||
+                              data?.data?.minus_CTO
+                            }___`
+                          : "_______"}
+                      </span>{" "}
+                      days without pay
+                    </p>
                     <p>_______ others (Specify)</p>
                   </div>
                 </div>
@@ -575,7 +727,9 @@ const DocumentComponent = forwardRef((props, ref) => {
 
                   <div className="pl-[5mm] text-[2.47mm] h-[16mm] overflow-hidden">
                     <p className="underline text-justify ">
-                      Details Disapproval
+                      {data?.data?.approvedStatus === "Declined"
+                        ? data?.data?.approvedDetails
+                        : ""}
                     </p>
                   </div>
                 </div>
@@ -586,7 +740,9 @@ const DocumentComponent = forwardRef((props, ref) => {
             <div className="w-full text-[2.82mm]">
               <div className="px-[70mm] text-center">
                 <div className="text-[2.47mm]">
-                  <p className="font-bold uppercase">FREDDIE T. BERNAL, Ph.D., CESO III</p>
+                  <p className="font-bold uppercase">
+                    FREDDIE T. BERNAL, Ph.D., CESO III
+                  </p>
                   <p>Director IV</p>
                 </div>
                 <div className="border-t border-black font-bold">
@@ -601,7 +757,7 @@ const DocumentComponent = forwardRef((props, ref) => {
   );
 });
 
-const CTOpage = () => {
+const LeaveFormModal = ({ showModal, setShowModal, data }) => {
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -611,17 +767,55 @@ const CTOpage = () => {
 
   return (
     <div>
-      <button
-        onClick={handlePrint}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Print Document
-      </button>
-      <div>
-        <DocumentComponent ref={componentRef} />
-      </div>
+      <TEModal show={showModal} setShow={setShowModal} scrollable>
+        <TEModalDialog centered size="fullscreen">
+          <TEModalContent>
+            {/* <!--Modal body--> */}
+            <TEModalBody>
+              <>
+                {/* <!--Close button--> */}
+                <div className="w-full flex justify-end">
+                  <button
+                    type="button"
+                    className="box-content rounded-none border-none hover:no-underline hover:opacity-75 focus:opacity-100 focus:shadow-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                    aria-label="Close"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="h-6 w-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <div>
+                  <button
+                    onClick={handlePrint}
+                    className="px-4 py-2 bg-blue-500 text-white rounded"
+                  >
+                    Print Document
+                  </button>
+                  <div>
+                    <DocumentComponent ref={componentRef} data={data} />
+                  </div>
+                </div>
+              </>
+            </TEModalBody>
+          </TEModalContent>
+        </TEModalDialog>
+      </TEModal>
     </div>
   );
 };
 
-export default CTOpage;
+export default LeaveFormModal;

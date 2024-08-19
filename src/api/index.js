@@ -337,6 +337,21 @@ export const getApprovedCount = () => {
   });
 };
 
+export const leaveApplicationForm = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/leaveApplicationForm", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
 // export const getPdf = () => {
 //   return useQuery({
 //     queryKey: ["getPdfkey"],

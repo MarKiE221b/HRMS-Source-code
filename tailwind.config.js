@@ -27,6 +27,10 @@ export default {
         fadeIn: "fadeIn 1.5s ease-in-out",
         logoPulse: "logoPulse 3s ease-in-out infinite",
       },
+      spacing: {
+        "a4-width": "210mm",
+        "a4-height": "297mm",
+      },
     },
   },
   plugins: [flowbite.plugin(), require("tw-elements-react/dist/plugin.cjs")],

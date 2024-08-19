@@ -16,7 +16,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Label, Select, Textarea, TextInput } from "flowbite-react";
+import { Label, Select, Textarea, TextInput, Radio } from "flowbite-react";
 import {
   TERipple,
   TEModal,
@@ -32,6 +32,7 @@ import { Alert, Avatar } from "flowbite-react";
 // api middlewares
 import {
   applyLeaveApi,
+  leaveApplicationForm,
   leaveApplicationsApi,
   leaveTypeApi,
   userInfoApi,
@@ -40,15 +41,18 @@ import {
 // Libraries
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
+import LeaveFormModal from "../../../components/user/LeaveFormModal";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { data: userData } = userInfoApi();
   const { data: leaveApplications } = leaveApplicationsApi();
+  const { mutate: postLeave, data } = leaveApplicationForm();
 
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [leaveFormModal, setLeaveFormModal] = useState(false);
 
   const columns = useMemo(
     () => [
@@ -77,6 +81,24 @@ const ProfilePage = () => {
         header: "Status",
         cell: (props) => (
           <StatusTimeline status={props.table} row={props.row} />
+        ),
+      },
+      {
+        accessorKey: "app_id",
+        header: "",
+        cell: (props) => (
+          <div>
+            <button
+              className="underline text-blue-900"
+              type="button"
+              onClick={() => {
+                postLeave({ id: props.getValue() });
+                setLeaveFormModal(true);
+              }}
+            >
+              Preview Leave Form
+            </button>
+          </div>
         ),
       },
     ],
@@ -226,6 +248,13 @@ const ProfilePage = () => {
         userInfo={userData}
         application={leaveApplications}
       />
+
+      {/* Leave Form Modal */}
+      <LeaveFormModal
+        data={data?.data}
+        showModal={leaveFormModal}
+        setShowModal={setLeaveFormModal}
+      />
     </div>
   );
 };
@@ -239,10 +268,9 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
     (item) => item.approvedStatus === "Pending"
   );
 
-  console.log(applicationStatus);
-
   const [formData, setFormData] = useState({
     type_id: "",
+    detailsRadio: "",
     details: "",
     no_days: 0,
     inclusive_dates: "",
@@ -257,6 +285,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
         setFormData({
           type_id: "",
           details: "",
+          detailsRadio: "",
           no_days: 0,
           inclusive_dates: "",
         });
@@ -341,11 +370,99 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                       </Select>
                     </div>
                   </div>
+
                   {/* Details of leave */}
                   <div className="mb-3">
-                    <div className="mb-3">
+                    <div>
                       <h1>6.B DETAILS OF LEAVE</h1>
                     </div>
+
+                    {/* radio conditions */}
+                    {(formData.type_id === "VC001" ||
+                      formData.type_id === "SPL006" ||
+                      formData.type_id === "SL003" ||
+                      formData.type_id === "SL008") && (
+                      <div className="py-2">
+                        <fieldset className="flex max-w-md flex-col gap-4">
+                          <div className="flex items-center gap-2">
+                            <Radio
+                              id="radio1"
+                              name="detailsRadio"
+                              value={
+                                formData.type_id === "VC001" ||
+                                formData.type_id === "SPL006"
+                                  ? "Within the Philippines"
+                                  : "" || formData.type_id === "SL003"
+                                  ? "In Hospital"
+                                  : "" || formData.type_id === "SL008"
+                                  ? "Completion of Master's Degree"
+                                  : ""
+                              }
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  detailsRadio: e.target.value,
+                                }))
+                              }
+                              required
+                            />
+                            <Label htmlFor="radio1">
+                              {formData.type_id === "VC001" ||
+                              formData.type_id === "SPL006"
+                                ? "Within the Philippines"
+                                : ""}
+
+                              {formData.type_id === "SL003"
+                                ? "In Hospital"
+                                : ""}
+
+                              {formData.type_id === "SL008"
+                                ? "Completion of Master's Degree"
+                                : ""}
+                            </Label>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Radio
+                              id="radio2"
+                              name="detailsRadio"
+                              value={
+                                formData.type_id === "VC001" ||
+                                formData.type_id === "SPL006"
+                                  ? "Abroad"
+                                  : "" || formData.type_id === "SL003"
+                                  ? "Out Patient"
+                                  : "" || formData.type_id === "SL008"
+                                  ? "BAR/Board Examination Review"
+                                  : ""
+                              }
+                              onChange={(e) =>
+                                setFormData((prev) => ({
+                                  ...prev,
+                                  detailsRadio: e.target.value,
+                                }))
+                              }
+                              required
+                            />
+                            <Label htmlFor="radio2">
+                              {formData.type_id === "VC001" ||
+                              formData.type_id === "SPL006"
+                                ? "Abroad"
+                                : ""}
+
+                              {formData.type_id === "SL003"
+                                ? "Out Patient"
+                                : ""}
+
+                              {formData.type_id === "SL008"
+                                ? "BAR/Board Examination Review"
+                                : ""}
+                            </Label>
+                          </div>
+                        </fieldset>
+                      </div>
+                    )}
+
+                    {/* text area */}
                     <div className="max-w-md">
                       <Textarea
                         id="details"
