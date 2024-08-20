@@ -53,7 +53,7 @@ const ComplyModal = ({ showModal, setShowModal, id, submitStatus }) => {
                   </p>
                 </div>
 
-                {(!isDecline && !isApproved) && (
+                {!isDecline && !isApproved && (
                   <div className="flex justify-evenly">
                     <button
                       type="button"

@@ -88,7 +88,6 @@ const NavBar = () => {
             <FaHome className="mr-3 h-4 w-4" />
             Home
           </Button>
-
           {userData?.unit === "Chief Administrative Officer" && (
             <Button
               className="relative"
@@ -102,7 +101,6 @@ const NavBar = () => {
               </span>
             </Button>
           )}
-
           {userData?.unit === "Chief Education Program Specialist" && (
             <Button
               className="relative"
@@ -119,11 +117,6 @@ const NavBar = () => {
           <Button color="gray" onClick={() => navigate(`${id}/ledger`)}>
             <FaRegListAlt className="mr-3 h-4 w-4" />
             Ledger
-          </Button>
-
-          <Button color="gray" onClick={() => navigate(`${id}/ctopage`)}>
-            <GrCertificate className="mr-3 h-4 w-4" />
-            CTO
           </Button>
         </Button.Group>
       </div>

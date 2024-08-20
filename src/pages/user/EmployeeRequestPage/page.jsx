@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   flexRender,
@@ -14,6 +14,7 @@ import StatusTimeline from "../../../components/user/StatusTimeline";
 
 import {
   getEmployeesApplication,
+  updateEmployeeLeaveCEPS,
   updateEmployeeLeaveOIC,
   userInfoApi,
 } from "../../../api";
@@ -33,7 +34,16 @@ const EmployeeRequestPage = () => {
     userData?.unit
   );
 
-  const { mutate: submitStatus, status } = updateEmployeeLeaveOIC();
+  const {
+    mutate: submitStatusOIC,
+    status: OICFetchStatus,
+    isSuccess: OICFetchSuccess,
+  } = updateEmployeeLeaveOIC();
+  const {
+    mutate: submitStatusCEPS,
+    status: CEPSFetchStatus,
+    isSuccess: CEPSFetchSuccess,
+  } = updateEmployeeLeaveCEPS();
 
   const columns2 = useMemo(
     () => [
@@ -73,6 +83,7 @@ const EmployeeRequestPage = () => {
             row={props.row}
             setShowModal={setShowModal}
             setId={setId}
+            userUnit={userData.unit}
           />
         ),
       },
@@ -94,18 +105,23 @@ const EmployeeRequestPage = () => {
     onSortingChange: setSorting,
   });
 
-  if (status.match("success")) {
-    queryClient.invalidateQueries({
-      queryKey: ["getemployeesapplicationkey"],
-    });
-  }
+  useEffect(() => {
+    if (OICFetchStatus.match("success") || CEPSFetchStatus.match("success")) {
+      queryClient.invalidateQueries({
+        queryKey: ["getemployeesapplicationkey"],
+      });
+    }
+  }, [OICFetchSuccess, CEPSFetchSuccess]);
+
   return (
     <>
       <ComplyModal
         showModal={showModal}
         setShowModal={setShowModal}
+        submitStatusOIC={submitStatusOIC}
+        submitStatusCEPS={submitStatusCEPS}
+        unit={userData?.unit}
         id={id}
-        submitStatus={submitStatus}
       />
 
       {/* Technical Content */}
