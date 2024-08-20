@@ -232,6 +232,21 @@ export const updateEmployeeLeaveOIC = () => {
   });
 };
 
+export const updateEmployeeLeaveCEPS = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/updateLeaveCEPS", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
 export const updateEmployeeLeaveRD = () => {
   return useMutation({
     mutationFn: async (input) => {
@@ -352,18 +367,46 @@ export const leaveApplicationForm = () => {
   });
 };
 
-// export const getPdf = () => {
-//   return useQuery({
-//     queryKey: ["getPdfkey"],
-//     queryFn: async () => {
-//       try {
-//         const response = await makeRequest.post("/pdffile", {
-//           responseType: "blob",
-//         });
-//         return URL.createObjectURL(response.data);
-//       } catch (error) {
-//         throw error;
-//       }
-//     },
-//   });
-// };
+export const uploadSignature = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/uploadSignature", input, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getSignature = () => {
+  return useQuery({
+    queryKey: ["getsignatureempkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/imgSignature", {
+          responseType: "blob",
+        });
+        return URL.createObjectURL(response.data);
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getOfficerSignatures = () => {
+  return useQuery({
+    queryKey: ["getofficersignatureskey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/officersSignatures");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};

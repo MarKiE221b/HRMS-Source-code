@@ -6,7 +6,6 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
 } from "@tanstack/react-table";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { getAllApplications, updateEmployeeLeaveRD } from "../../../api";
 import StatusTimeline from "../../../components/admin/StatusTimeline";
@@ -14,7 +13,6 @@ import TableButton from "../../../components/admin/TableButton";
 import ComplyModal from "../../../components/admin/ComplyModal";
 
 const RequestPage = () => {
-  const queryClient = useQueryClient();
   const [sorting, setSorting] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -25,6 +23,7 @@ const RequestPage = () => {
     isFetching: loadApp,
     refetch,
   } = getAllApplications();
+
   const { mutate: submitStatus, status, data } = updateEmployeeLeaveRD();
 
   const columns = useMemo(

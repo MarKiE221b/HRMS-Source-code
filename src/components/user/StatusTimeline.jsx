@@ -15,11 +15,12 @@ const StatusTimeline = ({ status, row }) => {
   return (
     <div className="mb-5 mt-8">
       <Timeline horizontal>
+        {/* OIC */}
         <Timeline.Item>
           <Timeline.Point
             icon={
-              filterStatusData?.notedStatus !== "Pending"
-                ? filterStatusData?.notedStatus === "Approved"
+              filterStatusData?.OICStatus !== "Pending"
+                ? filterStatusData?.OICStatus === "Approved"
                   ? FaCheck
                   : RxCross2
                 : MdOutlinePending
@@ -27,16 +28,38 @@ const StatusTimeline = ({ status, row }) => {
           />
           <Timeline.Content>
             <Timeline.Time>
-              {filterStatusData?.notedDateModified?.split("T")[0]}
+              {filterStatusData?.OICStatusDate?.split("T")[0]}
             </Timeline.Time>
-            <Timeline.Title>
-              {filterStatusData?.division === "Admin"
-                ? "Chief Administrative Officer"
-                : "Chief Education Program Specialist"}
-            </Timeline.Title>
-            <Timeline.Body>{filterStatusData?.notedStatus}</Timeline.Body>
+            <Timeline.Title>"Chief Administrative Officer"</Timeline.Title>
+            <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
           </Timeline.Content>
         </Timeline.Item>
+
+        {/* CEPS */}
+        {filterStatusData?.division === "Technical" && (
+          <Timeline.Item>
+            <Timeline.Point
+              icon={
+                filterStatusData?.CEPSStatus !== "Pending"
+                  ? filterStatusData?.CEPSStatus === "Approved"
+                    ? FaCheck
+                    : RxCross2
+                  : MdOutlinePending
+              }
+            />
+            <Timeline.Content>
+              <Timeline.Time>
+                {filterStatusData?.CEPSStatusDate?.split("T")[0]}
+              </Timeline.Time>
+              <Timeline.Title>
+                Chief Education Program Specialist
+              </Timeline.Title>
+              <Timeline.Body>{filterStatusData?.CEPSStatus}</Timeline.Body>
+            </Timeline.Content>
+          </Timeline.Item>
+        )}
+
+        {/* RD */}
         <Timeline.Item>
           <Timeline.Point
             icon={

@@ -2,10 +2,18 @@ import React, { useEffect, useState } from "react";
 
 import logo from "../../../assets/ched-logo.png";
 import { IoReturnUpBack } from "react-icons/io5";
+import { IoIosRefresh } from "react-icons/io";
 import { Avatar, Button, Label, TextInput } from "flowbite-react";
 import { Link, useParams } from "react-router-dom";
-import { getUsername, updateUsername, updatePwd } from "../../../api";
+import {
+  getUsername,
+  updateUsername,
+  updatePwd,
+  uploadSignature,
+  getSignature,
+} from "../../../api";
 import { useQueryClient } from "@tanstack/react-query";
+import SignatureCanvas from "react-signature-canvas";
 
 const SettingsPage = () => {
   const queryClient = useQueryClient();
@@ -18,6 +26,9 @@ const SettingsPage = () => {
   } = updateUsername();
 
   const { mutate: pwdUpdate, data: pwdData, error: pwdError } = updatePwd();
+  const { mutate: signatureUpload, data: uploadSignatureData } =
+    uploadSignature();
+  const { data: signatureImgData, refetch } = getSignature();
 
   const [credentials, setCredentials] = useState({
     username: "",
@@ -25,12 +36,14 @@ const SettingsPage = () => {
     new_pwd: "",
   });
 
+  const [signature, setSignature] = useState();
+
   useEffect(() => {
     setCredentials((prev) => ({ ...prev, username: username?.username || "" }));
   }, [isSuccess]);
 
   return (
-    <div className="flex items-start justify-center">
+    <div className="flex md:flex-row md:items-start flex-col items-center justify-center gap-5">
       <div className="bg-white w-full max-w-[500px] p-5 shadow-sm">
         <div className="flex items-center gap-1 mb-2">
           <IoReturnUpBack size="20px" />
@@ -125,8 +138,90 @@ const SettingsPage = () => {
           </div>
         </form>
       </div>
+
+      <div className="bg-white w-full max-w-[500px] p-5 shadow-sm">
+        <div className="flex flex-col items-center p-2 gap-2">
+          <p className="">MY CURRENT SIGNATURE</p>
+          <img
+            className="h-[100px] w-[100px]"
+            src={signatureImgData}
+            alt="signature"
+          />
+          <button type="button" onClick={() => refetch()}>
+            <IoIosRefresh size="20px" />
+          </button>
+        </div>
+
+        <div className="flex items-center justify-center h-[300px]">
+          <SignatureCanvas
+            ref={(ref) => setSignature(ref)}
+            penColor="black"
+            canvasProps={{
+              className:
+                "w-full h-full flex-grow border border-solid border-black",
+            }}
+          />
+        </div>
+
+        {/* Canvas buttons */}
+        <div className="mt-5 flex justify-end items-center gap-5">
+          {/* alert */}
+          {uploadSignatureData?.data && (
+            <p className="text-green-700 text-left">
+              {uploadSignatureData?.data}
+            </p>
+          )}
+
+          <Button
+            type="button"
+            color="failure"
+            onClick={() => {
+              signature.clear();
+            }}
+          >
+            Clear
+          </Button>
+          <Button
+            type="button"
+            color="success"
+            onClick={async () => {
+              const base64URL = signature
+                .getTrimmedCanvas()
+                .toDataURL("image/png");
+
+              const signatureBlob = await dataURLToBlob(base64URL);
+
+              const formData = new FormData();
+              formData.append("file", signatureBlob, "mySignature.png");
+
+              signatureUpload(formData);
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };
 
+const dataURLToBlob = (dataURL) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const byteString = atob(dataURL.split(",")[1]);
+      const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+
+      const blob = new Blob([ab], { type: mimeString });
+      resolve(blob);
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
 export default SettingsPage;

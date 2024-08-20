@@ -274,6 +274,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
     details: "",
     no_days: 0,
     inclusive_dates: "",
+    division: userInfo.division,
   });
 
   useEffect(() => {
