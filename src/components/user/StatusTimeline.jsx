@@ -30,7 +30,7 @@ const StatusTimeline = ({ status, row }) => {
             <Timeline.Time>
               {filterStatusData?.OICStatusDate?.split("T")[0]}
             </Timeline.Time>
-            <Timeline.Title>"Chief Administrative Officer"</Timeline.Title>
+            <Timeline.Title>Chief Administrative Officer</Timeline.Title>
             <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
           </Timeline.Content>
         </Timeline.Item>

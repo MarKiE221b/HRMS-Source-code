@@ -12,6 +12,9 @@ export default {
     extend: {
       fontFamily: {
         body: ["Radio Canada Big"],
+        arial_narrow: ["Arial Narrow"],
+        arial: ["Arial"],
+        calibri: ["Calibri"],
       },
       keyframes: {
         fadeIn: {

@@ -49,16 +49,17 @@ const LeaveFormModal = ({ showModal, setShowModal, data }) => {
                   </button>
                 </div>
 
-                <div>
+                <div className="flex justify-start md:justify-center mb-2">
                   <button
                     onClick={handlePrint}
                     className="px-4 py-2 bg-blue-500 text-white rounded"
                   >
                     Print Document
                   </button>
-                  <div>
-                    <DocumentComponent ref={componentRef} data={data} />
-                  </div>
+                </div>
+
+                <div className="flex w-full overflow-scroll md:justify-center md:overflow-visible">
+                  <DocumentComponent ref={componentRef} data={data} />
                 </div>
               </>
             </TEModalBody>

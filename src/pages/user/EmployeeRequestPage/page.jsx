@@ -11,28 +11,34 @@ import {
 import TableButton from "../../../components/user/TableButton";
 import ComplyModal from "../../../components/user/ComplyModal";
 import StatusTimeline from "../../../components/user/StatusTimeline";
+import LeaveFormModal from "../../../components/user/LeaveFormModal";
+import { Tooltip } from "flowbite-react";
 
 import {
   getEmployeesApplication,
+  leaveApplicationForm,
   updateEmployeeLeaveCEPS,
   updateEmployeeLeaveOIC,
   userInfoApi,
 } from "../../../api";
 
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
+import { FaRegFileAlt } from "react-icons/fa";
 
 const EmployeeRequestPage = () => {
   const queryClient = useQueryClient();
 
   const [id, setId] = useState("");
-  const [showModal, setShowModal] = useState(false);
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [leaveFormModal, setLeaveFormModal] = useState(false);
 
   const { data: userData } = userInfoApi();
   const { data: employeesApplication } = getEmployeesApplication(
     userData?.unit
   );
+  const { mutate: postLeave, data: applicationData } = leaveApplicationForm();
 
   const {
     mutate: submitStatusOIC,
@@ -87,6 +93,25 @@ const EmployeeRequestPage = () => {
           />
         ),
       },
+      {
+        accessorKey: "app_id",
+        header: "",
+        cell: (props) => (
+          <div className="flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => {
+                postLeave({ id: props.getValue() });
+                setLeaveFormModal(true);
+              }}
+            >
+              <Tooltip content="View Application Form">
+                <FaRegFileAlt size="25px" />
+              </Tooltip>
+            </button>
+          </div>
+        ),
+      },
     ],
     []
   );
@@ -122,6 +147,12 @@ const EmployeeRequestPage = () => {
         submitStatusCEPS={submitStatusCEPS}
         unit={userData?.unit}
         id={id}
+      />
+
+      <LeaveFormModal
+        data={applicationData?.data}
+        showModal={leaveFormModal}
+        setShowModal={setLeaveFormModal}
       />
 
       {/* Technical Content */}
@@ -178,7 +209,6 @@ const EmployeeRequestPage = () => {
       )}
 
       {/* Admin Content */}
-
       {userData?.unit === "Chief Administrative Officer" && (
         <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
           <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">

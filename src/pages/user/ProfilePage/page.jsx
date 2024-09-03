@@ -5,7 +5,12 @@ import logo from "../../../assets/ched-logo.png";
 import gifSwimming from "/swimming-pool.gif";
 import gifSick from "/sick.gif";
 import gifOT from "/down-time.gif";
-import { FaWpforms, FaExclamationCircle, FaCheckCircle } from "react-icons/fa";
+import {
+  FaWpforms,
+  FaExclamationCircle,
+  FaRegFileAlt,
+  FaCalendarCheck,
+} from "react-icons/fa";
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 
 // components
@@ -16,7 +21,16 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Label, Select, Textarea, TextInput, Radio } from "flowbite-react";
+import {
+  Label,
+  Select,
+  Textarea,
+  TextInput,
+  Radio,
+  Tooltip,
+  Alert,
+  Avatar,
+} from "flowbite-react";
 import {
   TERipple,
   TEModal,
@@ -26,8 +40,12 @@ import {
   TEModalBody,
   TEModalFooter,
 } from "tw-elements-react";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePanel from "react-multi-date-picker/plugins/date_panel";
+import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 import StatusTimeline from "../../../components/user/StatusTimeline";
-import { Alert, Avatar } from "flowbite-react";
+import LeaveFormModal from "../../../components/user/LeaveFormModal";
+import RDRequestPage from "../../../components/user/RDRequestPage";
 
 // api middlewares
 import {
@@ -41,12 +59,11 @@ import {
 // Libraries
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
-import LeaveFormModal from "../../../components/user/LeaveFormModal";
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { data: userData } = userInfoApi();
-  const { data: leaveApplications } = leaveApplicationsApi();
+  const { data: leaveApplications } = leaveApplicationsApi(userData?.division);
   const { mutate: postLeave, data } = leaveApplicationForm();
 
   const [columnFilters, setColumnFilters] = useState("");
@@ -89,14 +106,16 @@ const ProfilePage = () => {
         cell: (props) => (
           <div>
             <button
-              className="underline text-blue-900"
+              className="hover:text-blue-900"
               type="button"
               onClick={() => {
                 postLeave({ id: props.getValue() });
                 setLeaveFormModal(true);
               }}
             >
-              Preview Leave Form
+              <Tooltip content="View Application Form">
+                <FaRegFileAlt size="25px" />
+              </Tooltip>
             </button>
           </div>
         ),
@@ -125,120 +144,148 @@ const ProfilePage = () => {
         {/* Profile Panel */}
         <div className="bg-white shadow-sm p-8">
           <div className="flex items-center gap-4">
-            <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
-            <div>
-              <span className="block font-bold">
+            <div className="flex-shrink-0">
+              <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
+            </div>
+            <div className="overflow-hidden">
+              <p className="block font-bold">
                 {`${userData?.lastname}, ${userData?.firstname} ${
                   userData?.middlename ? userData?.middlename + " " : ""
                 }${userData?.ext_name || ""}`}
-              </span>
-              <span className="block text-sm text-gray-400">
-                {userData?.unit}
-              </span>
+              </p>
+              <p className="block text-sm text-gray-400">{userData?.unit}</p>
             </div>
           </div>
           {/* Credits Earned Panel */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-            <div className="flex flex-col items-center border p-4">
-              <div className="h-[30px] w-[30px]">
-                <img src={gifSwimming} alt="swimming_gif" />
+          {userData?.division !== "RD" && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
+              <div className="flex flex-col items-center border p-4 overflow-hidden">
+                <Tooltip content="Vacation Credits">
+                  <div className="h-[30px] w-[30px]">
+                    <img src={gifSwimming} alt="swimming_gif" />
+                  </div>
+                </Tooltip>
+                <div className="text-center">
+                  <p className="block font-bold">
+                    {userData?.vacation_balance !== null
+                      ? userData?.vacation_balance
+                      : 0}
+                  </p>
+                  <p className="block text-gray-400">Credits</p>
+                </div>
               </div>
-              <span className="block text-base font-bold">
-                {userData?.vacation_balance !== null
-                  ? userData?.vacation_balance
-                  : 0}
-              </span>
-              <span className="block text-gray-400">Credits</span>
-            </div>
 
-            <div className="flex flex-col items-center border p-4">
-              <img src={gifSick} alt="sick_gif" className="h-[30px] w-[30px]" />
-              <span className="block text-base font-bold">
-                {userData?.sick_balance !== null ? userData?.sick_balance : 0}
-              </span>
-              <span className="block text-gray-400">Credits</span>
-            </div>
+              <div className="flex flex-col items-center border p-4 overflow-hidden">
+                <Tooltip content="Sick Credits">
+                  <div className="h-[30px] w-[30px]">
+                    <img src={gifSick} alt="sick_gif" />
+                  </div>
+                </Tooltip>
+                <div className="text-center">
+                  <p className="block font-bold">
+                    {userData?.sick_balance !== null
+                      ? userData?.sick_balance
+                      : 0}
+                  </p>
+                  <p className="block text-gray-400">Credits</p>
+                </div>
+              </div>
 
-            <div className="flex flex-col items-center border p-4">
-              <img src={gifOT} alt="ot_gif" className="h-[30px] w-[30px]" />
-              <span className="block text-base font-bold">
-                {userData?.CTO_balance !== null ? userData?.CTO_balance : 0}
-              </span>
-              <span className="block text-gray-400">Credits</span>
+              <div className="flex flex-col items-center border p-4 overflow-hidden">
+                <Tooltip content="CTO Credits ">
+                  <div className="h-[30px] w-[30px]">
+                    <img src={gifOT} alt="ot_gif" />
+                  </div>
+                </Tooltip>
+                <div className="text-center">
+                  <p className="block font-bold">
+                    {userData?.CTO_balance !== null ? userData?.CTO_balance : 0}
+                  </p>
+                  <p className="block text-gray-400">Credits</p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="w-full flex justify-end mt-3">
-            <button
-              type="button"
-              className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
-              onClick={() => navigate("ledger")}
-            >
-              VIEW LEDGER
-            </button>
-          </div>
+          {userData?.division !== "RD" && (
+            <div className="w-full flex justify-end mt-3">
+              <button
+                type="button"
+                className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
+                onClick={() => navigate("ledger")}
+              >
+                VIEW LEDGER
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Table Application */}
-      <div className="flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
-        <div className="">
-          <div className="mb-3">
-            <button
-              className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
-              type="button"
-              onClick={() =>
-                setShowModal((prev) => ({ ...prev, modal1: true }))
-              }
-            >
-              <FaWpforms size="20px" />
-              <span className="text-sm md:text-base">Request Leave</span>
-            </button>
+      <div className="relative flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
+        {userData?.division === "RD" ? (
+          <div className="justify-center max-w-screen-xl">
+            <RDRequestPage />
           </div>
+        ) : (
+          <div className="">
+            <div className="mb-3">
+              <button
+                className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
+                type="button"
+                onClick={() =>
+                  setShowModal((prev) => ({ ...prev, modal1: true }))
+                }
+              >
+                <FaWpforms size="20px" />
+                <span className="text-sm md:text-base">Request Leave</span>
+              </button>
+            </div>
 
-          {/* Your Table */}
-          <div className="text-sm max-h-screen overflow-y-auto">
-            <table className=" w-full">
-              <thead>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id} className="bg-gray-100 border ">
-                    {headerGroup.headers.map((header) => (
-                      <td
-                        className="cursor-pointer px-7 py-3"
-                        key={header.id}
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        <div className="flex gap-1 items-center">
-                          {header.column.columnDef.header}
-                          {
+            {/* Your Table */}
+            <div className="text-sm max-h-screen overflow-y-auto">
+              <table className=" w-full">
+                <thead>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <tr key={headerGroup.id} className="bg-gray-100 border ">
+                      {headerGroup.headers.map((header) => (
+                        <td
+                          className="cursor-pointer px-7 py-3"
+                          key={header.id}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          <div className="flex gap-1 items-center">
+                            {header.column.columnDef.header}
                             {
-                              asc: <IoIosArrowUp />,
-                              desc: <IoIosArrowDown />,
-                            }[header.column.getIsSorted() ?? null]
-                          }
-                        </div>
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </thead>
-              <tbody>
-                {table.getRowModel().rows?.map((row) => (
-                  <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <td className="px-7 border" key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                              {
+                                asc: <IoIosArrowUp />,
+                                desc: <IoIosArrowDown />,
+                              }[header.column.getIsSorted() ?? null]
+                            }
+                          </div>
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows?.map((row) => (
+                    <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <td className="px-7 border" key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Modal */}
@@ -261,25 +308,26 @@ const ProfilePage = () => {
 
 const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
   const queryClient = useQueryClient();
-  const { data: leaveTypeData } = leaveTypeApi();
+  const { data: leaveTypeData } = leaveTypeApi(userInfo?.division);
   const { mutate: applyLeave, status, data } = applyLeaveApi();
 
   const applicationStatus = application?.some(
     (item) => item.approvedStatus === "Pending"
   );
 
+  const [dates, setDates] = useState([]);
+
   const [formData, setFormData] = useState({
     type_id: "",
     detailsRadio: "",
     details: "",
-    no_days: 0,
-    inclusive_dates: "",
-    division: userInfo.division,
+    inclusive_dates: [],
+    division: userInfo?.division ? userInfo?.division : "",
   });
 
   useEffect(() => {
     if (data?.status === 200) {
-      if (data?.data.message === "successfully submitted!") {
+      if (data?.data.message === "Successfully submitted!") {
         queryClient.invalidateQueries({
           queryKey: ["leaveApplicationsKey"]["getnotedcountkey"],
         });
@@ -287,19 +335,72 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
           type_id: "",
           details: "",
           detailsRadio: "",
-          no_days: 0,
-          inclusive_dates: "",
+          inclusive_dates: [],
         });
         setShowModal(false);
       }
     }
   }, [status === "success"]);
 
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      inclusive_dates: dates.map((date) => date.format("MMMM DD YYYY")),
+    }));
+  }, [dates]);
+
+  const CustomMultipleInput = ({ onFocus, value }) => {
+    return (
+      <div className="w-full">
+        <div className="mb-1 block">
+          <Label htmlFor="inclusiveD" value="INCLUSIVE DATES" />
+        </div>
+        <div className="flex items-center gap-2">
+          <TextInput
+            id="inclusiveD"
+            value={value}
+            onFocus={onFocus}
+            icon={FaCalendarCheck}
+            readOnly
+            disabled={
+              (formData.type_id === "SL003" &&
+                userInfo.sick_balance < formData.no_days) ||
+              (formData.type_id === "VC001" &&
+                userInfo.vacation_balance < formData.no_days) ||
+              (formData.type_id === "CTO001" &&
+                userInfo.CTO_balance < formData.no_days) ||
+              applicationStatus === true
+            }
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const minDateFilled = () => {
+    if (
+      formData.type_id === "VC001" ||
+      formData.type_id === "SL003" ||
+      formData.type_id === "SPL007" ||
+      formData.type_id === "SLBW011"
+    ) {
+      return new Date().setDate(parseInt(new Date().getDate() + 5));
+    } else if (formData.type_id === "SPL006" || formData.type_id === "RP010") {
+      return new Date().setDate(parseInt(new Date().getDate() + 7));
+    } else {
+      return new Date();
+    }
+  };
+
+  const countSplitDate = () => {
+    return formData.inclusive_dates.length;
+  };
+
   return (
     <div>
       {/* <!-- Modal --> */}
       <TEModal show={showModal} setShow={setShowModal} scrollable>
-        <TEModalDialog centered size="md">
+        <TEModalDialog centered size="lg">
           <TEModalContent>
             <TEModalHeader>
               {/* <!--Modal title--> */}
@@ -338,19 +439,12 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
             >
               <TEModalBody>
                 <div className="flex flex-col">
-                  {/* note */}
-                  <div className="mb-2">
-                    <p className="text-sm text-red-600">
-                      For inclusive dates, please follow the format: E.g., "Aug
-                      20", "Aug 20-21"
-                    </p>
-                  </div>
                   {/* Dropdown for leave type */}
                   <div className="mb-3">
                     <div className="mb-3">
                       <h1>6.A TYPE OF LEAVE TO BE AVAILED OF</h1>
                     </div>
-                    <div className="max-w-md">
+                    <div className="w-full">
                       <Select
                         id="leave"
                         value={formData.type_id}
@@ -464,7 +558,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                     )}
 
                     {/* text area */}
-                    <div className="max-w-md">
+                    <div className="w-full">
                       <Textarea
                         id="details"
                         placeholder="Details of leave..."
@@ -481,29 +575,17 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                       />
                     </div>
                   </div>
+
                   {/* Day Inputs */}
                   <div className="mb-3">
                     {/* No of days */}
+
                     <div>
-                      <div className="mb-2">
+                      <div className="mb-2 max-w-sm">
                         <h1>6.C NUMBER OF WORKING DAYS APPLIED FOR</h1>
-                      </div>
-                      <div className="">
-                        <TextInput
-                          id="days"
-                          type="number"
-                          step="1"
-                          sizing="sm"
-                          className="w-64"
-                          value={formData.no_days}
-                          disabled={applicationStatus}
-                          onChange={(e) => {
-                            setFormData((prev) => ({
-                              ...prev,
-                              no_days: parseInt(e.target.value),
-                            }));
-                          }}
-                        />
+                        <div className="block max-w-20 border disabled:cursor-not-allowed disabled:opacity-50 border-gray-300 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-cyan-500 dark:focus:ring-cyan-500 p-2.5 text-sm text-center rounded-lg">
+                          <p>{countSplitDate()}</p>
+                        </div>
                       </div>
 
                       {formData.type_id === "SL003" &&
@@ -533,23 +615,22 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                           </div>
                         )}
                     </div>
+
                     {/* Inclusive dates */}
-                    <div className="w-64">
-                      <div className="mb-1 block">
-                        <Label htmlFor="inclusiveD" value="INCLUSIVE DATES" />
-                      </div>
-                      <TextInput
-                        id="inclusiveD"
-                        type="text"
-                        sizing="sm"
-                        value={formData.inclusive_dates}
-                        disabled={applicationStatus}
-                        onChange={(e) => {
-                          setFormData((prev) => ({
-                            ...prev,
-                            inclusive_dates: e.target.value,
-                          }));
+                    <div className="w-full">
+                      <DatePicker
+                        value={dates}
+                        onChange={(date) => {
+                          setDates(date);
                         }}
+                        format="MMMM DD YYYY"
+                        sort
+                        plugins={[<DatePanel />, weekends()]}
+                        calendarPosition="right"
+                        fixMainPosition={true}
+                        fixRelativePosition={true}
+                        render={<CustomMultipleInput />}
+                        minDate={minDateFilled()}
                       />
                     </div>
 

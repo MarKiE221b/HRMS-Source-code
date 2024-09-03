@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 import logo from "../../assets/ched-logo.png";
 import checkmark from "../../assets/checkmark.png";
 import sign from "../../assets/signature.png";
-import { getSignature, getOfficerSignatures } from "../../api";
+import { getOfficerSignatures, postSignatureApplicant } from "../../api";
 
 const Checkbox = ({ label, checked }) => (
   <div className="flex flex-row items-center">
@@ -15,15 +15,17 @@ const Checkbox = ({ label, checked }) => (
 );
 
 export const DocumentComponent = forwardRef((data, ref) => {
-  const { data: signatureImgData, refetch } = getSignature();
-  const { data: officerSignaturesData } = getOfficerSignatures();
+  const { data: signatureImgData } = postSignatureApplicant(data?.data?.emp_id);
+  const { data: officerSignaturesData } = getOfficerSignatures(
+    data?.data?.emp_id
+  );
 
   return (
-    <div ref={ref} className="flex justify-center items-center">
-      <div className="w-a4-width h-a4-height border">
+    <div className="flex justify-center">
+      <div ref={ref} className="w-a4-width h-a4-height border font-arial">
         {/* top right text */}
         <div className="box-border mx-[10mm] my-[5mm]">
-          <div className="italic font-bold text-[2.82mm]">
+          <div className="italic font-bold font-calibri text-[2.82mm] ">
             <p>Civil Service Form No. 6</p>
             <p>Revised 2020</p>
           </div>
@@ -36,7 +38,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
               <p className="italic">COMMISSION ON HIGHER EDUCATION</p>
               <p>Hayes St., Cagayan de Oro City</p>
             </div>
-            <div className="text-[11px] p-2 border border-dashed border-gray-400">
+            <div className="text-[2.47mm] font-arial_narrow p-2 border border-dashed border-gray-400">
               <p>Stamp of Date of Receipt</p>
             </div>
           </div>
@@ -49,32 +51,38 @@ export const DocumentComponent = forwardRef((data, ref) => {
           {/* Body Border */}
           <div className="border border-solid border-black">
             {/* form 1 */}
-            <div className="py-[1mm] border-b border-black border-solid">
-              {/* form 1 column */}
-              <div className="text-[2.82mm] flex justify-start px-[1mm]">
-                <p className="mr-[30mm]">1. OFFICE/DEPARTMENT</p>
-                <p className="mr-[17mm]">2. NAME :</p>
-                <p className="mr-[16mm]">(Last)</p>
-                <p className="mr-[16mm]">(First)</p>
-                <p>(Middle)</p>
-              </div>
-
-              {/* form 1 data */}
-              <div className="text-[2.82mm] flex justify-center my-[1mm]">
-                <div className="text-center w-[40%]">
-                  <p>{data?.data?.unit ? data?.data?.unit : ""}</p>
-                </div>
-                <div className="text-center flex justify-evenly w-[60%]">
-                  <p>{data?.data?.lastname ? data?.data?.lastname : ""}</p>
-                  <p>{data?.data?.firstname ? data?.data?.firstname : ""}</p>
-                  <p>{data?.data?.middlename ? data?.data?.middlename : ""}</p>
-                </div>
-              </div>
+            <div className="py-[1mm] px-[1mm] border-b border-black border-solid">
+              <table className="w-full text-[2.82mm]">
+                <thead>
+                  <tr>
+                    <td>1. OFFICE/DEPARTMENT</td>
+                    <td>2. NAME :</td>
+                    <td>(Last)</td>
+                    <td>(First)</td>
+                    <td>(Middle)</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="uppercase font-bold">
+                    <td className="text-center">
+                      {data?.data?.unit ? data?.data?.division : ""}
+                    </td>
+                    <td></td>
+                    <td>{data?.data?.lastname ? data?.data?.lastname : ""}</td>
+                    <td>
+                      {data?.data?.firstname ? data?.data?.firstname : ""}
+                    </td>
+                    <td>
+                      {data?.data?.middlename ? data?.data?.middlename : ""}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* form 2 */}
-            <div className="py-[3mm] px-[1mm] text-[2.82mm] flex justify-start gap-[18mm] border-b border-solid border-black">
-              <p>
+            <div className="py-[1mm] px-[1mm] border-b border-solid border-black">
+              {/* <p>
                 3. DATE OF FILING{" "}
                 <span className="underline">
                   {data?.data?.dateFiling
@@ -90,7 +98,30 @@ export const DocumentComponent = forwardRef((data, ref) => {
               </p>
               <p>
                 5. SALARY <span className="underline">?</span>
-              </p>
+              </p> */}
+
+              <table className="w-full text-[2.82mm]">
+                <thead>
+                  <tr>
+                    <td className="w-[70mm]">
+                      3. DATE OF FILING{" "}
+                      <span className="underline font-bold uppercase">
+                        {" "}
+                        {data?.data?.dateFiling
+                          ? data?.data?.dateFiling.split("T")[0]
+                          : ""}
+                      </span>
+                    </td>
+                    <td className="w-[60mm]">
+                      4. POSITION{" "}
+                      <span className="underline font-bold uppercase">
+                        {data?.data?.unit ? data?.data?.unit : ""}
+                      </span>
+                    </td>
+                    <td>5. SALARY </td>
+                  </tr>
+                </thead>
+              </table>
             </div>
 
             {/* form 3 title */}
@@ -276,7 +307,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     {/* Others form */}
                     <div className="text-[2.82mm] py-[5px] italic">
                       <p>Others :</p>
-                      <div className="not-italic border-b border-solid border-black w-[65mm]">
+                      <div className="not-italic font-bold uppercase border-b border-solid border-black w-[65mm]">
                         {data?.data?.type_id === "CTO001" ? "CTO" : ""}
                       </div>
                     </div>
@@ -313,7 +344,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>
+                          <p className="font-bold uppercase">
                             {data?.data?.detailsOption ===
                             "Within the Philippines"
                               ? data?.data?.details
@@ -333,7 +364,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>
+                          <p className="font-bold uppercase">
                             {data?.data?.detailsOption === "Abroad"
                               ? data?.data?.details
                               : ""}
@@ -357,7 +388,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>
+                          <p className="font-bold uppercase">
                             {data?.data?.detailsOption === "In Hospital"
                               ? data?.data?.details
                               : ""}
@@ -376,7 +407,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         />
                         {/* more details */}
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>
+                          <p className="font-bold uppercase">
                             {data?.data?.detailsOption === "Out Patient"
                               ? data?.data?.details
                               : ""}
@@ -393,7 +424,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       <div className="flex mt-[1mm]">
                         <p>(Specify Illness)</p>
                         <div className="ml-1 border-b border-solid border-black flex-grow">
-                          <p>
+                          <p className="font-bold uppercase">
                             {data?.data?.type_id === "SLBW011"
                               ? data?.data?.details
                               : ""}
@@ -464,14 +495,16 @@ export const DocumentComponent = forwardRef((data, ref) => {
                 <div className="pr-[35mm]">
                   <p>6.C NUMBER OF WORKING DAYS APPLIED FOR</p>
                   <div className="ml-[5mm] border-b border-solid border-black flex-grow">
-                    <p>{data?.data?.no_days ? data?.data?.no_days : ""}</p>
+                    <p className="font-bold uppercase">
+                      {data?.data?.no_days ? data?.data?.no_days : ""}
+                    </p>
                   </div>
                 </div>
                 {/* Inclusive Dates */}
                 <div className="ml-[5mm] pr-[35mm]">
                   <p>INCLUSIVE DATES</p>
                   <div className="border-b border-solid border-black flex-grow">
-                    <p>
+                    <p className="font-bold uppercase">
                       {data?.data?.inclusive_dates
                         ? data?.data?.inclusive_dates
                         : ""}
@@ -488,7 +521,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
                   <div className="px-[3mm]">
                     <div className="flex mt-[1mm] ">
-                      <Checkbox checked={false} label={<p>Not Requested</p>} />
+                      <Checkbox checked={true} label={<p>Not Requested</p>} />
                     </div>
                     <div className="flex mt-[1mm] ">
                       <Checkbox checked={false} label={<p>Requested</p>} />
@@ -534,12 +567,12 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   <p>7.A CERTIFICATION OF LEAVE CREDITS</p>
 
                   {/* As of Date */}
-                  <div className="flex justify-center px-[25mm]">
+                  <div className="flex justify-center gap-1 px-[25mm]">
                     <div>
                       <p>As of</p>
                     </div>
-                    <div className="flex-grow border-b border-solid border-black">
-                      <p>
+                    <div className="flex-grow text-center border-b border-solid border-black">
+                      <p className="font-bold uppercase">
                         {data?.data?.dateFiling
                           ? data?.data?.dateFiling.split("T")[0]
                           : ""}
@@ -549,7 +582,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
                   {/* Table */}
                   <div className="mt-2 px-7">
-                    <table className="w-full text-center font-normal border border-black table-fixed">
+                    <table className="w-full text-center border border-black table-fixed">
                       <thead>
                         <tr>
                           <td className="border-r border-black"></td>
@@ -633,10 +666,8 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     )}
 
                     <div className="text-[2.47mm]">
-                      <p className="font-bold">
-                        DESIDERIO R. APAG, III, D.Eng'g
-                      </p>
-                      <p>OIC - Office of the Chief Administrative Officer</p>
+                      <p className="font-bold">DESIDERIO R. APAG, III, D.Eng</p>
+                      <p>Chief Administrative Officer</p>
                     </div>
                     <div className="border-t border-black">
                       <p>(Authorized Officer)</p>
@@ -746,7 +777,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       </p>
                       <p>
                         {data?.data?.division === "Admin"
-                          ? "OIC - Office of the Chief Administrative Officer"
+                          ? "Chief Administrative Officer"
                           : "Chief Education Program Specialist"}
                       </p>
                     </div>
@@ -819,7 +850,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     className="h-[60px] w-[60px]"
                     src={
                       officerSignaturesData?.signatures?.find(
-                        (sig) => sig.unit === "Regional Director"
+                        (sig) => sig.unit === "Director IV"
                       )?.base64
                     }
                     alt="Signature"

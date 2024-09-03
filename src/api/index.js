@@ -42,7 +42,7 @@ export const userInfoApi = () => {
   });
 };
 
-export const leaveTypeApi = () => {
+export const leaveTypeApi = (enable) => {
   return useQuery({
     queryKey: ["getLeaveTypeKey"],
     queryFn: async () => {
@@ -53,6 +53,7 @@ export const leaveTypeApi = () => {
         throw error;
       }
     },
+    enabled: enable !== "RD",
   });
 };
 
@@ -67,6 +68,7 @@ export const verifyApi = () => {
         throw error;
       }
     },
+    retry: false,
   });
 };
 
@@ -85,7 +87,7 @@ export const applyLeaveApi = () => {
   });
 };
 
-export const leaveApplicationsApi = () => {
+export const leaveApplicationsApi = (enable) => {
   return useQuery({
     queryKey: ["leaveApplicationsKey"],
     queryFn: async () => {
@@ -96,6 +98,7 @@ export const leaveApplicationsApi = () => {
         throw error;
       }
     },
+    enabled: enable !== "RD",
   });
 };
 
@@ -321,12 +324,12 @@ export const getPdf = () => {
   });
 };
 
-export const getNotedCount = (unit) => {
+export const getPendingNofitCount = (unit) => {
   return useQuery({
-    queryKey: ["getnotedcountkey"],
+    queryKey: ["getPendingNotifCountKey"],
     queryFn: async () => {
       try {
-        const response = await makeRequest.get("/getCountNoted");
+        const response = await makeRequest.get("/getPendingNotifCount");
         return response.data;
       } catch (error) {
         throw error;
@@ -397,7 +400,28 @@ export const getSignature = () => {
   });
 };
 
-export const getOfficerSignatures = () => {
+export const postSignatureApplicant = (input) => {
+  return useQuery({
+    queryKey: ["postSignatureApplicantKey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.post(
+          "/postImgSignatureApplicant",
+          { id: input },
+          {
+            responseType: "blob",
+          }
+        );
+        return URL.createObjectURL(response.data);
+      } catch (error) {
+        throw error;
+      }
+    },
+    enabled: !!input,
+  });
+};
+
+export const getOfficerSignatures = (_id) => {
   return useQuery({
     queryKey: ["getofficersignatureskey"],
     queryFn: async () => {
@@ -408,5 +432,7 @@ export const getOfficerSignatures = () => {
         throw error;
       }
     },
+    enabled: !!_id,
+    retry: false,
   });
 };
