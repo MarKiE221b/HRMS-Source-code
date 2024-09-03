@@ -6,17 +6,18 @@ import logo from "../../assets/ched-logo.png";
 
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getNotedCount, logoutApi, userInfoApi } from "../../api";
+import { getPendingNofitCount, logoutApi, userInfoApi } from "../../api";
 import { FaRegListAlt, FaHome } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
-import { GrCertificate } from "react-icons/gr";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data: userData } = userInfoApi();
-  const { data: countNotif } = getNotedCount(userData?.unit);
+  const { data: countNotif } = getPendingNofitCount(userData?.unit);
   const { mutate: logoutFunct, isSuccess } = logoutApi();
+
+  console.log(countNotif);
 
   if (isSuccess) return <Navigate to="/" />;
 
@@ -50,23 +51,25 @@ const NavBar = () => {
               }`}</span>
             </Dropdown.Header>
             {!userData && <Dropdown.Item>Profile</Dropdown.Item>}
-            <Dropdown.Header>
-              <span className="block font-semibold">Credits: </span>
-              <span className="flex items-center ml-2 font-semibold">
-                <FaSwimmer size="25px" /> :{" "}
-                {userData?.vacation_balance !== null
-                  ? userData?.vacation_balance
-                  : 0}
-              </span>
-              <span className="flex items-center ml-2 font-semibold">
-                <MdOutlineSick size="25px" /> :{" "}
-                {userData?.sick_balance !== null ? userData?.sick_balance : 0}
-              </span>
-              <span className="flex items-center ml-2 font-semibold">
-                <FcOvertime size="25px" />:{" "}
-                {userData?.CTO_balance !== null ? userData?.CTO_balance : 0}
-              </span>
-            </Dropdown.Header>
+            {userData?.division !== "RD" && (
+              <Dropdown.Header>
+                <span className="block font-semibold">Credits: </span>
+                <span className="flex items-center ml-2 font-semibold">
+                  <FaSwimmer size="25px" /> :{" "}
+                  {userData?.vacation_balance !== null
+                    ? userData?.vacation_balance
+                    : 0}
+                </span>
+                <span className="flex items-center ml-2 font-semibold">
+                  <MdOutlineSick size="25px" /> :{" "}
+                  {userData?.sick_balance !== null ? userData?.sick_balance : 0}
+                </span>
+                <span className="flex items-center ml-2 font-semibold">
+                  <FcOvertime size="25px" />:{" "}
+                  {userData?.CTO_balance !== null ? userData?.CTO_balance : 0}
+                </span>
+              </Dropdown.Header>
+            )}
             <Dropdown.Item
               type="button"
               onClick={() => navigate(`${id}/settings`)}
@@ -83,7 +86,7 @@ const NavBar = () => {
       </Navbar>
 
       <div className="flex flex-wrap overflow-x-auto gap-2 mx-3 mt-3">
-        <Button.Group outline>
+        <Button.Group>
           <Button color="gray" onClick={() => navigate(id)}>
             <FaHome className="mr-3 h-4 w-4" />
             Home
@@ -97,7 +100,7 @@ const NavBar = () => {
               <IoPeopleSharp className="mr-3 h-4 w-4" />
               Employee Request{" "}
               <span className="absolute top-0 left-8 p-1 text-xs rounded-full bg-red-200">
-                {countNotif?.countNoted}
+                {countNotif?.notifCount}
               </span>
             </Button>
           )}
@@ -110,14 +113,17 @@ const NavBar = () => {
               <IoPeopleSharp className="mr-3 h-4 w-4" />
               Employee Request{" "}
               <span className="absolute top-0 left-8 p-1 text-xs rounded-full bg-red-200">
-                {countNotif?.countNoted}
+                {countNotif?.notifCount}
               </span>
             </Button>
           )}
-          <Button color="gray" onClick={() => navigate(`${id}/ledger`)}>
-            <FaRegListAlt className="mr-3 h-4 w-4" />
-            Ledger
-          </Button>
+
+          {userData?.division !== "RD" && (
+            <Button color="gray" onClick={() => navigate(`${id}/ledger`)}>
+              <FaRegListAlt className="mr-3 h-4 w-4" />
+              Ledger
+            </Button>
+          )}
         </Button.Group>
       </div>
     </div>

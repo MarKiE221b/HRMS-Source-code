@@ -155,6 +155,9 @@ const SettingsPage = () => {
         <div className="flex items-center justify-center h-[300px]">
           <SignatureCanvas
             ref={(ref) => setSignature(ref)}
+            minWidth={2}
+            maxWidth={3}
+            velocityFilterWeight={0.5}
             penColor="black"
             canvasProps={{
               className:
