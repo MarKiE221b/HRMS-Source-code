@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
 import logo from "../../assets/ched-logo.png";
+import bg from "../../assets/ched-bg.jpg"
 
 import { Navigate } from "react-router-dom";
 import { loginApi } from "../../api";
@@ -39,7 +40,7 @@ const LoginPage = () => {
     <div
       className="h-screen bg-cover bg-center overflow-y-auto"
       style={{
-        backgroundImage: `url(${logo})`,
+        backgroundImage: `url(${bg})`,
         backgroundRepeat: "no-repeat",
       }}
     >
