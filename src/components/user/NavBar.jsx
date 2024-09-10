@@ -7,7 +7,7 @@ import logo from "../../assets/ched-logo.png";
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getPendingNofitCount, logoutApi, userInfoApi } from "../../api";
-import { FaRegListAlt, FaHome } from "react-icons/fa";
+import { FaRegListAlt, FaHome, FaClock } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
 
 const NavBar = () => {
@@ -124,6 +124,11 @@ const NavBar = () => {
               Ledger
             </Button>
           )}
+
+          <Button color="gray" onClick={() => navigate(`${id}/ctopage`)}>
+            <FaClock className="mr-3 h-4 w-4" />
+            CTO
+          </Button>
         </Button.Group>
       </div>
     </div>
