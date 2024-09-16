@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 
-import logo from "../../../assets/ched-logo.png";
-import { IoReturnUpBack } from "react-icons/io5";
+import defautAvatar from "../../../assets/default-avatar.png";
+import { IoReturnUpBack, IoCloudUploadOutline } from "react-icons/io5";
 import { IoIosRefresh } from "react-icons/io";
+import { MdFileUpload } from "react-icons/md";
 import { Avatar, Button, Label, TextInput } from "flowbite-react";
 import { Link, useParams } from "react-router-dom";
 import {
@@ -11,36 +12,78 @@ import {
   updatePwd,
   uploadSignature,
   getSignature,
+  uploadAvatar,
+  getUploadAvatar,
 } from "../../../api";
 import { useQueryClient } from "@tanstack/react-query";
 import SignatureCanvas from "react-signature-canvas";
 
 const SettingsPage = () => {
   const queryClient = useQueryClient();
+
+  const { mutate: pwdUpdate, data: pwdData, error: pwdError } = updatePwd();
+  const { mutate: signatureUpload, data: uploadSignatureData } =
+    uploadSignature();
+  const {
+    mutate: postUploadAvatar,
+    data: avatarData,
+    isPending: avatarUploadPending,
+  } = uploadAvatar();
+
+  const { data: signatureImgData, refetch } = getSignature();
+  const { data: username, isFetched } = getUsername();
+  const { data: profileAvatar, isFetched: avatarFetched } = getUploadAvatar();
+
   const { id } = useParams();
-  const { data: username, isSuccess } = getUsername();
   const {
     mutate: usernameUpdate,
     data: usernameData,
     error: usernameError,
   } = updateUsername();
 
-  const { mutate: pwdUpdate, data: pwdData, error: pwdError } = updatePwd();
-  const { mutate: signatureUpload, data: uploadSignatureData } =
-    uploadSignature();
-  const { data: signatureImgData, refetch } = getSignature();
-
+  const [signature, setSignature] = useState();
+  const [imageUpload, setImageUpload] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [credentials, setCredentials] = useState({
     username: "",
     old_pwd: "",
     new_pwd: "",
   });
 
-  const [signature, setSignature] = useState();
+  // preview avatar upload
+  const previewAvatar = (file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file || null);
+    }
+  };
 
+  // preview handler
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setImageUpload(file);
+      previewAvatar(file);
+    }
+  };
+
+  // upload profile picture
+  const uploadProfile = (image) => {
+    const formdata = new FormData();
+    formdata.append("file", image);
+
+    postUploadAvatar(formdata);
+  };
+
+  //
   useEffect(() => {
     setCredentials((prev) => ({ ...prev, username: username?.username || "" }));
-  }, [isSuccess]);
+    previewAvatar(profileAvatar);
+  }, [isFetched, avatarFetched]);
 
   return (
     <div className="flex md:flex-row md:items-start flex-col items-center justify-center gap-5">
@@ -51,13 +94,46 @@ const SettingsPage = () => {
             <span className="hover:text-blue-900 hover:underline">Go back</span>
           </Link>
         </div>
-        <div>
-          <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
-        </div>
 
         <div className="mt-5">
           <h1 className="text-xl font-medium">Profile Info</h1>
           <hr className="my-3" />
+
+          {/* Avatar */}
+          <div>
+            <div className="relative flex justify-center">
+              <Avatar img={imagePreview || defautAvatar} rounded size="lg" />
+              <div className="absolute w-20 h-20 group flex items-center justify-center hover:bg-gray-200 opacity-70 rounded-full transition duration-500">
+                <label htmlFor="pic-upload">
+                  <IoCloudUploadOutline
+                    className="hidden group-hover:block cursor-pointer"
+                    size="35px"
+                  />
+                  <input
+                    type="file"
+                    className="hidden"
+                    id="pic-upload"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                  />
+                </label>
+              </div>
+            </div>
+
+            {imageUpload && (
+              <div className="flex justify-center mt-2">
+                <button
+                  onClick={() => uploadProfile(imageUpload)}
+                  className="inline-flex items-center bg-gray-100 hover:bg-gray-300 py-1 px-2 text-base font-semibold rounded-md"
+                  disabled={avatarUploadPending}
+                >
+                  <MdFileUpload />
+                  Upload
+                </button>
+              </div>
+            )}
+          </div>
+
           {/* username */}
           <div>
             <div className="mb-2 block">
@@ -65,7 +141,7 @@ const SettingsPage = () => {
             </div>
             <TextInput
               id="username1"
-              type="email"
+              type="text"
               value={credentials.username}
               onChange={(e) =>
                 setCredentials((prev) => ({

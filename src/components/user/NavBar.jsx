@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaSwimmer } from "react-icons/fa";
 import { MdOutlineSick } from "react-icons/md";
 import { FcOvertime } from "react-icons/fc";
@@ -6,18 +6,39 @@ import logo from "../../assets/ched-logo.png";
 
 import { Avatar, Button, Dropdown, Navbar } from "flowbite-react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getPendingNofitCount, logoutApi, userInfoApi } from "../../api";
+import {
+  getPendingNofitCount,
+  getUploadAvatar,
+  logoutApi,
+  userInfoApi,
+} from "../../api";
 import { FaRegListAlt, FaHome, FaClock } from "react-icons/fa";
 import { IoPeopleSharp } from "react-icons/io5";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [avatar, setAvatar] = useState(null);
+
   const { data: userData } = userInfoApi();
   const { data: countNotif } = getPendingNofitCount(userData?.unit);
+  const { data: profileAvatar, isFetched: avatarFetched } = getUploadAvatar();
+
   const { mutate: logoutFunct, isSuccess } = logoutApi();
 
-  console.log(countNotif);
+  const avatarOnload = (file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatar(reader.result);
+      };
+      reader.readAsDataURL(file || null);
+    }
+  };
+
+  useEffect(() => {
+    avatarOnload(profileAvatar);
+  }, [avatarFetched]);
 
   if (isSuccess) return <Navigate to="/" />;
 
@@ -35,13 +56,7 @@ const NavBar = () => {
           <Dropdown
             arrowIcon={false}
             inline
-            label={
-              <Avatar
-                alt="user_icon"
-                img="/pexels-pixabay-220453.jpg"
-                rounded
-              />
-            }
+            label={<Avatar alt="user_icon" img={avatar} rounded />}
           >
             <Dropdown.Header>
               <span className="block text-base">{`${userData?.lastname}, ${

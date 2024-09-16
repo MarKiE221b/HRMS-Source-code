@@ -397,6 +397,7 @@ export const getSignature = () => {
         throw error;
       }
     },
+    retry: false,
   });
 };
 
@@ -433,6 +434,37 @@ export const getOfficerSignatures = (_id) => {
       }
     },
     enabled: !!_id,
+    retry: false,
+  });
+};
+
+export const uploadAvatar = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/uploadAvatar", input, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getUploadAvatar = (_id) => {
+  return useQuery({
+    queryKey: ["getuploadavatarkey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getUploadAvatar", {
+          responseType: "blob",
+        });
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
     retry: false,
   });
 };
