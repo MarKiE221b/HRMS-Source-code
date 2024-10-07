@@ -361,7 +361,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
     detailsRadio: "",
     details: "",
     inclusive_dates: [],
-    division: userInfo?.division ? userInfo?.division : "",
+    division: "",
   });
 
   useEffect(() => {
@@ -387,6 +387,13 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
       inclusive_dates: dates.map((date) => date.format("MMMM DD YYYY")),
     }));
   }, [dates]);
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      division: userInfo?.division,
+    }));
+  }, [userInfo]);
 
   const CustomMultipleInput = ({ onFocus, value }) => {
     return (
