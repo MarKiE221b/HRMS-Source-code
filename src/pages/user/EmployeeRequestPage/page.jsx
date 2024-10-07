@@ -89,7 +89,7 @@ const EmployeeRequestPage = () => {
             row={props.row}
             setShowModal={setShowModal}
             setId={setId}
-            userUnit={userData.unit}
+            userUnit={userData?.unit}
           />
         ),
       },

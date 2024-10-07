@@ -12,52 +12,61 @@ const StatusTimeline = ({ status, row }) => {
       )
       .filter((id) => id !== undefined)[0] || {};
 
+
+
+      console.log(filterStatusData);
+
   return (
     <div className="mb-5 mt-8">
       <Timeline horizontal>
         {/* OIC */}
-        <Timeline.Item>
-          <Timeline.Point
-            icon={
-              filterStatusData?.OICStatus !== "Pending"
-                ? filterStatusData?.OICStatus === "Approved"
-                  ? FaCheck
-                  : RxCross2
-                : MdOutlinePending
-            }
-          />
-          <Timeline.Content>
-            <Timeline.Time>
-              {filterStatusData?.OICStatusDate?.split("T")[0]}
-            </Timeline.Time>
-            <Timeline.Title>"Chief Administrative Officer"</Timeline.Title>
-            <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
-          </Timeline.Content>
-        </Timeline.Item>
+
+        {filterStatusData?.unit !== "Chief Education Program Specialist" &&
+          filterStatusData?.unit !== "Chief Administrative Officer" && (
+            <Timeline.Item>
+              <Timeline.Point
+                icon={
+                  filterStatusData?.OICStatus !== "Pending"
+                    ? filterStatusData?.OICStatus === "Approved"
+                      ? FaCheck
+                      : RxCross2
+                    : MdOutlinePending
+                }
+              />
+              <Timeline.Content>
+                <Timeline.Time>
+                  {filterStatusData?.OICStatusDate?.split("T")[0]}
+                </Timeline.Time>
+                <Timeline.Title>Chief Administrative Officer</Timeline.Title>
+                <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
+              </Timeline.Content>
+            </Timeline.Item>
+          )}
 
         {/* CEPS */}
-        {filterStatusData?.division === "Technical" && (
-          <Timeline.Item>
-            <Timeline.Point
-              icon={
-                filterStatusData?.CEPSStatus !== "Pending"
-                  ? filterStatusData?.CEPSStatus === "Approved"
-                    ? FaCheck
-                    : RxCross2
-                  : MdOutlinePending
-              }
-            />
-            <Timeline.Content>
-              <Timeline.Time>
-                {filterStatusData?.CEPSStatusDate?.split("T")[0]}
-              </Timeline.Time>
-              <Timeline.Title>
-                Chief Education Program Specialist
-              </Timeline.Title>
-              <Timeline.Body>{filterStatusData?.CEPSStatus}</Timeline.Body>
-            </Timeline.Content>
-          </Timeline.Item>
-        )}
+        {filterStatusData?.division === "Technical" &&
+          filterStatusData?.unit !== "Chief Education Program Specialist" && (
+            <Timeline.Item>
+              <Timeline.Point
+                icon={
+                  filterStatusData?.CEPSStatus !== "Pending"
+                    ? filterStatusData?.CEPSStatus === "Approved"
+                      ? FaCheck
+                      : RxCross2
+                    : MdOutlinePending
+                }
+              />
+              <Timeline.Content>
+                <Timeline.Time>
+                  {filterStatusData?.CEPSStatusDate?.split("T")[0]}
+                </Timeline.Time>
+                <Timeline.Title>
+                  Chief Education Program Specialist
+                </Timeline.Title>
+                <Timeline.Body>{filterStatusData?.CEPSStatus}</Timeline.Body>
+              </Timeline.Content>
+            </Timeline.Item>
+          )}
 
         {/* RD */}
         <Timeline.Item>

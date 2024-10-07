@@ -3,12 +3,7 @@ import { flexRender } from "@tanstack/react-table";
 import Loading from "../loading/Loading";
 import { Label, TextInput } from "flowbite-react";
 
-import { IoMdSearch } from "react-icons/io";
-import {
-  FaLongArrowAltDown,
-  FaLongArrowAltUp,
-  FaArrowsAltV,
-} from "react-icons/fa";
+import { IoIosArrowDown, IoIosArrowUp, IoMdSearch } from "react-icons/io";
 
 const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
   return (
@@ -31,93 +26,60 @@ const GlobalFilter = ({ globalFilter, setGlobalFilter }) => {
 
 const Table = ({ load, globalFilter, setGlobalFilter, table }) => {
   return (
-    <div className="flex-grow rounded-lg bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full">
+    <div className="max-h-full overflow-y-auto rounded-lg bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
       <div className="border-b-2 border-neutral-100 px-6 py-3 dark:border-neutral-600 dark:text-neutral-50">
         Employees Lists
       </div>
       {load ? (
         <Loading />
       ) : (
-        <div className="p-6">
-          {/* table */}
-          <div className="flex flex-col">
-            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 sm:px-6 lg:px-8">
-                <div className="overflow-hidden">
-                  {/* Global Search */}
-                  <GlobalFilter
-                    globalFilter={globalFilter}
-                    setGlobalFilter={setGlobalFilter}
-                  />
-                  <div className="max-h-[500px] overflow-y-auto">
-                    <table className="min-w-full text-left text-sm font-light">
-                      <thead className="bg-white font-medium">
-                        {table.getHeaderGroups().map((headerGroup) => (
-                          <tr key={headerGroup.id}>
-                            {headerGroup.headers.map((header) => (
-                              <th
-                                key={header.id}
-                                scope="col"
-                                className="px-3 py-4"
-                              >
-                                <button
-                                  onClick={header.column.getToggleSortingHandler()}
-                                  className="ml-2"
-                                >
-                                  {header.isPlaceholder ? null : (
-                                    <div className="flex flex-row gap-3">
-                                      {flexRender(
-                                        header.column.columnDef.header,
-                                        header.getContext()
-                                      )}
-
-                                      {header.column.columnDef.header ? (
-                                        header.column.getIsSorted() ? (
-                                          header.column.getIsSorted() ===
-                                          "desc" ? (
-                                            <FaLongArrowAltDown />
-                                          ) : (
-                                            <FaLongArrowAltUp />
-                                          )
-                                        ) : (
-                                          <FaArrowsAltV />
-                                        )
-                                      ) : (
-                                        <div></div>
-                                      )}
-                                    </div>
-                                  )}
-                                </button>
-                              </th>
-                            ))}
-                          </tr>
-                        ))}
-                      </thead>
-                      <tbody>
-                        {table.getRowModel().rows.map((row) => (
-                          <tr
-                            key={row.id}
-                            className="bg-neutral-100 hover:bg-neutral-200 duration-300 ease-in-out"
-                          >
-                            {row.getVisibleCells().map((cell) => (
-                              <td
-                                key={cell.id}
-                                className="whitespace-nowrap px-6 py-4 font-medium"
-                              >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext()
-                                )}
-                              </td>
-                            ))}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="p-6 flex flex-col">
+          {/* Search Bar */}
+          <GlobalFilter
+            globalFilter={globalFilter}
+            setGlobalFilter={setGlobalFilter}
+          />
+          {/* Table */}
+          <div className="flex-grow mt-5 max-h-[600px] overflow-y-auto">
+            <table className="w-full text-sm">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id} className="bg-gray-100 border">
+                    {headerGroup.headers.map((header) => (
+                      <td
+                        className="cursor-pointer px-7 py-3"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <div className="flex gap-1 items-center">
+                          {header.column.columnDef.header}
+                          {
+                            {
+                              asc: <IoIosArrowUp />,
+                              desc: <IoIosArrowDown />,
+                            }[header.column.getIsSorted() ?? null]
+                          }
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows?.map((row) => (
+                  <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td className="px-7 border" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

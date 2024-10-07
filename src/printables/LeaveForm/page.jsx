@@ -82,24 +82,6 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
             {/* form 2 */}
             <div className="py-[1mm] px-[1mm] border-b border-solid border-black">
-              {/* <p>
-                3. DATE OF FILING{" "}
-                <span className="underline">
-                  {data?.data?.dateFiling
-                    ? data?.data?.dateFiling.split("T")[0]
-                    : ""}
-                </span>
-              </p>
-              <p>
-                4. POSITION{" "}
-                <span className="underline">
-                  {data?.data?.unit ? data?.data?.unit : ""}
-                </span>
-              </p>
-              <p>
-                5. SALARY <span className="underline">?</span>
-              </p> */}
-
               <table className="w-full text-[2.82mm]">
                 <thead>
                   <tr>
@@ -644,34 +626,74 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
                   {/* Authorized OIC */}
                   <div className="relative mt-3 px-7 text-center">
-                    {data?.data?.OICStatus === "Approved" && (
-                      <div className="absolute right-[30mm] bottom-[4mm] flex items-center justify-center">
-                        <img
-                          className="h-[60px] w-[60px]"
-                          src={
-                            officerSignaturesData?.signatures?.find(
-                              (sig) =>
-                                sig.unit === "Chief Administrative Officer"
-                            )?.base64
-                          }
-                          alt="Signature"
-                        />
+                    {data?.data?.unit === "Chief Administrative Officer" ||
+                    data?.data?.unit ===
+                      "Chief Education Program Specialist" ? (
+                      <>
+                        {data?.data?.approvedStatus === "Approved" && (
+                          <div className="absolute right-[75mm] bottom-[4mm] flex items-center justify-center">
+                            <img
+                              className="h-[60px] w-[60px]"
+                              src={
+                                officerSignaturesData?.signatures?.find(
+                                  (sig) => sig.unit === "Director IV"
+                                )?.base64
+                              }
+                              alt="Signature"
+                            />
 
-                        <p className="text-end">
-                          {data?.data?.OICStatusDate
-                            ? data?.data?.OICStatusDate.split("T")[0]
-                            : ""}
-                        </p>
-                      </div>
+                            <p className="text-end">
+                              {data?.data?.approvedDateModified
+                                ? data?.data?.approvedDateModified.split("T")[0]
+                                : ""}
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="text-[2.47mm]">
+                          <p className="font-bold uppercase">
+                            FREDDIE T. BERNAL, Ph.D., CESO III
+                          </p>
+                          <p>Director IV</p>
+                        </div>
+                        <div className="border-t border-black font-bold">
+                          <p>(Authorized Official)</p>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        {data?.data?.OICStatus === "Approved" && (
+                          <div className="absolute right-[30mm] bottom-[4mm] flex items-center justify-center">
+                            <img
+                              className="h-[60px] w-[60px]"
+                              src={
+                                officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit === "Chief Administrative Officer"
+                                )?.base64
+                              }
+                              alt="Signature"
+                            />
+
+                            <p className="text-end">
+                              {data?.data?.OICStatusDate
+                                ? data?.data?.OICStatusDate.split("T")[0]
+                                : ""}
+                            </p>
+                          </div>
+                        )}
+
+                        <div className="text-[2.47mm]">
+                          <p className="font-bold">
+                            DESIDERIO R. APAG, III, D.Eng
+                          </p>
+                          <p>Chief Administrative Officer</p>
+                        </div>
+                        <div className="border-t border-black">
+                          <p>(Authorized Officer)</p>
+                        </div>
+                      </>
                     )}
-
-                    <div className="text-[2.47mm]">
-                      <p className="font-bold">DESIDERIO R. APAG, III, D.Eng</p>
-                      <p>Chief Administrative Officer</p>
-                    </div>
-                    <div className="border-t border-black">
-                      <p>(Authorized Officer)</p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -726,60 +748,94 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   </div>
 
                   <div className="relative mt-3 px-7 text-center">
-                    {data?.data?.division === "Admin"
-                      ? data?.data?.OICStatus === "Approved" && (
-                          <div className="absolute right-[25mm] bottom-[4mm] flex items-center justify-center">
-                            <img
-                              className="h-[60px] w-[60px]"
-                              src={
-                                officerSignaturesData?.signatures?.find(
-                                  (sig) =>
-                                    sig.unit === "Chief Administrative Officer"
-                                )?.base64
-                              }
-                              alt="Signature"
-                            />
+                    {(data?.data?.unit === "Chief Administrative Officer" ||
+                      data?.data?.unit ===
+                        "Chief Education Program Specialist") &&
+                      data?.data?.approvedStatus === "Approved" && (
+                        <div className="absolute right-[75mm] bottom-[4mm] flex items-center justify-center">
+                          <img
+                            className="h-[60px] w-[60px]"
+                            src={
+                              officerSignaturesData?.signatures?.find(
+                                (sig) => sig.unit === "Director IV"
+                              )?.base64
+                            }
+                            alt="Signature"
+                          />
+                          <p className="text-end">
+                            {data?.data?.approvedDateModified
+                              ? data?.data?.approvedDateModified.split("T")[0]
+                              : ""}
+                          </p>
+                        </div>
+                      )}
 
-                            <p className="text-end">
-                              {data?.data?.OICStatusDate
-                                ? data?.data?.OICStatusDate.split("T")[0]
-                                : ""}
-                            </p>
-                          </div>
-                        )
-                      : data?.data?.CEPSStatus === "Approved" && (
-                          <div className="absolute right-[20mm] bottom-[4mm] flex items-center justify-center">
-                            <img
-                              className="h-[60px] w-[60px]"
-                              src={
-                                officerSignaturesData?.signatures?.find(
-                                  (sig) =>
-                                    sig.unit ===
-                                    "Chief Education Program Specialist"
-                                )?.base64
-                              }
-                              alt="Signature"
-                            />
+                    {data?.data?.division === "Admin" &&
+                      data?.data?.OICStatus === "Approved" && (
+                        <div className="absolute right-[25mm] bottom-[4mm] flex items-center justify-center">
+                          <img
+                            className="h-[60px] w-[60px]"
+                            src={
+                              officerSignaturesData?.signatures?.find(
+                                (sig) =>
+                                  sig.unit === "Chief Administrative Officer"
+                              )?.base64
+                            }
+                            alt="Signature"
+                          />
+                          <p className="text-end">
+                            {data?.data?.OICStatusDate
+                              ? data?.data?.OICStatusDate.split("T")[0]
+                              : ""}
+                          </p>
+                        </div>
+                      )}
 
-                            <p className="text-end">
-                              {data?.data?.CEPSStatusDate
-                                ? data?.data?.CEPSStatusDate.split("T")[0]
-                                : ""}
-                            </p>
-                          </div>
-                        )}
+                    {data?.data?.CEPSStatus === "Approved" && (
+                      <div className="absolute right-[20mm] bottom-[4mm] flex items-center justify-center">
+                        <img
+                          className="h-[60px] w-[60px]"
+                          src={
+                            officerSignaturesData?.signatures?.find(
+                              (sig) =>
+                                sig.unit ===
+                                "Chief Education Program Specialist"
+                            )?.base64
+                          }
+                          alt="Signature"
+                        />
+                        <p className="text-end">
+                          {data?.data?.CEPSStatusDate
+                            ? data?.data?.CEPSStatusDate.split("T")[0]
+                            : ""}
+                        </p>
+                      </div>
+                    )}
 
                     <div className="text-[2.47mm]">
-                      <p className="font-bold">
-                        {data?.data?.division === "Admin"
-                          ? "DESIDERIO R. APAG, III, D.Eng'g"
-                          : "MIRIAM B. FUENTES, Ph.D."}
-                      </p>
-                      <p>
-                        {data?.data?.division === "Admin"
-                          ? "Chief Administrative Officer"
-                          : "Chief Education Program Specialist"}
-                      </p>
+                      {data?.data?.unit === "Chief Administrative Officer" ||
+                      data?.data?.unit ===
+                        "Chief Education Program Specialist" ? (
+                        <>
+                          <p className="font-bold">
+                            FREDDIE T. BERNAL, Ph.D., CESO III
+                          </p>
+                          <p>Director IV</p>
+                        </>
+                      ) : (
+                        <>
+                          <p className="font-bold">
+                            {data?.data?.division === "Admin"
+                              ? "DESIDERIO R. APAG, III, D.Eng'g"
+                              : "MIRIAM B. FUENTES, Ph.D."}
+                          </p>
+                          <p>
+                            {data?.data?.division === "Admin"
+                              ? "Chief Administrative Officer"
+                              : "Chief Education Program Specialist"}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <div className="border-t border-black">
                       <p>(Authorized Officer)</p>

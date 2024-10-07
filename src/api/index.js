@@ -468,3 +468,22 @@ export const getUploadAvatar = (_id) => {
     retry: false,
   });
 };
+
+export const editEmployeeDetails = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.put("/editEmployeeDetails", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getemployeeslistkey"] });
+    },
+  });
+};

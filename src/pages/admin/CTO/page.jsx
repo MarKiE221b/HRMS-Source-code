@@ -14,14 +14,21 @@ import { Button, Label } from "flowbite-react";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 
-import { getCTOLedger } from "../../../api";
+import { getCTOLedger, getPdf } from "../../../api";
+
 import CtoUploadModal from "../../../components/admin/CtoUploadModal";
+import Loading from "./../../../components/loading/Loading";
+import PdfViewModal from "../../../components/admin/PdfViewModal";
 
 const CTO = () => {
   const navigate = useNavigate();
 
-  const { data: ctoLedger } = getCTOLedger();
+  const { data: ctoLedger, isFetching: isDataTableFetching } = getCTOLedger();
+  const { mutate: pdfView, data: pdfFile, isPending } = getPdf();
+
   const [showModal, setShowModal] = useState(false);
+  const [showModalPDFView, setShowModalPDFView] = useState(false);
+
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
 
@@ -47,7 +54,22 @@ const CTO = () => {
       {
         accessorKey: "certificate_id",
         header: "ROMO No.",
-        cell: (props) => <div>{props.getValue()}</div>,
+        cell: (props) => (
+          <div>
+            {
+              <button
+                className="hover:underline hover:text-blue-900"
+                type="button"
+                onClick={() => {
+                  setShowModalPDFView(true);
+                  pdfView({ id: props.getValue() });
+                }}
+              >
+                {props.getValue()}
+              </button>
+            }
+          </div>
+        ),
       },
       {
         accessorKey: "date_uploaded",
@@ -76,9 +98,15 @@ const CTO = () => {
     <>
       {/* Modal */}
       <CtoUploadModal showModal={showModal} setShowModal={setShowModal} />
+      <PdfViewModal
+        showModal={showModalPDFView}
+        setShowModal={setShowModalPDFView}
+        pdfFile={pdfFile}
+        load={isPending}
+      />
 
       {/* Main Body */}
-      <div className=" bg-white h-full shadow-sm p-8">
+      <div className="relative bg-white shadow-sm p-8 max-h-full overflow-y-auto">
         {/* Go back button */}
         <div className="mb-2">
           <button
@@ -109,45 +137,51 @@ const CTO = () => {
 
         {/* Table */}
         <div className="text-xs max-h-[600px] overflow-y-auto">
-          <table className="w-full">
-            <thead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="bg-gray-100 border ">
-                  {headerGroup.headers.map((header) => (
-                    <td
-                      className="cursor-pointer px-7 py-3"
-                      key={header.id}
-                      onClick={header.column.getToggleSortingHandler()}
-                    >
-                      <div className="flex gap-1 items-center">
-                        {header.column.columnDef.header}
-                        {
+          {isDataTableFetching ? (
+            <div>
+              <Loading />
+            </div>
+          ) : (
+            <table className="w-full">
+              <thead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <tr key={headerGroup.id} className="bg-gray-100 border ">
+                    {headerGroup.headers.map((header) => (
+                      <td
+                        className="cursor-pointer px-7 py-3"
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                      >
+                        <div className="flex gap-1 items-center">
+                          {header.column.columnDef.header}
                           {
-                            asc: <IoIosArrowUp />,
-                            desc: <IoIosArrowDown />,
-                          }[header.column.getIsSorted() ?? null]
-                        }
-                      </div>
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody>
-              {table.getRowModel().rows?.map((row) => (
-                <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <td className="px-7 border" key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                            {
+                              asc: <IoIosArrowUp />,
+                              desc: <IoIosArrowDown />,
+                            }[header.column.getIsSorted() ?? null]
+                          }
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody>
+                {table.getRowModel().rows?.map((row) => (
+                  <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td className="px-7 border" key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </>

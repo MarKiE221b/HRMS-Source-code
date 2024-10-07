@@ -84,7 +84,6 @@ const CtoUploadModal = ({ showModal, setShowModal }) => {
     uploadData(formData);
   };
 
-
   return (
     <div>
       <TEModal show={showModal} setShow={setShowModal}>
@@ -120,6 +119,11 @@ const CtoUploadModal = ({ showModal, setShowModal }) => {
             <TEModalBody>
               <form onSubmit={uploadForm}>
                 {/* ROMO id */}
+                <p className="text-xs text-red-600 mb-6">
+                  * In the "month of" input. Please include the specific day/s.
+                  Ex. "January 23, 24".
+                </p>
+
                 <div className="flex gap-3 mb-2">
                   <div className="flex items-center">
                     <p className="mr-2 text-sm">Reference</p>

@@ -67,12 +67,14 @@ const Employees = () => {
         header: "",
         accessorKey: "modButton",
         cell: (props) => (
-          <ModifyButton
-            table={props.table}
-            row={props.row}
-            setTableRowData={setTableRowData}
-            setShowModal={setShowModal}
-          />
+          <div className="flex justify-center items-center py-2">
+            <ModifyButton
+              table={props.table}
+              row={props.row}
+              setTableRowData={setTableRowData}
+              setShowModal={setShowModal}
+            />
+          </div>
         ),
       },
     ],
@@ -95,7 +97,7 @@ const Employees = () => {
   });
 
   return (
-    <div>
+    <>
       <EModifyModal
         tableRowData={tableRowData}
         showModal={showModal}
@@ -107,7 +109,7 @@ const Employees = () => {
         globalFilter={globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
-    </div>
+    </>
   );
 };
 

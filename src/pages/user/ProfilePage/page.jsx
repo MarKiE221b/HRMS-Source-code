@@ -253,9 +253,7 @@ const ProfilePage = () => {
         ) : (
           <>
             {userData?.division === "RD" ? (
-              <div className="justify-center max-w-screen-xl">
-                <RDRequestPage />
-              </div>
+              <RDRequestPage />
             ) : (
               <div className="">
                 <div className="mb-3">
@@ -632,42 +630,6 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                               <p>{countSplitDate()}</p>
                             </div>
                           </div>
-
-                          {formData.type_id === "SL003" &&
-                            userInfo.sick_balance < formData.no_days && (
-                              <div className="mt-3">
-                                <Alert
-                                  color="warning"
-                                  icon={FaExclamationCircle}
-                                >
-                                  Insuficient balance for Sick Leave.
-                                </Alert>
-                              </div>
-                            )}
-
-                          {formData.type_id === "VC001" &&
-                            userInfo.vacation_balance < formData.no_days && (
-                              <div className="mt-3">
-                                <Alert
-                                  color="warning"
-                                  icon={FaExclamationCircle}
-                                >
-                                  Insuficient balance for Vacation Leave.
-                                </Alert>
-                              </div>
-                            )}
-
-                          {formData.type_id === "CTO001" &&
-                            userInfo.CTO_balance < formData.no_days && (
-                              <div className="mt-3">
-                                <Alert
-                                  color="warning"
-                                  icon={FaExclamationCircle}
-                                >
-                                  Insuficient balance for CTO Leave.
-                                </Alert>
-                              </div>
-                            )}
                         </div>
 
                         {/* Inclusive dates */}
@@ -696,6 +658,33 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                             </Alert>
                           </div>
                         )}
+
+                        {formData.type_id === "SL003" &&
+                          userInfo.sick_balance < countSplitDate() && (
+                            <div className="mt-3">
+                              <Alert color="warning" icon={FaExclamationCircle}>
+                                Insuficient balance for Sick Leave.
+                              </Alert>
+                            </div>
+                          )}
+
+                        {formData.type_id === "VC001" &&
+                          userInfo.vacation_balance < countSplitDate() && (
+                            <div className="mt-3">
+                              <Alert color="warning" icon={FaExclamationCircle}>
+                                Insuficient balance for Vacation Leave.
+                              </Alert>
+                            </div>
+                          )}
+
+                        {formData.type_id === "CTO001" &&
+                          userInfo.CTO_balance < countSplitDate() && (
+                            <div className="mt-3">
+                              <Alert color="warning" icon={FaExclamationCircle}>
+                                Insuficient balance for CTO Leave.
+                              </Alert>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </TEModalBody>
@@ -716,11 +705,11 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                         className="flex gap-3 ml-1 rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                         disabled={
                           (formData.type_id === "SL003" &&
-                            userInfo.sick_balance < formData.no_days) ||
+                            userInfo.sick_balance < countSplitDate()) ||
                           (formData.type_id === "VC001" &&
-                            userInfo.vacation_balance < formData.no_days) ||
+                            userInfo.vacation_balance < countSplitDate()) ||
                           (formData.type_id === "CTO001" &&
-                            userInfo.CTO_balance < formData.no_days) ||
+                            userInfo.CTO_balance < countSplitDate()) ||
                           applicationStatus === true
                         }
                       >
