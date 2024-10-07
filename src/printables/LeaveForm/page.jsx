@@ -631,7 +631,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       "Chief Education Program Specialist" ? (
                       <>
                         {data?.data?.approvedStatus === "Approved" && (
-                          <div className="absolute right-[75mm] bottom-[4mm] flex items-center justify-center">
+                          <div className="absolute right-[30mm] bottom-[10mm] flex items-baseline justify-center">
                             <img
                               className="h-[60px] w-[60px]"
                               src={
@@ -752,7 +752,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       data?.data?.unit ===
                         "Chief Education Program Specialist") &&
                       data?.data?.approvedStatus === "Approved" && (
-                        <div className="absolute right-[75mm] bottom-[4mm] flex items-center justify-center">
+                        <div className="absolute right-[20mm] bottom-[10mm] flex items-baseline justify-center">
                           <img
                             className="h-[60px] w-[60px]"
                             src={
@@ -901,7 +901,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
             {/* Form 7 */}
             <div className="relative w-full text-[2.82mm]">
               {data?.data?.approvedStatus === "Approved" && (
-                <div className="absolute right-[75mm] bottom-[4mm] flex items-center justify-center">
+                <div className="absolute right-[75mm] bottom-[10mm] flex items-baseline justify-center">
                   <img
                     className="h-[60px] w-[60px]"
                     src={
