@@ -626,74 +626,34 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
                   {/* Authorized OIC */}
                   <div className="relative mt-3 px-7 text-center">
-                    {data?.data?.unit === "Chief Administrative Officer" ||
-                    data?.data?.unit ===
-                      "Chief Education Program Specialist" ? (
-                      <>
-                        {data?.data?.approvedStatus === "Approved" && (
-                          <div className="absolute right-[30mm] bottom-[10mm] flex items-baseline justify-center">
-                            <img
-                              className="h-[60px] w-[60px]"
-                              src={
-                                officerSignaturesData?.signatures?.find(
-                                  (sig) => sig.unit === "Director IV"
-                                )?.base64
-                              }
-                              alt="Signature"
-                            />
+                    {data?.data?.OICStatus === "Approved" && (
+                      <div className="absolute right-[30mm] bottom-[4mm] flex items-center justify-center">
+                        <img
+                          className="h-[60px] w-[60px]"
+                          src={
+                            officerSignaturesData?.signatures?.find(
+                              (sig) =>
+                                sig.unit === "Chief Administrative Officer"
+                            )?.base64
+                          }
+                          alt="Signature"
+                        />
 
-                            <p className="text-end">
-                              {data?.data?.approvedDateModified
-                                ? data?.data?.approvedDateModified.split("T")[0]
-                                : ""}
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="text-[2.47mm]">
-                          <p className="font-bold uppercase">
-                            FREDDIE T. BERNAL, Ph.D., CESO III
-                          </p>
-                          <p>Director IV</p>
-                        </div>
-                        <div className="border-t border-black font-bold">
-                          <p>(Authorized Official)</p>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        {data?.data?.OICStatus === "Approved" && (
-                          <div className="absolute right-[30mm] bottom-[4mm] flex items-center justify-center">
-                            <img
-                              className="h-[60px] w-[60px]"
-                              src={
-                                officerSignaturesData?.signatures?.find(
-                                  (sig) =>
-                                    sig.unit === "Chief Administrative Officer"
-                                )?.base64
-                              }
-                              alt="Signature"
-                            />
-
-                            <p className="text-end">
-                              {data?.data?.OICStatusDate
-                                ? data?.data?.OICStatusDate.split("T")[0]
-                                : ""}
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="text-[2.47mm]">
-                          <p className="font-bold">
-                            DESIDERIO R. APAG, III, D.Eng
-                          </p>
-                          <p>Chief Administrative Officer</p>
-                        </div>
-                        <div className="border-t border-black">
-                          <p>(Authorized Officer)</p>
-                        </div>
-                      </>
+                        <p className="text-end">
+                          {data?.data?.OICStatusDate
+                            ? data?.data?.OICStatusDate.split("T")[0]
+                            : ""}
+                        </p>
+                      </div>
                     )}
+
+                    <div className="text-[2.47mm]">
+                      <p className="font-bold">DESIDERIO R. APAG, III, D.Eng</p>
+                      <p>Chief Administrative Officer</p>
+                    </div>
+                    <div className="border-t border-black">
+                      <p>(Authorized Officer)</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -748,9 +708,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   </div>
 
                   <div className="relative mt-3 px-7 text-center">
-                    {(data?.data?.unit === "Chief Administrative Officer" ||
-                      data?.data?.unit ===
-                        "Chief Education Program Specialist") &&
+                    {data?.data?.unit === "Chief Administrative Officer" ||
+                    data?.data?.unit ===
+                      "Chief Education Program Specialist" ? (
                       data?.data?.approvedStatus === "Approved" && (
                         <div className="absolute right-[20mm] bottom-[10mm] flex items-baseline justify-center">
                           <img
@@ -768,48 +728,52 @@ export const DocumentComponent = forwardRef((data, ref) => {
                               : ""}
                           </p>
                         </div>
-                      )}
+                      )
+                    ) : (
+                      <>
+                        {data?.data?.division === "Admin" &&
+                          data?.data?.OICStatus === "Approved" && (
+                            <div className="absolute right-[25mm] bottom-[4mm] flex items-center justify-center">
+                              <img
+                                className="h-[60px] w-[60px]"
+                                src={
+                                  officerSignaturesData?.signatures?.find(
+                                    (sig) =>
+                                      sig.unit ===
+                                      "Chief Administrative Officer"
+                                  )?.base64
+                                }
+                                alt="Signature"
+                              />
+                              <p className="text-end">
+                                {data?.data?.OICStatusDate
+                                  ? data?.data?.OICStatusDate.split("T")[0]
+                                  : ""}
+                              </p>
+                            </div>
+                          )}
 
-                    {data?.data?.division === "Admin" &&
-                      data?.data?.OICStatus === "Approved" && (
-                        <div className="absolute right-[25mm] bottom-[4mm] flex items-center justify-center">
-                          <img
-                            className="h-[60px] w-[60px]"
-                            src={
-                              officerSignaturesData?.signatures?.find(
-                                (sig) =>
-                                  sig.unit === "Chief Administrative Officer"
-                              )?.base64
-                            }
-                            alt="Signature"
-                          />
-                          <p className="text-end">
-                            {data?.data?.OICStatusDate
-                              ? data?.data?.OICStatusDate.split("T")[0]
-                              : ""}
-                          </p>
-                        </div>
-                      )}
-
-                    {data?.data?.CEPSStatus === "Approved" && (
-                      <div className="absolute right-[20mm] bottom-[4mm] flex items-center justify-center">
-                        <img
-                          className="h-[60px] w-[60px]"
-                          src={
-                            officerSignaturesData?.signatures?.find(
-                              (sig) =>
-                                sig.unit ===
-                                "Chief Education Program Specialist"
-                            )?.base64
-                          }
-                          alt="Signature"
-                        />
-                        <p className="text-end">
-                          {data?.data?.CEPSStatusDate
-                            ? data?.data?.CEPSStatusDate.split("T")[0]
-                            : ""}
-                        </p>
-                      </div>
+                        {data?.data?.CEPSStatus === "Approved" && (
+                          <div className="absolute right-[20mm] bottom-[4mm] flex items-center justify-center">
+                            <img
+                              className="h-[60px] w-[60px]"
+                              src={
+                                officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit ===
+                                    "Chief Education Program Specialist"
+                                )?.base64
+                              }
+                              alt="Signature"
+                            />
+                            <p className="text-end">
+                              {data?.data?.CEPSStatusDate
+                                ? data?.data?.CEPSStatusDate.split("T")[0]
+                                : ""}
+                            </p>
+                          </div>
+                        )}
+                      </>
                     )}
 
                     <div className="text-[2.47mm]">
@@ -855,7 +819,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
 
                   <div className="pl-[5mm]">
                     <p>
-                      <span>
+                      <span className="underline">
                         {data?.data?.leavePayType === 0
                           ? `___${
                               data?.data?.minus_vacation ||
@@ -867,7 +831,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       days with pay
                     </p>
                     <p>
-                      <span>
+                      <span className="underline">
                         {data?.data?.leavePayType === 1
                           ? `___${
                               data?.data?.minus_vacation ||

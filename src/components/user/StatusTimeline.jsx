@@ -17,27 +17,24 @@ const StatusTimeline = ({ status, row }) => {
       <Timeline horizontal>
         {/* OIC */}
 
-        {filterStatusData?.unit !== "Chief Education Program Specialist" &&
-          filterStatusData?.unit !== "Chief Administrative Officer" && (
-            <Timeline.Item>
-              <Timeline.Point
-                icon={
-                  filterStatusData?.OICStatus !== "Pending"
-                    ? filterStatusData?.OICStatus === "Approved"
-                      ? FaCheck
-                      : RxCross2
-                    : MdOutlinePending
-                }
-              />
-              <Timeline.Content>
-                <Timeline.Time>
-                  {filterStatusData?.OICStatusDate?.split("T")[0]}
-                </Timeline.Time>
-                <Timeline.Title>Chief Administrative Officer</Timeline.Title>
-                <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
-              </Timeline.Content>
-            </Timeline.Item>
-          )}
+        <Timeline.Item>
+          <Timeline.Point
+            icon={
+              filterStatusData?.OICStatus !== "Pending"
+                ? filterStatusData?.OICStatus === "Approved"
+                  ? FaCheck
+                  : RxCross2
+                : MdOutlinePending
+            }
+          />
+          <Timeline.Content>
+            <Timeline.Time>
+              {filterStatusData?.OICStatusDate?.split("T")[0]}
+            </Timeline.Time>
+            <Timeline.Title>Chief Administrative Officer</Timeline.Title>
+            <Timeline.Body>{filterStatusData?.OICStatus}</Timeline.Body>
+          </Timeline.Content>
+        </Timeline.Item>
 
         {/* CEPS */}
         {filterStatusData?.division === "Technical" &&
