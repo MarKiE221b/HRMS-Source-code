@@ -12,8 +12,6 @@ const StatusTimeline = ({ status, row }) => {
       )
       .filter((id) => id !== undefined)[0] || {};
 
-  console.log(filterStatusData);
-
   return (
     <div className="mb-5 mt-8">
       <Timeline horizontal>

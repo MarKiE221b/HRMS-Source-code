@@ -487,3 +487,48 @@ export const editEmployeeDetails = () => {
     },
   });
 };
+
+export const uploadLeaveForm = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/uploadLeaveForms", input, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getUploadLeaveForms = (_id) => {
+  return useQuery({
+    queryKey: ["getUploadLeaveFormsKey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.get("/getUploadLeaveForms");
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
+
+export const getLeaveFormPdf = () => {
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        const response = await makeRequest.post("/leaveFormPdfFile", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+          responseType: "blob",
+        });
+        return URL.createObjectURL(response.data); // Convert the blob to an object URL
+      } catch (error) {
+        throw error;
+      }
+    },
+  });
+};
