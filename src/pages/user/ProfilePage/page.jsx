@@ -5,6 +5,9 @@ import logo from "../../../assets/ched-logo.png";
 import gifSwimming from "/swimming-pool.gif";
 import gifSick from "/sick.gif";
 import gifOT from "/down-time.gif";
+import gifPerson from "/person-time.gif";
+import gifExit from "/exit.gif";
+
 import {
   FaWpforms,
   FaExclamationCircle,
@@ -179,67 +182,99 @@ const ProfilePage = () => {
 
               {/* Credits Earned Panel */}
               {userData?.division !== "RD" && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-                  <div className="flex flex-col items-center border p-4 overflow-hidden">
-                    <Tooltip content="Vacation Credits">
-                      <div className="h-[30px] w-[30px]">
-                        <img src={gifSwimming} alt="swimming_gif" />
+                <>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
+                    <div className="flex flex-col items-center border p-4 overflow-hidden">
+                      <Tooltip content="Vacation Credits">
+                        <div className="h-[30px] w-[30px]">
+                          <img src={gifSwimming} alt="swimming_gif" />
+                        </div>
+                      </Tooltip>
+                      <div className="text-center">
+                        <p className="block font-bold">
+                          {userData?.vacation_balance !== null
+                            ? userData?.vacation_balance
+                            : 0}
+                        </p>
+                        <p className="block text-gray-400">Credits</p>
                       </div>
-                    </Tooltip>
-                    <div className="text-center">
-                      <p className="block font-bold">
-                        {userData?.vacation_balance !== null
-                          ? userData?.vacation_balance
-                          : 0}
-                      </p>
-                      <p className="block text-gray-400">Credits</p>
+                    </div>
+
+                    <div className="flex flex-col items-center border p-4 overflow-hidden">
+                      <Tooltip content="Sick Credits">
+                        <div className="h-[30px] w-[30px]">
+                          <img src={gifSick} alt="sick_gif" />
+                        </div>
+                      </Tooltip>
+                      <div className="text-center">
+                        <p className="block font-bold">
+                          {userData?.sick_balance !== null
+                            ? userData?.sick_balance
+                            : 0}
+                        </p>
+                        <p className="block text-gray-400">Credits</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center border p-4 overflow-hidden">
+                      <Tooltip content="CTO Credits ">
+                        <div className="h-[30px] w-[30px]">
+                          <img src={gifOT} alt="ot_gif" />
+                        </div>
+                      </Tooltip>
+                      <div className="text-center">
+                        <p className="block font-bold">
+                          {userData?.CTO_balance !== null
+                            ? userData?.CTO_balance
+                            : 0}
+                        </p>
+                        <p className="block text-gray-400">Credits</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center border p-4 overflow-hidden">
+                      <Tooltip content="Personal Leave">
+                        <div className="h-[30px] w-[30px]">
+                          <img src={gifPerson} alt="ot_gif" />
+                        </div>
+                      </Tooltip>
+                      <div className="text-center">
+                        <p className="block font-bold">
+                          {userData?.personal_balance !== null
+                            ? userData?.personal_balance
+                            : 0}
+                        </p>
+                        <p className="block text-gray-400">Credits</p>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-center border p-4 overflow-hidden">
+                      <Tooltip content="Forced leave">
+                        <div className="h-[30px] w-[30px]">
+                          <img src={gifExit} alt="ot_gif" />
+                        </div>
+                      </Tooltip>
+                      <div className="text-center">
+                        <p className="block font-bold">
+                          {userData?.forced_balance !== null
+                            ? userData?.forced_balance
+                            : 0}
+                        </p>
+                        <p className="block text-gray-400">Credits</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="flex flex-col items-center border p-4 overflow-hidden">
-                    <Tooltip content="Sick Credits">
-                      <div className="h-[30px] w-[30px]">
-                        <img src={gifSick} alt="sick_gif" />
-                      </div>
-                    </Tooltip>
-                    <div className="text-center">
-                      <p className="block font-bold">
-                        {userData?.sick_balance !== null
-                          ? userData?.sick_balance
-                          : 0}
-                      </p>
-                      <p className="block text-gray-400">Credits</p>
-                    </div>
+                  <div className="w-full flex justify-end mt-3">
+                    <button
+                      type="button"
+                      className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
+                      onClick={() => navigate("ledger")}
+                    >
+                      VIEW LEDGER
+                    </button>
                   </div>
-
-                  <div className="flex flex-col items-center border p-4 overflow-hidden">
-                    <Tooltip content="CTO Credits ">
-                      <div className="h-[30px] w-[30px]">
-                        <img src={gifOT} alt="ot_gif" />
-                      </div>
-                    </Tooltip>
-                    <div className="text-center">
-                      <p className="block font-bold">
-                        {userData?.CTO_balance !== null
-                          ? userData?.CTO_balance
-                          : 0}
-                      </p>
-                      <p className="block text-gray-400">Credits</p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {userData?.division !== "RD" && (
-                <div className="w-full flex justify-end mt-3">
-                  <button
-                    type="button"
-                    className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
-                    onClick={() => navigate("ledger")}
-                  >
-                    VIEW LEDGER
-                  </button>
-                </div>
+                </>
               )}
             </>
           )}
@@ -692,6 +727,24 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                               </Alert>
                             </div>
                           )}
+
+                        {formData.type_id === "PL006" &&
+                          userInfo.personal_balance < countSplitDate() && (
+                            <div className="mt-3">
+                              <Alert color="warning" icon={FaExclamationCircle}>
+                                Insuficient balance for Personal Leave.
+                              </Alert>
+                            </div>
+                          )}
+
+                        {formData.type_id === "ML002" &&
+                          userInfo.forced_balance < countSplitDate() && (
+                            <div className="mt-3">
+                              <Alert color="warning" icon={FaExclamationCircle}>
+                                Insuficient balance for Forced/Mandatory Leave.
+                              </Alert>
+                            </div>
+                          )}
                       </div>
                     </div>
                   </TEModalBody>
@@ -717,6 +770,10 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                             userInfo.vacation_balance < countSplitDate()) ||
                           (formData.type_id === "CTO001" &&
                             userInfo.CTO_balance < countSplitDate()) ||
+                          (formData.type_id === "PL006" &&
+                            userInfo.personal_balance < countSplitDate()) ||
+                          (formData.type_id === "ML002" &&
+                            userInfo.forced_balance < countSplitDate()) ||
                           applicationStatus === true
                         }
                       >

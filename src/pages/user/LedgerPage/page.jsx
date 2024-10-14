@@ -10,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 
 // api
-import { getLedger, getPdf } from "../../../api";
+import { getLeaveFormPdf, getLedger, getPdf } from "../../../api";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { TiArrowBack } from "react-icons/ti";
 import { useNavigate, useParams } from "react-router-dom";
@@ -22,10 +22,16 @@ const LedgerPage = () => {
   const [columnFilters, setColumnFilters] = useState("");
   const [sorting, setSorting] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
 
   const { id } = useParams();
   const { data: ledger } = getLedger();
   const { mutate: pdfView, data: pdfFile, isPending } = getPdf();
+  const {
+    mutate: pdfLeaveView,
+    data: pdfLeaveFile,
+    isPending: pdfLeaveIsPending,
+  } = getLeaveFormPdf();
 
   const columns = useMemo(
     () => [
@@ -115,6 +121,26 @@ const LedgerPage = () => {
         ),
       },
       {
+        accessorKey: "document_id",
+        header: "LEAVE DOCUMENT",
+        cell: (props) => (
+          <div>
+            {
+              <button
+                className="hover:underline hover:text-blue-900"
+                type="button"
+                onClick={() => {
+                  setShowModal2(true);
+                  pdfLeaveView({ id: props.getValue() });
+                }}
+              >
+                {props.getValue()}
+              </button>
+            }
+          </div>
+        ),
+      },
+      {
         accessorKey: "remarks",
         header: "REMARKS",
         cell: (props) => <div>{props.getValue()}</div>,
@@ -145,6 +171,12 @@ const LedgerPage = () => {
         pdfFile={pdfFile}
         load={isPending}
       />
+      <PdfViewModal
+        showModal={showModal2}
+        setShowModal={setShowModal2}
+        pdfFile={pdfLeaveFile}
+        load={pdfLeaveIsPending}
+      />
       <div className="bg-white shadow-sm p-8">
         <div className="mb-2">
           <button
@@ -157,12 +189,12 @@ const LedgerPage = () => {
             </p>
           </button>
         </div>
-        <div className="text-xs max-h-[1000px] overflow-y-auto">
+        <div className="text-xs max-h-[600px] overflow-y-auto">
           <table className="w-full">
-            <thead>
-              <tr className="bg-white border">
-                <td className=" px-7 py-3"></td>
-                <td className=" px-7 py-3"></td>
+            <thead className="bg-white sticky top-0 z-10">
+              <tr className="border">
+                <td className="px-7 py-3"></td>
+                <td className="px-7 py-3"></td>
                 <td colSpan={4} className="text-center bg-green-300 px-7 py-3">
                   VACATION LEAVE
                 </td>
@@ -172,10 +204,10 @@ const LedgerPage = () => {
                 <td colSpan={4} className="text-center bg-blue-300 px-7 py-3">
                   CTO
                 </td>
-                <td className=" px-7 py-3"></td>
+                <td className="px-7 py-3"></td>
               </tr>
               {table.getHeaderGroups().map((headerGroup) => (
-                <tr key={headerGroup.id} className="bg-gray-100 border ">
+                <tr key={headerGroup.id} className="bg-gray-100 border">
                   {headerGroup.headers.map((header) => (
                     <td
                       className="cursor-pointer px-7 py-3"

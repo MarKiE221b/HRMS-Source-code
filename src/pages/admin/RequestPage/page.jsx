@@ -161,7 +161,7 @@ const RequestPage = () => {
     state: {
       sorting: leaveUploadSorting,
       globalFilter: leaveUploadGlobalFilter,
-    },
+    },  
     onSortingChange: setLeaveUploadSorting,
     onGlobalFilterChange: setLeaveUploadGlobalFilter,
     getCoreRowModel: getCoreRowModel(),

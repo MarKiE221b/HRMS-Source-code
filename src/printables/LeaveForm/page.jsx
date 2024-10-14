@@ -126,7 +126,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   <div className="pl-[2.5mm] flex flex-col gap-5">
                     <div>
                       <Checkbox
-                        checked={data?.data?.type_id === "VC001" ? true : false}
+                        checked={data?.data?.type_id === "VC001" || data?.data?.type_id === "PL006" ? true : false}
                         label={
                           <p>
                             Vacation Leave{" "}
@@ -290,7 +290,11 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     <div className="text-[2.82mm] py-[5px] italic">
                       <p>Others :</p>
                       <div className="not-italic font-bold uppercase border-b border-solid border-black w-[65mm]">
-                        {data?.data?.type_id === "CTO001" ? "CTO" : ""}
+                        {data?.data?.type_id === "CTO001"
+                          ? "CTO"
+                          : "" || data?.data?.type_id === "PL006"
+                          ? "Personal Leave"
+                          : ""}
                       </div>
                     </div>
                   </div>
@@ -821,11 +825,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     <p>
                       <span className="underline">
                         {data?.data?.leavePayType === 0
-                          ? `___${
-                              data?.data?.minus_vacation ||
-                              data?.data?.minus_sick ||
-                              data?.data?.minus_CTO
-                            }___`
+                          ? `___${data?.data?.no_days}___`
                           : "_______"}
                       </span>{" "}
                       days with pay
@@ -833,11 +833,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     <p>
                       <span className="underline">
                         {data?.data?.leavePayType === 1
-                          ? `___${
-                              data?.data?.minus_vacation ||
-                              data?.data?.minus_sick ||
-                              data?.data?.minus_CTO
-                            }___`
+                          ? `___${data?.data?.no_days}___`
                           : "_______"}
                       </span>{" "}
                       days without pay
