@@ -249,7 +249,7 @@ const ProfilePage = () => {
                     </div>
 
                     <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="Forced leave">
+                      <Tooltip content="Forced Leave">
                         <div className="h-[30px] w-[30px]">
                           <img src={gifExit} alt="ot_gif" />
                         </div>
