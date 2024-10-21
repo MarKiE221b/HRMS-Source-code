@@ -44,7 +44,7 @@ import {
   TEModalBody,
   TEModalFooter,
 } from "tw-elements-react";
-import DatePicker, { DateObject } from "react-multi-date-picker";
+import DatePicker from "react-multi-date-picker";
 import DatePanel from "react-multi-date-picker/plugins/date_panel";
 import weekends from "react-multi-date-picker/plugins/highlight_weekends";
 import StatusTimeline from "../../../components/user/StatusTimeline";

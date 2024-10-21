@@ -73,6 +73,7 @@ export const verifyApi = () => {
 };
 
 export const applyLeaveApi = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -83,6 +84,14 @@ export const applyLeaveApi = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "leaveApplicationsKey",
+        "getallapplicationskey",
+        "getEmployeeApplications",
+        "getPendingNotifCountKey",
+      ]);
     },
   });
 };
@@ -117,6 +126,8 @@ export const getUsername = () => {
 };
 
 export const updateUsername = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -128,10 +139,17 @@ export const updateUsername = () => {
         throw error;
       }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getusernamekey", "getemployeeslistkey"],
+      });
+    },
   });
 };
 
 export const updatePwd = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -142,6 +160,11 @@ export const updatePwd = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getemployeeslistkey"],
+      });
     },
   });
 };
@@ -221,6 +244,8 @@ export const getEmployeeDetails = () => {
 };
 
 export const updateEmployeeLeaveOIC = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -232,10 +257,22 @@ export const updateEmployeeLeaveOIC = () => {
         throw error;
       }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          "leaveApplicationsKey",
+          "getallapplicationskey",
+          "getEmployeeApplications",
+          "getPendingNotifCountKey",
+        ],
+      });
+    },
   });
 };
 
 export const updateEmployeeLeaveCEPS = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -247,10 +284,22 @@ export const updateEmployeeLeaveCEPS = () => {
         throw error;
       }
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          "leaveApplicationsKey",
+          "getallapplicationskey",
+          "getEmployeeApplications",
+          "getPendingNotifCountKey",
+        ],
+      });
+    },
   });
 };
 
 export const updateEmployeeLeaveRD = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -261,6 +310,16 @@ export const updateEmployeeLeaveRD = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [
+          "leaveApplicationsKey",
+          "getallapplicationskey",
+          "getEmployeeApplications",
+          "getPendingNotifCountKey",
+        ],
+      });
     },
   });
 };
@@ -294,6 +353,8 @@ export const getCTOLedger = () => {
 };
 
 export const uploadCTO = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -303,6 +364,11 @@ export const uploadCTO = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getCTOledgerkey", "getledgerkey"],
+      });
     },
   });
 };
@@ -371,6 +437,8 @@ export const leaveApplicationForm = () => {
 };
 
 export const uploadSignature = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -380,6 +448,12 @@ export const uploadSignature = () => {
       } catch (error) {
         throw error;
       }
+    },
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getsignatureempkey"],
+      });
     },
   });
 };
@@ -439,6 +513,7 @@ export const getOfficerSignatures = (_id) => {
 };
 
 export const uploadAvatar = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -448,6 +523,11 @@ export const uploadAvatar = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getuploadavatarkey"],
+      });
     },
   });
 };
@@ -489,6 +569,7 @@ export const editEmployeeDetails = () => {
 };
 
 export const uploadLeaveForm = () => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (input) => {
       try {
@@ -498,6 +579,11 @@ export const uploadLeaveForm = () => {
       } catch (error) {
         throw error;
       }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["getUploadLeaveFormsKey", "getledgerkey"],
+      });
     },
   });
 };
