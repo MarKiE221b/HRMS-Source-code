@@ -126,7 +126,12 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   <div className="pl-[2.5mm] flex flex-col gap-5">
                     <div>
                       <Checkbox
-                        checked={data?.data?.type_id === "VC001" || data?.data?.type_id === "PL006" ? true : false}
+                        checked={
+                          data?.data?.type_id === "VC001" ||
+                          data?.data?.type_id === "PL006"
+                            ? true
+                            : false
+                        }
                         label={
                           <p>
                             Vacation Leave{" "}
@@ -584,14 +589,15 @@ export const DocumentComponent = forwardRef((data, ref) => {
                             Total Earned
                           </td>
                           <td className="border-r border-black">
-                            {data?.data?.vacation_balance
-                              ? data?.data?.vacation_balance
-                              : ""}
+                            {data?.data?.approvedStatus === "Approved"
+                              ? data?.data?.vacation_balance + minus_vacation ||
+                                ""
+                              : data?.data?.vacation_balance || ""}
                           </td>
                           <td>
-                            {data?.data?.sick_balance
-                              ? data?.data?.sick_balance
-                              : ""}
+                            {data?.data?.approvedStatus === "Approved"
+                              ? data?.data?.sick_balance + minus_sick || ""
+                              : data?.data?.sick_balance || ""}
                           </td>
                         </tr>
                         <tr className="border-y border-black">
@@ -612,13 +618,19 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         <tr className="border-y border-black">
                           <td className="border-r border-black">Balance</td>
                           <td className="border-r border-black">
-                            {data?.data?.vacation_balance
+                            {data?.data?.approvedStatus === "Approved"
+                              ? data?.data?.vacation_balance || ""
+                              : data?.data?.vacation_balance +
+                                data?.data?.minus_vacation
                               ? data?.data?.vacation_balance -
                                 data?.data?.minus_vacation
                               : ""}
                           </td>
                           <td>
-                            {data?.data?.sick_balance
+                            {data?.data?.approvedStatus === "Approved"
+                              ? data?.data?.sick_balance || ""
+                              : data?.data?.sick_balance +
+                                data?.data?.minus_sick
                               ? data?.data?.sick_balance -
                                 data?.data?.minus_sick
                               : ""}
