@@ -10,7 +10,7 @@ import {
 const ComplyModal = ({ showModal, setShowModal, id, submitStatus }) => {
   const [isDecline, setIsDecline] = useState(false);
   const [isApproved, setIsApproved] = useState(false);
-  const [payType, setPayType] = useState("");
+  const [payType, setPayType] = useState("0");
   const [remarks, setRemarks] = useState("");
 
   return (
