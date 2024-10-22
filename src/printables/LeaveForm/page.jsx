@@ -590,13 +590,13 @@ export const DocumentComponent = forwardRef((data, ref) => {
                           </td>
                           <td className="border-r border-black">
                             {data?.data?.approvedStatus === "Approved"
-                              ? data?.data?.vacation_balance + minus_vacation ||
+                              ? data?.data?.vacation_balance + data?.data?.minus_vacation ||
                                 ""
                               : data?.data?.vacation_balance || ""}
                           </td>
                           <td>
                             {data?.data?.approvedStatus === "Approved"
-                              ? data?.data?.sick_balance + minus_sick || ""
+                              ? data?.data?.sick_balance + data?.data?.minus_sick || ""
                               : data?.data?.sick_balance || ""}
                           </td>
                         </tr>
