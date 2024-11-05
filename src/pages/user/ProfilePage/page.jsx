@@ -155,7 +155,7 @@ const ProfilePage = () => {
   });
 
   return (
-    <div className="flex flex-col gap-5 md:flex-row">
+    <div className="flex flex-col gap-5 md:flex-row md:w-full">
       <div className="flex flex-col gap-5 md:w-[450px] ">
         {/* Profile Panel */}
 
@@ -164,11 +164,9 @@ const ProfilePage = () => {
             <Loading />
           ) : (
             <>
-              <div className="flex items-center gap-4">
-                <div className="flex-shrink-0">
-                  <Avatar img={logo} alt="profile_avatar" rounded size="lg" />
-                </div>
-                <div className="overflow-hidden">
+              <div className="flex justify-center gap-4 md:flex-col">
+                
+                <div >
                   <p className="block font-bold">
                     {`${userData?.lastname}, ${userData?.firstname} ${
                       userData?.middlename ? userData?.middlename + " " : ""
