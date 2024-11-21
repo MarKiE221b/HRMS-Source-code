@@ -155,204 +155,7 @@ const ProfilePage = () => {
   });
 
   return (
-    <div className="flex flex-col gap-5 md:flex-row md:w-full">
-      <div className="flex flex-col gap-5 md:w-[450px] ">
-        {/* Profile Panel */}
-
-        <div className="bg-white shadow-sm p-8">
-          {isPendingUserInfo ? (
-            <Loading />
-          ) : (
-            <>
-              <div className="flex justify-center gap-4 md:flex-col">
-                
-                <div >
-                  <p className="block font-bold">
-                    {`${userData?.lastname}, ${userData?.firstname} ${
-                      userData?.middlename ? userData?.middlename + " " : ""
-                    }${userData?.ext_name || ""}`}
-                  </p>
-                  <p className="block text-sm text-gray-400">
-                    {userData?.unit}
-                  </p>
-                </div>
-              </div>
-
-              {/* Credits Earned Panel */}
-              {userData?.division !== "RD" && (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
-                    <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="Vacation Credits">
-                        <div className="h-[30px] w-[30px]">
-                          <img src={gifSwimming} alt="swimming_gif" />
-                        </div>
-                      </Tooltip>
-                      <div className="text-center">
-                        <p className="block font-bold">
-                          {userData?.vacation_balance !== null
-                            ? userData?.vacation_balance
-                            : 0}
-                        </p>
-                        <p className="block text-gray-400">Credits</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="Sick Credits">
-                        <div className="h-[30px] w-[30px]">
-                          <img src={gifSick} alt="sick_gif" />
-                        </div>
-                      </Tooltip>
-                      <div className="text-center">
-                        <p className="block font-bold">
-                          {userData?.sick_balance !== null
-                            ? userData?.sick_balance
-                            : 0}
-                        </p>
-                        <p className="block text-gray-400">Credits</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="CTO Credits ">
-                        <div className="h-[30px] w-[30px]">
-                          <img src={gifOT} alt="ot_gif" />
-                        </div>
-                      </Tooltip>
-                      <div className="text-center">
-                        <p className="block font-bold">
-                          {userData?.CTO_balance !== null
-                            ? userData?.CTO_balance
-                            : 0}
-                        </p>
-                        <p className="block text-gray-400">Credits</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="Personal Leave">
-                        <div className="h-[30px] w-[30px]">
-                          <img src={gifPerson} alt="ot_gif" />
-                        </div>
-                      </Tooltip>
-                      <div className="text-center">
-                        <p className="block font-bold">
-                          {userData?.personal_balance !== null
-                            ? userData?.personal_balance
-                            : 0}
-                        </p>
-                        <p className="block text-gray-400">Credits</p>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center border p-4 overflow-hidden">
-                      <Tooltip content="Forced Leave">
-                        <div className="h-[30px] w-[30px]">
-                          <img src={gifExit} alt="ot_gif" />
-                        </div>
-                      </Tooltip>
-                      <div className="text-center">
-                        <p className="block font-bold">
-                          {userData?.forced_balance !== null
-                            ? userData?.forced_balance
-                            : 0}
-                        </p>
-                        <p className="block text-gray-400">Credits</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="w-full flex justify-end mt-3">
-                    <button
-                      type="button"
-                      className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
-                      onClick={() => navigate("ledger")}
-                    >
-                      VIEW LEDGER
-                    </button>
-                  </div>
-                </>
-              )}
-            </>
-          )}
-        </div>
-      </div>
-
-      {/* Table Application */}
-      <div className="relative flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
-        {isPendingUserInfo || isPendingApplications ? (
-          <Loading />
-        ) : (
-          <>
-            {userData?.division === "RD" ? (
-              <RDRequestPage />
-            ) : (
-              <div className="">
-                <div className="mb-3">
-                  <button
-                    className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
-                    type="button"
-                    onClick={() =>
-                      setShowModal((prev) => ({ ...prev, modal1: true }))
-                    }
-                  >
-                    <FaWpforms size="20px" />
-                    <span className="text-sm md:text-base">Request Leave</span>
-                  </button>
-                </div>
-
-                {/* Your Table */}
-                <div className="text-sm max-h-screen overflow-y-auto">
-                  <table className=" w-full">
-                    <thead>
-                      {table.getHeaderGroups().map((headerGroup) => (
-                        <tr
-                          key={headerGroup.id}
-                          className="bg-gray-100 border "
-                        >
-                          {headerGroup.headers.map((header) => (
-                            <td
-                              className="cursor-pointer px-7 py-3"
-                              key={header.id}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              <div className="flex gap-1 items-center">
-                                {header.column.columnDef.header}
-                                {
-                                  {
-                                    asc: <IoIosArrowUp />,
-                                    desc: <IoIosArrowDown />,
-                                  }[header.column.getIsSorted() ?? null]
-                                }
-                              </div>
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </thead>
-                    <tbody>
-                      {table.getRowModel().rows?.map((row) => (
-                        <tr className="h-10 hover:bg-gray-100" key={row.id}>
-                          {row.getVisibleCells().map((cell) => (
-                            <td className="px-7 border" key={cell.id}>
-                              {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                              )}
-                            </td>
-                          ))}
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
+    <>
       {/* Modal */}
       <LeaveModal
         showModal={showModal}
@@ -367,7 +170,207 @@ const ProfilePage = () => {
         showModal={leaveFormModal}
         setShowModal={setLeaveFormModal}
       />
-    </div>
+
+      <div className="flex flex-col gap-5 md:flex-row w-full overflow-x-auto">
+        <div className="flex flex-col gap-5 min-w-[300px] ">
+          {/* Profile Panel */}
+
+          <div className="bg-white shadow-sm p-8">
+            {isPendingUserInfo ? (
+              <Loading />
+            ) : (
+              <>
+                <div className="flex justify-center gap-4 md:flex-col">
+                  <div>
+                    <p className="block font-bold">
+                      {`${userData?.lastname}, ${userData?.firstname} ${
+                        userData?.middlename ? userData?.middlename + " " : ""
+                      }${userData?.ext_name || ""}`}
+                    </p>
+                    <p className="block text-sm text-gray-400">
+                      {userData?.unit}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Credits Earned Panel */}
+                {userData?.division !== "RD" && (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-5">
+                      <div className="flex flex-col items-center border p-4 overflow-hidden">
+                        <Tooltip content="Vacation Credits">
+                          <div className="h-[30px] w-[30px]">
+                            <img src={gifSwimming} alt="swimming_gif" />
+                          </div>
+                        </Tooltip>
+                        <div className="text-center">
+                          <p className="block font-bold">
+                            {userData?.vacation_balance !== null
+                              ? userData?.vacation_balance
+                              : 0}
+                          </p>
+                          <p className="block text-gray-400">Credits</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-center border p-4 overflow-hidden">
+                        <Tooltip content="Sick Credits">
+                          <div className="h-[30px] w-[30px]">
+                            <img src={gifSick} alt="sick_gif" />
+                          </div>
+                        </Tooltip>
+                        <div className="text-center">
+                          <p className="block font-bold">
+                            {userData?.sick_balance !== null
+                              ? userData?.sick_balance
+                              : 0}
+                          </p>
+                          <p className="block text-gray-400">Credits</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-center border p-4 overflow-hidden">
+                        <Tooltip content="CTO Credits ">
+                          <div className="h-[30px] w-[30px]">
+                            <img src={gifOT} alt="ot_gif" />
+                          </div>
+                        </Tooltip>
+                        <div className="text-center">
+                          <p className="block font-bold">
+                            {userData?.CTO_balance !== null
+                              ? userData?.CTO_balance
+                              : 0}
+                          </p>
+                          <p className="block text-gray-400">Credits</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-center border p-4 overflow-hidden">
+                        <Tooltip content="Personal Leave">
+                          <div className="h-[30px] w-[30px]">
+                            <img src={gifPerson} alt="ot_gif" />
+                          </div>
+                        </Tooltip>
+                        <div className="text-center">
+                          <p className="block font-bold">
+                            {userData?.personal_balance !== null
+                              ? userData?.personal_balance
+                              : 0}
+                          </p>
+                          <p className="block text-gray-400">Credits</p>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col items-center border p-4 overflow-hidden">
+                        <Tooltip content="Forced Leave">
+                          <div className="h-[30px] w-[30px]">
+                            <img src={gifExit} alt="ot_gif" />
+                          </div>
+                        </Tooltip>
+                        <div className="text-center">
+                          <p className="block font-bold">
+                            {userData?.forced_balance !== null
+                              ? userData?.forced_balance
+                              : 0}
+                          </p>
+                          <p className="block text-gray-400">Credits</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="w-full flex justify-end mt-3">
+                      <button
+                        type="button"
+                        className="inline-block rounded px-2 pt-2.5 text-sm hover:underline font-medium uppercase leading-normal text-primary hover:text-primary-600 focus:text-primary-600 focus:outline-none focus:ring-0 active:text-primary-700"
+                        onClick={() => navigate("ledger")}
+                      >
+                        VIEW LEDGER
+                      </button>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Table Application */}
+        <div className="relative flex-grow bg-white text-left shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700 w-full p-5">
+          {isPendingUserInfo || isPendingApplications ? (
+            <Loading />
+          ) : (
+            <>
+              {userData?.division === "RD" ? (
+                <RDRequestPage />
+              ) : (
+                <div className="">
+                  <div className="mb-3">
+                    <button
+                      className="border flex items-center gap-2 bg-slate-50 p-2 hover:bg-slate-200 w-full sm:w-auto"
+                      type="button"
+                      onClick={() =>
+                        setShowModal((prev) => ({ ...prev, modal1: true }))
+                      }
+                    >
+                      <FaWpforms size="20px" />
+                      <span className="text-sm md:text-base">
+                        Request Leave
+                      </span>
+                    </button>
+                  </div>
+
+                  {/* Your Table */}
+                  <div className="text-sm max-h-screen overflow-y-auto">
+                    <table className=" w-full">
+                      <thead>
+                        {table.getHeaderGroups().map((headerGroup) => (
+                          <tr
+                            key={headerGroup.id}
+                            className="bg-gray-100 border "
+                          >
+                            {headerGroup.headers.map((header) => (
+                              <td
+                                className="cursor-pointer px-7 py-3"
+                                key={header.id}
+                                onClick={header.column.getToggleSortingHandler()}
+                              >
+                                <div className="flex gap-1 items-center">
+                                  {header.column.columnDef.header}
+                                  {
+                                    {
+                                      asc: <IoIosArrowUp />,
+                                      desc: <IoIosArrowDown />,
+                                    }[header.column.getIsSorted() ?? null]
+                                  }
+                                </div>
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </thead>
+                      <tbody>
+                        {table.getRowModel().rows?.map((row) => (
+                          <tr className="h-10 hover:bg-gray-100" key={row.id}>
+                            {row.getVisibleCells().map((cell) => (
+                              <td className="px-7 border" key={cell.id}>
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
+                                )}
+                              </td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 

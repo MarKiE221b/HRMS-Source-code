@@ -20,7 +20,7 @@ const UserLayout = () => {
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden bg-slate-100">
           <NavBar />
           <div className="max-h-full p-5 md:p-8 lg:p-14 overflow-y-auto">
-            <div className="md:scale-75 lg:scale-90 xl:scale-100">
+            <div className="">
               <Outlet />
             </div>
           </div>
