@@ -637,6 +637,6 @@ export const getLedgerPerEmployee = (input) => {
       }
     },
 
-    enabled: !!input,
+    enabled: input ? true : false,
   });
 };

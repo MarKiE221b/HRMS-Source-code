@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import {
   flexRender,
@@ -19,7 +19,7 @@ const LedgerTable = ({ emp_id }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
 
-  const { data: ledger, isFetching } = getLedgerPerEmployee(emp_id);
+  const { data: ledger, isFetching, refetch } = getLedgerPerEmployee(emp_id);
   const { mutate: pdfView, data: pdfFile, isPending } = getPdf();
   const {
     mutate: pdfLeaveView,
@@ -156,6 +156,11 @@ const LedgerTable = ({ emp_id }) => {
     onGlobalFilterChange: setColumnFilters,
     onSortingChange: setSorting,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [emp_id]);
+
   return isFetching ? (
     <div>Loading...</div>
   ) : (
