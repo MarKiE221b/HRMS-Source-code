@@ -618,3 +618,25 @@ export const getLeaveFormPdf = () => {
     },
   });
 };
+
+export const getLedgerPerEmployee = (input) => {
+  return useQuery({
+    queryKey: ["getLedgerPerEmployeeKey"],
+    queryFn: async () => {
+      try {
+        const response = await makeRequest.put(
+          "/getLedgerPerEmployee",
+          { emp_id: input },
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        return response.data;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    enabled: !!input,
+  });
+};
