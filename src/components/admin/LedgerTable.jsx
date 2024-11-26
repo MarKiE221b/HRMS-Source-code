@@ -19,7 +19,7 @@ const LedgerTable = ({ emp_id }) => {
   const [showModal, setShowModal] = useState(false);
   const [showModal2, setShowModal2] = useState(false);
 
-  const { data: ledger } = getLedgerPerEmployee(emp_id);
+  const { data: ledger, isFetching } = getLedgerPerEmployee(emp_id);
   const { mutate: pdfView, data: pdfFile, isPending } = getPdf();
   const {
     mutate: pdfLeaveView,
@@ -144,7 +144,7 @@ const LedgerTable = ({ emp_id }) => {
   );
 
   const table = useReactTable({
-    data: ledger || [],
+    data: ledger ? ledger : [],
     columns,
     state: {
       sorting: sorting,
@@ -156,7 +156,9 @@ const LedgerTable = ({ emp_id }) => {
     onGlobalFilterChange: setColumnFilters,
     onSortingChange: setSorting,
   });
-  return (
+  return isFetching ? (
+    <div>Loading...</div>
+  ) : (
     <>
       <PdfViewModal
         showModal={showModal}
@@ -221,7 +223,7 @@ const LedgerTable = ({ emp_id }) => {
             ))}
           </tbody>
         </table>
-      </div>{" "}
+      </div>
     </>
   );
 };
