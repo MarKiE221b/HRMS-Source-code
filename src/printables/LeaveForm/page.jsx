@@ -524,7 +524,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     <div className="absolute right-[20mm] bottom-[4mm] flex items-end justify-center">
                       <img
                         className="h-[60px] w-[60px]"
-                        src={signatureImgData}
+                        src={signatureImgData ? signatureImgData : null}
                         alt="Signature"
                       />
 
@@ -590,13 +590,14 @@ export const DocumentComponent = forwardRef((data, ref) => {
                           </td>
                           <td className="border-r border-black">
                             {data?.data?.approvedStatus === "Approved"
-                              ? data?.data?.vacation_balance + data?.data?.minus_vacation ||
-                                ""
+                              ? data?.data?.vacation_balance +
+                                  data?.data?.minus_vacation || ""
                               : data?.data?.vacation_balance || ""}
                           </td>
                           <td>
                             {data?.data?.approvedStatus === "Approved"
-                              ? data?.data?.sick_balance + data?.data?.minus_sick || ""
+                              ? data?.data?.sick_balance +
+                                  data?.data?.minus_sick || ""
                               : data?.data?.sick_balance || ""}
                           </td>
                         </tr>
@@ -649,7 +650,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                           src={
                             officerSignaturesData?.signatures?.find(
                               (sig) =>
-                                sig.unit === "Chief Administrative Officer"
+                                sig.unit === "Chief Administrative Officer" ||
+                                sig.unit ===
+                                  "OIC - Chief Administrative Officer"
                             )?.base64
                           }
                           alt="Signature"
@@ -664,8 +667,24 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     )}
 
                     <div className="text-[2.47mm]">
-                      <p className="font-bold">DESIDERIO R. APAG, III, D.Eng</p>
-                      <p>Chief Administrative Officer</p>
+                      <p className="font-bold">
+                        {
+                          officerSignaturesData?.signatures?.find(
+                            (sig) =>
+                              sig.unit === "Chief Administrative Officer" ||
+                              sig.unit === "OIC - Chief Administrative Officer"
+                          )?.name
+                        }
+                      </p>
+                      <p>
+                        {
+                          officerSignaturesData?.signatures?.find(
+                            (sig) =>
+                              sig.unit === "Chief Administrative Officer" ||
+                              sig.unit === "OIC - Chief Administrative Officer"
+                          )?.unit
+                        }
+                      </p>
                     </div>
                     <div className="border-t border-black">
                       <p>(Authorized Officer)</p>
@@ -733,7 +752,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                             className="h-[60px] w-[60px]"
                             src={
                               officerSignaturesData?.signatures?.find(
-                                (sig) => sig.unit === "Director IV"
+                                (sig) =>
+                                  sig.unit === "Director IV" ||
+                                  sig.unit === "OIC - Director IV"
                               )?.base64
                             }
                             alt="Signature"
@@ -756,7 +777,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                                   officerSignaturesData?.signatures?.find(
                                     (sig) =>
                                       sig.unit ===
-                                      "Chief Administrative Officer"
+                                        "Chief Administrative Officer" ||
+                                      sig.unit ===
+                                        "OIC - Chief Administrative Officer"
                                   )?.base64
                                 }
                                 alt="Signature"
@@ -777,7 +800,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                                 officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                    "Chief Education Program Specialist"
+                                      "Chief Education Program Specialist" ||
+                                    sig.unit ===
+                                      "OIC - Chief Education Program Specialist"
                                 )?.base64
                               }
                               alt="Signature"
@@ -798,21 +823,59 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         "Chief Education Program Specialist" ? (
                         <>
                           <p className="font-bold">
-                            FREDDIE T. BERNAL, Ph.D., CESO III
+                            {
+                              officerSignaturesData?.signatures?.find(
+                                (sig) =>
+                                  sig.unit === "Director IV" ||
+                                  sig.unit === "OIC - Director IV"
+                              )?.name
+                            }
                           </p>
-                          <p>Director IV</p>
+                          <p>
+                            {
+                              officerSignaturesData?.signatures?.find(
+                                (sig) =>
+                                  sig.unit === "Director IV" ||
+                                  sig.unit === "OIC - Director IV"
+                              )?.unit
+                            }
+                          </p>
                         </>
                       ) : (
                         <>
                           <p className="font-bold">
                             {data?.data?.division === "Admin"
-                              ? "DESIDERIO R. APAG, III, D.Eng'g"
-                              : "MIRIAM B. FUENTES, Ph.D."}
+                              ? officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit ===
+                                      "Chief Administrative Officer" ||
+                                    sig.unit ===
+                                      "OIC - Chief Administrative Officer"
+                                )?.name
+                              : officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit ===
+                                      "Chief Education Program Specialist" ||
+                                    sig.unit ===
+                                      "OIC - Chief Education Program Specialist"
+                                )?.name}
                           </p>
                           <p>
                             {data?.data?.division === "Admin"
-                              ? "Chief Administrative Officer"
-                              : "Chief Education Program Specialist"}
+                              ? officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit ===
+                                      "Chief Administrative Officer" ||
+                                    sig.unit ===
+                                      "OIC - Chief Administrative Officer"
+                                )?.unit
+                              : officerSignaturesData?.signatures?.find(
+                                  (sig) =>
+                                    sig.unit ===
+                                      "Chief Education Program Specialist" ||
+                                    sig.unit ===
+                                      "OIC - Chief Education Program Specialist"
+                                )?.unit}
                           </p>
                         </>
                       )}
@@ -878,7 +941,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     className="h-[60px] w-[60px]"
                     src={
                       officerSignaturesData?.signatures?.find(
-                        (sig) => sig.unit === "Director IV"
+                        (sig) =>
+                          sig.unit === "Director IV" ||
+                          sig.unit === "OIC - Director IV"
                       )?.base64
                     }
                     alt="Signature"
@@ -895,9 +960,23 @@ export const DocumentComponent = forwardRef((data, ref) => {
               <div className="px-[70mm] text-center">
                 <div className="text-[2.47mm]">
                   <p className="font-bold uppercase">
-                    FREDDIE T. BERNAL, Ph.D., CESO III
+                    {
+                      officerSignaturesData?.signatures?.find(
+                        (sig) =>
+                          sig.unit === "Director IV" ||
+                          sig.unit === "OIC - Director IV"
+                      )?.name
+                    }
                   </p>
-                  <p>Director IV</p>
+                  <p>
+                    {
+                      officerSignaturesData?.signatures?.find(
+                        (sig) =>
+                          sig.unit === "Director IV" ||
+                          sig.unit === "OIC - Director IV"
+                      )?.unit
+                    }
+                  </p>
                 </div>
                 <div className="border-t border-black font-bold">
                   <p>(Authorized Official)</p>
