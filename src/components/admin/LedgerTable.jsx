@@ -158,7 +158,9 @@ const LedgerTable = ({ emp_id }) => {
   });
 
   useEffect(() => {
-    refetch();
+    if (emp_id) {
+      refetch();
+    }
   }, [emp_id]);
 
   return isFetching ? (

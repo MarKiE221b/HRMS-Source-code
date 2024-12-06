@@ -560,6 +560,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
 
                         {/* radio conditions */}
                         {(formData.type_id === "VC001" ||
+                          formData.type_id === "PL006" ||
                           formData.type_id === "SPL006" ||
                           formData.type_id === "SL003" ||
                           formData.type_id === "SL008") && (
@@ -570,8 +571,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                                   id="radio1"
                                   name="detailsRadio"
                                   value={
-                                    formData.type_id === "VC001" ||
-                                    formData.type_id === "SPL006"
+                                    (formData.type_id === "VC001" ||formData.type_id === "SPL006" || formData.type_id === "PL006")
                                       ? "Within the Philippines"
                                       : "" || formData.type_id === "SL003"
                                       ? "In Hospital"
@@ -588,8 +588,9 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                                   required
                                 />
                                 <Label htmlFor="radio1">
-                                  {formData.type_id === "VC001" ||
-                                  formData.type_id === "SPL006"
+                                  {(formData.type_id === "VC001" ||
+                                  formData.type_id === "SPL006" ||
+                                  formData.type_id === "PL006")
                                     ? "Within the Philippines"
                                     : ""}
 
@@ -607,8 +608,9 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                                   id="radio2"
                                   name="detailsRadio"
                                   value={
-                                    formData.type_id === "VC001" ||
-                                    formData.type_id === "SPL006"
+                                    (formData.type_id === "VC001" ||
+                                    formData.type_id === "SPL006" ||
+                                     formData.type_id === "PL006")
                                       ? "Abroad"
                                       : "" || formData.type_id === "SL003"
                                       ? "Out Patient"
@@ -625,8 +627,9 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                                   required
                                 />
                                 <Label htmlFor="radio2">
-                                  {formData.type_id === "VC001" ||
-                                  formData.type_id === "SPL006"
+                                  {(formData.type_id === "VC001" ||
+                                    formData.type_id === "SPL006"|| 
+                                    formData.type_id === "PL006")
                                     ? "Abroad"
                                     : ""}
 

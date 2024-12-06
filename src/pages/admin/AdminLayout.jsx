@@ -9,9 +9,9 @@ import SideBar from "../../components/admin/SideBar";
 const AdminLayout = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data: verifyUser, isLoading, isError, isFetching } = verifyApi();
+  const { data: verifyUser, isError, isFetching } = verifyApi();
 
-  if (isLoading || isFetching) {
+  if (isFetching) {
     return <Loading />;
   }
 

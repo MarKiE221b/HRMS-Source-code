@@ -128,7 +128,7 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       <Checkbox
                         checked={
                           data?.data?.type_id === "VC001" ||
-                          data?.data?.type_id === "PL006"
+                          data?.data?.type_id === "ML002"
                             ? true
                             : false
                         }
@@ -191,7 +191,10 @@ export const DocumentComponent = forwardRef((data, ref) => {
                       />
                       <Checkbox
                         checked={
-                          data?.data?.type_id === "SPL006" ? true : false
+                          data?.data?.type_id === "SPL006" ||
+                          data?.data?.type_id === "PL006"
+                            ? true
+                            : false
                         }
                         label={
                           <p>
@@ -650,9 +653,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                           src={
                             officerSignaturesData?.signatures?.find(
                               (sig) =>
-                                sig.unit === "Chief Administrative Officer" ||
+                                sig.unit === "CHIEF ADMINISTRATIVE OFFICER" ||
                                 sig.unit ===
-                                  "OIC - Chief Administrative Officer"
+                                  "OIC - CHIEF ADMINISTRATIVE OFFICER"
                             )?.base64
                           }
                           alt="Signature"
@@ -671,8 +674,8 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         {
                           officerSignaturesData?.signatures?.find(
                             (sig) =>
-                              sig.unit === "Chief Administrative Officer" ||
-                              sig.unit === "OIC - Chief Administrative Officer"
+                              sig.unit === "CHIEF ADMINISTRATIVE OFFICER" ||
+                              sig.unit === "OIC - CHIEF ADMINISTRATIVE OFFICER"
                           )?.name
                         }
                       </p>
@@ -680,8 +683,8 @@ export const DocumentComponent = forwardRef((data, ref) => {
                         {
                           officerSignaturesData?.signatures?.find(
                             (sig) =>
-                              sig.unit === "Chief Administrative Officer" ||
-                              sig.unit === "OIC - Chief Administrative Officer"
+                              sig.unit === "CHIEF ADMINISTRATIVE OFFICER" ||
+                              sig.unit === "OIC - CHIEF ADMINISTRATIVE OFFICER"
                           )?.unit
                         }
                       </p>
@@ -743,9 +746,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                   </div>
 
                   <div className="relative mt-3 px-7 text-center">
-                    {data?.data?.unit === "Chief Administrative Officer" ||
+                    {data?.data?.unit === "CHIEF ADMINISTRATIVE OFFICER" ||
                     data?.data?.unit ===
-                      "Chief Education Program Specialist" ? (
+                      "CHIEF EDUCATION PROGRAM SPECIALIST" ? (
                       data?.data?.approvedStatus === "Approved" && (
                         <div className="absolute right-[20mm] bottom-[10mm] flex items-baseline justify-center">
                           <img
@@ -777,9 +780,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                                   officerSignaturesData?.signatures?.find(
                                     (sig) =>
                                       sig.unit ===
-                                        "Chief Administrative Officer" ||
+                                        "CHIEF ADMINISTRATIVE OFFICER" ||
                                       sig.unit ===
-                                        "OIC - Chief Administrative Officer"
+                                        "OIC - CHIEF ADMINISTRATIVE OFFICER"
                                   )?.base64
                                 }
                                 alt="Signature"
@@ -800,9 +803,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                                 officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                      "Chief Education Program Specialist" ||
+                                      "CHIEF EDUCATION PROGRAM SPECIALIST" ||
                                     sig.unit ===
-                                      "OIC - Chief Education Program Specialist"
+                                      "OIC - CHIEF EDUCATION PROGRAM SPECIALIST"
                                 )?.base64
                               }
                               alt="Signature"
@@ -818,9 +821,9 @@ export const DocumentComponent = forwardRef((data, ref) => {
                     )}
 
                     <div className="text-[2.47mm]">
-                      {data?.data?.unit === "Chief Administrative Officer" ||
+                      {data?.data?.unit === "CHIEF ADMINISTRATIVE OFFICER" ||
                       data?.data?.unit ===
-                        "Chief Education Program Specialist" ? (
+                        "CHIEF EDUCATION PROGRAM SPECIALIST" ? (
                         <>
                           <p className="font-bold">
                             {
@@ -848,16 +851,16 @@ export const DocumentComponent = forwardRef((data, ref) => {
                               ? officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                      "Chief Administrative Officer" ||
+                                      "CHIEF ADMINISTRATIVE OFFICER" ||
                                     sig.unit ===
-                                      "OIC - Chief Administrative Officer"
+                                      "OIC - CHIEF ADMINISTRATIVE OFFICER"
                                 )?.name
                               : officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                      "Chief Education Program Specialist" ||
+                                      "CHIEF EDUCATION PROGRAM SPECIALIST" ||
                                     sig.unit ===
-                                      "OIC - Chief Education Program Specialist"
+                                      "OIC - CHIEF EDUCATION PROGRAM SPECIALIST"
                                 )?.name}
                           </p>
                           <p>
@@ -865,16 +868,16 @@ export const DocumentComponent = forwardRef((data, ref) => {
                               ? officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                      "Chief Administrative Officer" ||
+                                      "CHIEF ADMINISTRATIVE OFFICER" ||
                                     sig.unit ===
-                                      "OIC - Chief Administrative Officer"
+                                      "OIC - CHIEF ADMINISTRATIVE OFFICER"
                                 )?.unit
                               : officerSignaturesData?.signatures?.find(
                                   (sig) =>
                                     sig.unit ===
-                                      "Chief Education Program Specialist" ||
+                                      "CHIEF EDUCATION PROGRAM SPECIALIST" ||
                                     sig.unit ===
-                                      "OIC - Chief Education Program Specialist"
+                                      "OIC - CHIEF EDUCATION PROGRAM SPECIALIST"
                                 )?.unit}
                           </p>
                         </>

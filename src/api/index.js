@@ -68,6 +68,7 @@ export const verifyApi = () => {
         throw error;
       }
     },
+    refetchOnWindowFocus: false,
     retry: false,
   });
 };
@@ -620,6 +621,7 @@ export const getLeaveFormPdf = () => {
 };
 
 export const getLedgerPerEmployee = (input) => {
+  console.log("api test", !input);
   return useQuery({
     queryKey: ["getLedgerPerEmployeeKey"],
     queryFn: async () => {
@@ -636,7 +638,28 @@ export const getLedgerPerEmployee = (input) => {
         throw error;
       }
     },
+    enabled: !!input,
+  });
+};
 
-    enabled: input ? true : false,
+export const recalculateAction = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input) => {
+      try {
+        return await makeRequest.post("/autoUpdateLedger", input, {
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(input),
+        });
+      } catch (error) {
+        throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries([
+        "getLedgerPerEmployeeKey",
+        "getemployeeslistkey",
+      ]);
+    },
   });
 };

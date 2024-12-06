@@ -127,7 +127,7 @@ function EModifyModal({ tableRowData, showModal, setShowModal }) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          lastname: e.target.value,
+                          lastname: e.target.value.toUpperCase().toUpperCase(),
                         }))
                       }
                       id="lastname"
@@ -144,7 +144,7 @@ function EModifyModal({ tableRowData, showModal, setShowModal }) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          firstname: e.target.value,
+                          firstname: e.target.value.toUpperCase(),
                         }))
                       }
                       id="firstname"
@@ -161,7 +161,7 @@ function EModifyModal({ tableRowData, showModal, setShowModal }) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          middlename: e.target.value,
+                          middlename: e.target.value.toUpperCase(),
                         }))
                       }
                       id="middlename"
@@ -178,7 +178,7 @@ function EModifyModal({ tableRowData, showModal, setShowModal }) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          extName: e.target.value,
+                          extName: e.target.value.toUpperCase(),
                         }))
                       }
                       id="extname"
@@ -194,7 +194,7 @@ function EModifyModal({ tableRowData, showModal, setShowModal }) {
                       onChange={(e) =>
                         setFormData((prev) => ({
                           ...prev,
-                          unit: e.target.value,
+                          unit: e.target.value.toUpperCase(),
                         }))
                       }
                       id="unit"

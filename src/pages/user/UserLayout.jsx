@@ -6,9 +6,9 @@ import { verifyApi } from "../../api/index.js";
 import Loading from "../../Loading.jsx";
 
 const UserLayout = () => {
-  const { data: verifyUser, isLoading, isError, isFetching } = verifyApi();
+  const { data: verifyUser, isError, isFetching } = verifyApi();
 
-  if (isLoading || isFetching) {
+  if (isFetching) {
     return <Loading />;
   }
 

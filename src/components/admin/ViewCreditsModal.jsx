@@ -9,13 +9,15 @@ import {
   TEModalFooter,
 } from "tw-elements-react";
 import LedgerTable from "./LedgerTable";
+import { Button } from "flowbite-react";
+import { recalculateAction } from "./../../api/index";
 
 function ViewCreditsModal({ tableRowData, showModal, setShowModal }) {
   const empDataObject = tableRowData?.reduce((acc, data) => {
     return data;
   }, {});
 
-  console.log(empDataObject);
+  const { mutate: recalculate, isPending, isSuccess } = recalculateAction();
 
   return (
     <div>
@@ -54,9 +56,11 @@ function ViewCreditsModal({ tableRowData, showModal, setShowModal }) {
 
             <TEModalBody>
               <div>
-                <p className="mb-2">Employee: <span>{empDataObject?.full_name}</span></p>
+                <p className="mb-2">
+                  Employee: <span>{empDataObject?.full_name}</span>
+                </p>
                 <div className="flex flex-row gap-3 mb-2">
-                  <div className="text-right max-w-[400px]">
+                  <div className="text-right max-w-[400px] text-nowrap">
                     <p>Vacation Leave :</p>
                     <p>Sick Leave :</p>
                     <p>CTO :</p>
@@ -70,6 +74,21 @@ function ViewCreditsModal({ tableRowData, showModal, setShowModal }) {
                     <p>{empDataObject?.CTO_balance}</p>
                     <p>{empDataObject?.personal_balance}</p>
                     <p>{empDataObject?.forced_balance}</p>
+                  </div>
+
+                  <div className="w-full flex justify-end max-h-11">
+                    <Button
+                      type="button"
+                      color="blue"
+                      isProcessing={isPending}
+                      disabled={isPending}
+                      pill
+                      onClick={() =>
+                        recalculate({ emp_id: empDataObject?.emp_id })
+                      }
+                    >
+                      Recalculate
+                    </Button>
                   </div>
                 </div>
 
