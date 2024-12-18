@@ -742,7 +742,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                           )}
 
                         {formData.type_id === "ML002" &&
-                          userInfo.forced_balance < countSplitDate() && (
+                          (userInfo.forced_balance < countSplitDate() || userInfo.vacation_balance < countSplitDate()) && (
                             <div className="mt-3">
                               <Alert color="warning" icon={FaExclamationCircle}>
                                 Insuficient balance for Forced/Mandatory Leave.
@@ -777,7 +777,7 @@ const LeaveModal = ({ showModal, setShowModal, userInfo, application }) => {
                           (formData.type_id === "PL006" &&
                             userInfo.personal_balance < countSplitDate()) ||
                           (formData.type_id === "ML002" &&
-                            userInfo.forced_balance < countSplitDate()) ||
+                            (userInfo.forced_balance < countSplitDate() || userInfo.vacation_balance < countSplitDate() )) ||
                           applicationStatus === true
                         }
                       >
