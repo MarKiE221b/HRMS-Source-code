@@ -106,7 +106,7 @@ const NavBar = () => {
             <FaHome className="mr-3 h-4 w-4" />
             Home
           </Button>
-          {userData?.unit === "Chief Administrative Officer" && (
+          {userData?.unit === "CHIEF ADMINISTRATIVE OFFICER" && (
             <Button
               className="relative"
               color="gray"
@@ -119,7 +119,7 @@ const NavBar = () => {
               </span>
             </Button>
           )}
-          {userData?.unit === "Chief Education Program Specialist" && (
+          {userData?.unit === "CHIEF EDUCATION PROGRAM SPECIALIST" && (
             <Button
               className="relative"
               color="gray"

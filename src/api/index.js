@@ -224,8 +224,8 @@ export const getEmployeesApplication = (unit) => {
       }
     },
     enabled:
-      unit === "Chief Administrative Officer" ||
-      unit === "Chief Education Program Specialist",
+      unit === "CHIEF ADMINISTRATIVE OFFICE" ||
+      unit === "CHIEF EDUCATION PROGRAM SPECIALIST",
   });
 };
 
@@ -403,8 +403,8 @@ export const getPendingNofitCount = (unit) => {
       }
     },
     enabled:
-      unit === "Chief Administrative Officer" ||
-      unit === "Chief Education Program Specialist",
+      unit === "CHIEF ADMINISTRATIVE OFFICER" ||
+      unit === "CHIEF EDUCATION PROGRAM SPECIALIST",
   });
 };
 
