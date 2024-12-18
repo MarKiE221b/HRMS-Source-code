@@ -11,7 +11,7 @@ const TableButton = ({ table, row, setShowModal, setId, userUnit }) => {
 
   return (
     <>
-      {userUnit === "Chief Administrative Officer" &&
+      {userUnit === "CHIEF ADMINISTRATIVE OFFICER" &&
         (filterStatusData.OICStatus === "Pending" ? (
           <button
             type="button"
@@ -29,7 +29,7 @@ const TableButton = ({ table, row, setShowModal, setId, userUnit }) => {
           <p className="text-center text-green-900 font-semibold">Approved</p>
         ))}
 
-      {userUnit === "Chief Education Program Specialist" &&
+      {userUnit === "CHIEF EDUCATION PROGRAM SPECIALIST" &&
         (filterStatusData.OICStatus === "Approved" ? (
           filterStatusData.CEPSStatus === "Approved" ? (
             <p className="text-center text-green-900 font-semibold">Approved</p>
